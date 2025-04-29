@@ -1,7 +1,7 @@
-import { StatCard } from "@/components/stat-card";
+import { StatSummary } from "@/components/charts/stat-summary";
+import { StatCard } from "@/components/statCard";
 import { Button } from "@/components/ui/button";
 import { getPatientDashboardStatistics } from "@/untils/Services/patient";
-import { UserButton } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs/server";
 import { Briefcase, BriefcaseBusiness, BriefcaseMedical } from "lucide-react";
 import Link from "next/link";
@@ -10,6 +10,7 @@ import React from "react";
 
 const PatientDashboard = async () => {
   const user = await currentUser();
+
   const {
     data,
     appointmentCounts,
@@ -18,7 +19,7 @@ const PatientDashboard = async () => {
     availableDoctor,
     monthlyData,
   } = await getPatientDashboardStatistics(user?.id!);
-  console.log("o day co data nua ne: ", data);
+
   if (user && !data) {
     redirect("/patient/registration");
   }
@@ -28,7 +29,7 @@ const PatientDashboard = async () => {
   const cardData = [
     {
       title: "appointments",
-      value: totalAppointments,
+      value: totalAppointments ?? 0,
       icon: Briefcase,
       className: "bg-blue-600/15",
       iconClassName: "bg-blue-600/25 text-blue-600",
@@ -36,7 +37,7 @@ const PatientDashboard = async () => {
     },
     {
       title: "cancelled",
-      value: appointmentCounts?.CANCELLED,
+      value: appointmentCounts?.CANCELLED ?? 0,
       icon: Briefcase,
       className: "bg-rose-600/15",
       iconClassName: "bg-rose-600/25 text-rose-600",
@@ -44,7 +45,9 @@ const PatientDashboard = async () => {
     },
     {
       title: "pending",
-      value: appointmentCounts?.PENDING! + appointmentCounts?.SCHEDULED!,
+      value:
+        (appointmentCounts?.PENDING! ?? 0) +
+        (appointmentCounts?.SCHEDULED! ?? 0),
       icon: BriefcaseBusiness,
       className: "bg-yellow-600/15",
       iconClassName: "bg-yellow-600/25 text-yellow-600",
@@ -52,7 +55,7 @@ const PatientDashboard = async () => {
     },
     {
       title: "completed",
-      value: appointmentCounts?.COMPLETED,
+      value: appointmentCounts?.COMPLETED ?? 0,
       icon: BriefcaseMedical,
       className: "bg-emerald-600/15",
       iconClassName: "bg-emerald-600/25 text-emerald-600",
@@ -61,7 +64,7 @@ const PatientDashboard = async () => {
   ];
 
   return (
-    <div className="py-6mpx-3 flex flex-col rounded-xl xl:flex-row gap-6">
+    <div className="py-6 px-3 flex flex-col rounded-xl xl:flex-row gap-6">
       {/* LEFT */}
       <div className="w-full xl:w-[69%]">
         <div className="bg-white rounded-xl p-4 mb-8">
@@ -77,14 +80,36 @@ const PatientDashboard = async () => {
               </Button>
             </div>
           </div>
+
           <div className="w-full flex flex-wrap gap-5">
             {cardData?.map((el, id) => (
               <StatCard key={id} {...el} link="#" />
             ))}
           </div>
         </div>
+
+        <div className="h-[500px]">
+          {/* <AppointmentChart data={monthlyData} /> */}
+        </div>
+
+        <div className="bg-white rounded-xl p-4 mt-8">
+          {/* <RecentAppointments data={last5Records} /> */}
+        </div>
       </div>
+
       {/* RIGHT */}
+      <div className="w-full xl:w-[30%]">
+        <div className="w-full h-[450px] mb-8">
+          <StatSummary
+            data={appointmentCounts}
+            total={totalAppointments ?? 0}
+          />
+        </div>
+
+        {/* <AvailableDoctors data={availableDoctor as AvailableDoctorProps} /> */}
+
+        {/* <PatientRatingContainer /> */}
+      </div>
     </div>
   );
 };
