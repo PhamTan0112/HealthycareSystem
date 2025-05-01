@@ -1,6 +1,11 @@
+import { AvailableDoctors } from "@/components/available-doctor";
+import { AppointmentChart } from "@/components/charts/appointment-chart";
 import { StatSummary } from "@/components/charts/stat-summary";
+import { PatientRatingContainer } from "@/components/patient-rating-container";
 import { StatCard } from "@/components/statCard";
+import { RecentAppointments } from "@/components/table/recent-appoinment";
 import { Button } from "@/components/ui/button";
+import { AvailableDoctorProps } from "@/types/data-types";
 import { getPatientDashboardStatistics } from "@/untils/Services/patient";
 import { currentUser } from "@clerk/nextjs/server";
 import { Briefcase, BriefcaseBusiness, BriefcaseMedical } from "lucide-react";
@@ -89,11 +94,11 @@ const PatientDashboard = async () => {
         </div>
 
         <div className="h-[500px]">
-          {/* <AppointmentChart data={monthlyData} /> */}
+          <AppointmentChart data={monthlyData ?? []} />
         </div>
 
         <div className="bg-white rounded-xl p-4 mt-8">
-          {/* <RecentAppointments data={last5Records} /> */}
+          <RecentAppointments data={lastRecords ?? []} />
         </div>
       </div>
 
@@ -106,9 +111,11 @@ const PatientDashboard = async () => {
           />
         </div>
 
-        {/* <AvailableDoctors data={availableDoctor as AvailableDoctorProps} /> */}
+        <AvailableDoctors
+          data={availableDoctor ?? ([] as AvailableDoctorProps)}
+        />
 
-        {/* <PatientRatingContainer /> */}
+        <PatientRatingContainer />
       </div>
     </div>
   );

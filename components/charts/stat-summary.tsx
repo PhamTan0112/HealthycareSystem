@@ -8,13 +8,13 @@ import { formatNumber } from "@/untils";
 
 export const StatSummary = ({ data, total }: { data: any; total: number }) => {
   const dataInfo = [
-    { name: "Total", count: total || 30, fill: "white" },
+    { name: "Total", count: total || 0, fill: "white" },
     {
       name: "Appointments",
-      count: data?.PENDING + data?.SCHEDULED || 80,
+      count: data?.PENDING + data?.SCHEDULED || 0,
       fill: "#000000",
     },
-    { name: "Consultation", count: data?.COMPLETED || 100, fill: "#2563eb" },
+    { name: "Consultation", count: data?.COMPLETED || 0, fill: "#2563eb" },
   ];
 
   const appointment = dataInfo[1].count;
