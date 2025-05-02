@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { getRole } from "@/untils/roles";
+import { getRole } from "@/utils/roles";
 import { UserButton } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import Image from "next/image";

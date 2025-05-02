@@ -9,15 +9,15 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 import { Button } from "./ui/button";
-import { calculateAge, formatDateTime } from "@/untils";
+import { calculateAge, formatDateTime } from "@/utils";
 import { ProfileImage } from "./profile-image";
 import { Calendar, Phone } from "lucide-react";
 import { format } from "date-fns";
 import { AppointmentStatusIndicator } from "./appointment-status-indicator";
-import { checkRole } from "@/untils/roles";
+import { checkRole } from "@/utils/roles";
 import { auth } from "@clerk/nextjs/server";
 import { AppointmentAction } from "./appointment-action";
-import { getAppointmentById } from "@/untils/Services/appointment";
+import { getAppointmentById } from "@/utils/Services/appointment";
 
 export const ViewAppointment = async ({ id }: { id: string | undefined }) => {
   const { data } = await getAppointmentById(Number(id!));

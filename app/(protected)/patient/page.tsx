@@ -6,7 +6,7 @@ import { StatCard } from "@/components/statCard";
 import { RecentAppointments } from "@/components/table/recent-appoinment";
 import { Button } from "@/components/ui/button";
 import { AvailableDoctorProps } from "@/types/data-types";
-import { getPatientDashboardStatistics } from "@/untils/Services/patient";
+import { getPatientDashboardStatistics } from "@/utils/Services/patient";
 import { currentUser } from "@clerk/nextjs/server";
 import { Briefcase, BriefcaseBusiness, BriefcaseMedical } from "lucide-react";
 import Link from "next/link";
@@ -38,7 +38,7 @@ const PatientDashboard = async () => {
       icon: Briefcase,
       className: "bg-blue-600/15",
       iconClassName: "bg-blue-600/25 text-blue-600",
-      note: "Total appointments",
+      note: "Total Appointments",
     },
     {
       title: "cancelled",
@@ -64,7 +64,7 @@ const PatientDashboard = async () => {
       icon: BriefcaseMedical,
       className: "bg-emerald-600/15",
       iconClassName: "bg-emerald-600/25 text-emerald-600",
-      note: "Successfully appointments",
+      note: "Successfully Appointments",
     },
   ];
 

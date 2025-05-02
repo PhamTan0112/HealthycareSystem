@@ -1,4 +1,4 @@
-import { getRole } from "@/untils/roles";
+import { getRole } from "@/utils/roles";
 import { link } from "fs";
 import {
   Bell,

@@ -1,4 +1,4 @@
-import { checkRole, getRole } from "@/untils/roles";
+import { checkRole, getRole } from "@/utils/roles";
 import { redirect } from "next/navigation";
 
 import React from "react";
