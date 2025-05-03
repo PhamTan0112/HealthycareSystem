@@ -74,7 +74,6 @@ const Appointments = async (props: {
 
   const renderItem = (item: DataProps) => {
     const patient_name = `${item?.patient?.first_name} ${item?.patient?.last_name}`;
-
     return (
       <tr
         key={item?.id}
@@ -93,11 +92,8 @@ const Appointments = async (props: {
             </span>
           </div>
         </td>
-
         <td className="hidden md:table-cell">
-          {item?.appointment_date
-            ? format(new Date(item.appointment_date), "yyyy-MM-dd")
-            : "No date"}
+          <td>{format(new Date(item.appointment_date), "yyyy-MM-dd")}</td>
         </td>
         <td className="hidden md:table-cell">{item.time}</td>
 

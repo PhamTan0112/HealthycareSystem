@@ -41,6 +41,8 @@ const columns = [
 ];
 export const RecentAppointments = ({ data }: DataProps) => {
   const renderRow = (item: Appointment) => {
+    console.log("item:", item);
+    console.log("appointment_date:", item?.appointment_date);
     const name = item?.patient?.first_name + " " + item?.patient?.last_name;
     return (
       <tr

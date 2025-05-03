@@ -1,13 +1,12 @@
 import db from "@/lib/db";
 import { Prisma } from "@prisma/client";
-
 export async function getAppointmentById(id: number) {
   try {
     if (!id) {
       return {
         success: false,
         message: "Appointment id does not exist.",
-        status: 200,
+        status: 404,
       };
     }
 
@@ -44,7 +43,7 @@ export async function getAppointmentById(id: number) {
     return { success: true, data, status: 200 };
   } catch (error) {
     console.log(error);
-    return { success: false, message: "Internal Server ERROR", status: 500 };
+    return { success: false, message: "Internal Server Error", status: 500 };
   }
 }
 
@@ -111,7 +110,8 @@ export async function getPatientAppointments({
   try {
     const PAGE_NUMBER = Number(page) <= 0 ? 1 : Number(page);
     const LIMIT = Number(limit) || 10;
-    const SKIP = (PAGE_NUMBER - 1) * LIMIT; // 0 - 9
+
+    const SKIP = (PAGE_NUMBER - 1) * LIMIT; //0 -9
 
     const [data, totalRecord] = await Promise.all([
       db.appointment.findMany({
@@ -123,6 +123,7 @@ export async function getPatientAppointments({
           patient_id: true,
           doctor_id: true,
           type: true,
+          appointment_date: true,
           time: true,
           status: true,
           patient: {
@@ -149,7 +150,9 @@ export async function getPatientAppointments({
         },
         orderBy: { appointment_date: "desc" },
       }),
-      db.appointment.count({ where: buildQuery(id, search) }),
+      db.appointment.count({
+        where: buildQuery(id, search),
+      }),
     ]);
 
     if (!data) {
@@ -160,7 +163,9 @@ export async function getPatientAppointments({
         data: null,
       };
     }
+
     const totalPages = Math.ceil(totalRecord / LIMIT);
+
     return {
       success: true,
       data,
@@ -171,6 +176,6 @@ export async function getPatientAppointments({
     };
   } catch (error) {
     console.log(error);
-    return { success: false, message: "Internal Server ERROR", status: 500 };
+    return { success: false, message: "Internal Server Error", status: 500 };
   }
 }
