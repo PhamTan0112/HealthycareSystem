@@ -1,11 +1,13 @@
 import { AppointmentActionOptions } from "@/components/appointment-actions";
 import { AppointmentStatusIndicator } from "@/components/appointment-status-indicator";
+import { Pagination } from "@/components/pagination";
 import { ProfileImage } from "@/components/profile-image";
 import SearchInput from "@/components/search-input";
 import { Table } from "@/components/table/table";
 import { ViewAppointment } from "@/components/view-appointment";
 import { checkRole, getRole } from "@/utils/roles";
 import { getPatientAppointments } from "@/utils/Services/appointment";
+import { DATA_LIMIT } from "@/utils/setings";
 import { auth } from "@clerk/nextjs/server";
 import { Appointment, Doctor, Patient } from "@prisma/client";
 import { format } from "date-fns";
@@ -151,6 +153,15 @@ const Appointments = async (props: {
       </div>
       <div className="mt-6">
         <Table columns={columns} renderRow={renderItem} data={data ?? []} />
+
+        {(data ?? []).length > 0 && (
+          <Pagination
+            totalRecords={totalRecord!}
+            currentPage={currentPage!}
+            totalPages={totalPages!}
+            limit={DATA_LIMIT}
+          />
+        )}
       </div>
     </div>
   );
