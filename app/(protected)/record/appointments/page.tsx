@@ -1,19 +1,19 @@
 import { AppointmentActionOptions } from "@/components/appointment-actions";
 import { AppointmentStatusIndicator } from "@/components/appointment-status-indicator";
-import { Pagination } from "@/components/pagination";
 import { ProfileImage } from "@/components/profile-image";
 import SearchInput from "@/components/search-input";
 import { Table } from "@/components/table/table";
 import { ViewAppointment } from "@/components/view-appointment";
 import { checkRole, getRole } from "@/utils/roles";
-import { getPatientAppointments } from "@/utils/Services/appointment";
 import { DATA_LIMIT } from "@/utils/setings";
+import { getPatientAppointments } from "@/utils/Services/appointment";
 import { auth } from "@clerk/nextjs/server";
 import { Appointment, Doctor, Patient } from "@prisma/client";
 import { format } from "date-fns";
 import { BriefcaseBusiness } from "lucide-react";
 import React from "react";
-
+import { Pagination } from "@/components/pagination";
+import { AppointmentContainer } from "@/components/appointment-container";
 const columns = [
   {
     header: "Info",
@@ -50,16 +50,19 @@ interface DataProps extends Appointment {
   doctor: Doctor;
 }
 const Appointments = async (props: {
-  searchParams?: { [key: string]: string | undefined };
+  searchParams?: Promise<{ [key: string]: string | undefined }>;
 }) => {
-  const isPatient = await checkRole("PATIENT");
   const searchParams = await props.searchParams;
   const userRole = await getRole();
   const { userId } = await auth();
+  const isPatient = await checkRole("PATIENT");
+
   const page = (searchParams?.p || "1") as string;
   const searchQuery = searchParams?.q || "";
   const id = searchParams?.id || undefined;
+
   let queryId = undefined;
+
   if (
     userRole == "admin" ||
     (userRole == "doctor" && id) ||
@@ -71,11 +74,19 @@ const Appointments = async (props: {
   } else if (userRole === "nurse") {
     queryId = undefined;
   }
+
   const { data, totalPages, totalRecord, currentPage } =
-    await getPatientAppointments({ page, search: searchQuery, id: queryId! });
+    await getPatientAppointments({
+      page,
+      search: searchQuery,
+      id: queryId!,
+    });
+
+  if (!data) return null;
 
   const renderItem = (item: DataProps) => {
     const patient_name = `${item?.patient?.first_name} ${item?.patient?.last_name}`;
+
     return (
       <tr
         key={item?.id}
@@ -94,8 +105,9 @@ const Appointments = async (props: {
             </span>
           </div>
         </td>
+
         <td className="hidden md:table-cell">
-          <td>{format(new Date(item.appointment_date), "yyyy-MM-dd")}</td>
+          {format(item?.appointment_date, "yyyy-MM-dd")}
         </td>
         <td className="hidden md:table-cell">{item.time}</td>
 
@@ -143,18 +155,21 @@ const Appointments = async (props: {
           <BriefcaseBusiness size={20} className="text-gray-500" />
           <p className="text-2xl font-semibold">{totalRecord ?? 0}</p>
           <span className="text-gray-600 text-sm xl:text-base">
-            Total Apointments
+            total appointments
           </span>
         </div>
-        <div className="w-full lg:w-fit flex items-center justify-start gap-2">
+
+        <div className="w-full lg:w-fit flex items-center justify-between lg:justify-start gap-2">
           <SearchInput />
-          {/* {isPatient && <AppointmentsContainer id={userId}/>} */}
+
+          {isPatient && <AppointmentContainer id={userId!} />}
         </div>
       </div>
-      <div className="mt-6">
-        <Table columns={columns} renderRow={renderItem} data={data ?? []} />
 
-        {(data ?? []).length > 0 && (
+      <div className="mt-6">
+        <Table columns={columns} renderRow={renderItem} data={data} />
+
+        {data?.length > 0 && (
           <Pagination
             totalRecords={totalRecord!}
             currentPage={currentPage!}
