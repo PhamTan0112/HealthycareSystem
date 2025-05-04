@@ -8,7 +8,7 @@ import { checkRole, getRole } from "@/utils/roles";
 import { DATA_LIMIT } from "@/utils/setings";
 import { getPatientAppointments } from "@/utils/Services/appointment";
 import { auth } from "@clerk/nextjs/server";
-import { Appointment, Doctor, Patient } from "@prisma/client";
+import { Appointment, Doctor, Patient, Role } from "@prisma/client";
 import { format } from "date-fns";
 import { BriefcaseBusiness } from "lucide-react";
 import React from "react";
@@ -83,6 +83,10 @@ const Appointments = async (props: {
     });
 
   if (!data) return null;
+
+  console.log("check role user:", userRole);
+  console.log("check role patient:", userId);
+  console.log("check role ispatient:", isPatient);
 
   const renderItem = (item: DataProps) => {
     const patient_name = `${item?.patient?.first_name} ${item?.patient?.last_name}`;

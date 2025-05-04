@@ -8,7 +8,6 @@ const Registration = async () => {
   const { userId } = await auth();
 
   const { data } = await getPatientById(userId!);
-  console.log("o day co data", data);
   return (
     <div className="w-full h-full flex justify-center">
       <div className="max-w-6xl w-full relative pb-10">
