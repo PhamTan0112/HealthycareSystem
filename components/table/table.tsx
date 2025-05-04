@@ -19,7 +19,14 @@ export const Table = ({ columns, renderRow, data }: TableProps) => {
       </thead>
       <tbody>
         {data?.length < 1 && (
-          <tr className="text-gray-400 text-base py-10">No Data Found</tr>
+          <tr className="text-gray-400 text-base py-10">
+            <td
+              colSpan={3}
+              className="text-center py-10 text-gray-400 text-base"
+            >
+              No Data Found
+            </td>
+          </tr>
         )}
 
         {data?.length > 0 &&
