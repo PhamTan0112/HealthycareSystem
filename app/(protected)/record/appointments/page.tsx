@@ -84,10 +84,6 @@ const Appointments = async (props: {
 
   if (!data) return null;
 
-  console.log("check role user:", userRole);
-  console.log("check role patient:", userId);
-  console.log("check role ispatient:", isPatient);
-
   const renderItem = (item: DataProps) => {
     const patient_name = `${item?.patient?.first_name} ${item?.patient?.last_name}`;
 
