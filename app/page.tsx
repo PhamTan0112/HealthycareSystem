@@ -28,7 +28,7 @@ export default async function Home() {
         </div>
 
         <div className="text-center max-w-xl flex flex-col items-center justify-center">
-          <ForceRefreshOnLogin /> {/* ✅ Thêm để reload sau login */}
+          <ForceRefreshOnLogin />
           <p className="mb-8">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse maxime
             quae numquam possimus dolor. Illum, ipsam laudantium. Reprehenderit

@@ -9,11 +9,7 @@ export function ForceRefreshOnLogin() {
   useEffect(() => {
     const refresh = async () => {
       if (isSignedIn) {
-        // ⏱️ Chờ 1 giây để chắc chắn auth state đã sync
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-
-        // 👉 Nếu cần fetch gì đó từ server, có thể làm ở đây
-        // const res = await fetch("/api/check-role");
+        await new Promise((resolve) => setTimeout(resolve, 5000));
 
         window.location.reload();
       }
