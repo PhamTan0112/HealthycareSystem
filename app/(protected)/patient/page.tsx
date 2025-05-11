@@ -69,7 +69,10 @@ const PatientDashboard = async () => {
   ];
 
   return (
-    <div className="py-6 px-3 flex flex-col rounded-xl xl:flex-row gap-6">
+    <div
+      style={{ caretColor: "transparent" }}
+      className="py-6 px-3 flex flex-col rounded-xl xl:flex-row gap-6"
+    >
       {/* LEFT */}
       <div className="w-full xl:w-[69%]">
         <div className="bg-white rounded-xl p-4 mb-8">

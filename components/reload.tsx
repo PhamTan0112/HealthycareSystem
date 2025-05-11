@@ -5,7 +5,6 @@ import { useAuth } from "@clerk/nextjs";
 
 export function ForceRefreshOnLogin() {
   const { isSignedIn } = useAuth();
-
   useEffect(() => {
     const refresh = async () => {
       if (isSignedIn) {

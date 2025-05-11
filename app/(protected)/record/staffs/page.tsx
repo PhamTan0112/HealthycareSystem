@@ -8,12 +8,12 @@ import { Button } from "@/components/ui/button";
 import { SearchParamsProps } from "@/types";
 import { checkRole } from "@/utils/roles";
 import { DATA_LIMIT } from "@/utils/setings";
-import { getAllDoctors } from "@/utils/Services/doctor";
-import { Doctor } from "@prisma/client";
+import { Staff } from "@prisma/client";
 import { format } from "date-fns";
 import { Users } from "lucide-react";
 import React from "react";
-import { DoctorForm } from "@/components/forms/doctor-form";
+import { getAllStaff } from "@/utils/Services/staff";
+import { StaffForm } from "@/components/forms/staff-form";
 
 const columns = [
   {
@@ -21,8 +21,8 @@ const columns = [
     key: "name",
   },
   {
-    header: "License #",
-    key: "license",
+    header: "Role",
+    key: "role",
     className: "hidden md:table-cell",
   },
   {
@@ -46,12 +46,12 @@ const columns = [
   },
 ];
 
-const DoctorsList = async (props: SearchParamsProps) => {
+const StaffList = async (props: SearchParamsProps) => {
   const searchParams = await props.searchParams;
   const page = (searchParams?.p || "1") as string;
   const searchQuery = (searchParams?.q || "") as string;
 
-  const { data, totalPages, totalRecords, currentPage } = await getAllDoctors({
+  const { data, totalPages, totalRecords, currentPage } = await getAllStaff({
     page,
     search: searchQuery,
   });
@@ -59,7 +59,7 @@ const DoctorsList = async (props: SearchParamsProps) => {
   if (!data) return null;
   const isAdmin = await checkRole("ADMIN");
 
-  const renderRow = (item: Doctor) => (
+  const renderRow = (item: Staff) => (
     <tr
       key={item?.id}
       className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-slate-50"
@@ -73,10 +73,10 @@ const DoctorsList = async (props: SearchParamsProps) => {
         />
         <div>
           <h3 className="uppercase">{item?.name}</h3>
-          <span className="text-sm capitalize">{item?.specialization}</span>
+          <span className="text-sm capitalize">{item?.phone}</span>
         </div>
       </td>
-      <td className="hidden md:table-cell">{item?.license_number}</td>
+      <td className="hidden md:table-cell">{item?.role}</td>
       <td className="hidden md:table-cell">{item?.phone}</td>
       <td className="hidden lg:table-cell">{item?.email}</td>
       <td className="hidden xl:table-cell">
@@ -84,9 +84,10 @@ const DoctorsList = async (props: SearchParamsProps) => {
       </td>
       <td>
         <div className="flex items-center gap-2">
-          <ViewAction href={`doctors/${item?.id}`} />
+          <ActionDialog type="staff" id={item?.id} data={item} />
+
           {isAdmin && (
-            <ActionDialog type="delete" id={item?.id} deleteType="doctor" />
+            <ActionDialog type="delete" id={item?.id} deleteType="staff" />
           )}
         </div>
       </td>
@@ -101,12 +102,12 @@ const DoctorsList = async (props: SearchParamsProps) => {
 
           <p className="text-2xl font-semibold">{totalRecords}</p>
           <span className="text-gray-600 text-sm xl:text-base">
-            total doctors
+            total staffs
           </span>
         </div>
         <div className="w-full lg:w-fit flex items-center justify-between lg:justify-start gap-2">
           <SearchInput />
-          {isAdmin && <DoctorForm />}
+          {isAdmin && <StaffForm />}
         </div>
       </div>
 
@@ -126,4 +127,4 @@ const DoctorsList = async (props: SearchParamsProps) => {
   );
 };
 
-export default DoctorsList;
+export default StaffList;
