@@ -53,7 +53,7 @@ export const AvailableDoctors = async ({ data }: DataProps) => {
       </div>
 
       <div className="w-full space-y-5 md:space-y-0 md:gap-6 flex flex-col md:flex-row md:flex-wrap">
-        {data?.map((doc, id) => (
+        {data?.slice(0, 5).map((doc, id) => (
           <Card
             key={id}
             className=" border-none  w-full md:w-[300px] min-h-28 xl:w-full p-4 flex  gap-4 odd:bg-emerald-600/5 even:bg-yellow-600/5"

@@ -56,7 +56,7 @@ const AdminDashboard = async () => {
     },
   ];
   return (
-    <div className="py-6 px-3 flex flex-col xl:flex-row rounded-xl gap-6">
+    <div className="py-6 px-3 flex flex-col xl:flex-row rounded-xl gap-6 cursor-default select-none">
       {/* LEFT */}
       <div className="w-full xl:w-[69%]">
         <div className="bg-white rounded-xl p-4 mb-8">

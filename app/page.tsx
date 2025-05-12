@@ -20,10 +20,10 @@ export default async function Home() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen p-6">
+    <div className="flex flex-col items-center justify-center h-screen p-6 cursor-default select-none">
       <div className="flex-1 flex flex-col items-center justify-center">
         <div className="mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold text-center">
+          <h1 className="text-4xl md:text-5xl font-bold text-center ">
             Welcome to <br />
             <span className="text-blue-700 text-5xl md:text-6xl">
               Kinda HMS
@@ -38,13 +38,15 @@ export default async function Home() {
           </p>
           <div className="flex gap-4">
             <Link href="/sign-up">
-              <Button className="md:text-base font-light">New Patient</Button>
+              <Button className="md:text-base font-light cursor-pointer">
+                New Patient
+              </Button>
             </Link>
 
             <Link href="/sign-in">
               <Button
                 variant="outline"
-                className="md:text-base underline hover:text-blue-600"
+                className="md:text-base underline hover:text-blue-600 cursor-pointer"
               >
                 Login to account
               </Button>
