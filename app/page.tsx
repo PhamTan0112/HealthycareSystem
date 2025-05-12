@@ -5,14 +5,18 @@ import { getRole } from "@/utils/roles";
 import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { ForceRefreshOnLogin } from "@/components/reload";
 
 export default async function Home() {
   const { userId } = await auth();
   const role = await getRole();
 
   if (userId && role) {
-    redirect(`/${role}`);
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p>Đang chuyển hướng tới trang {role}...</p>
+        <meta httpEquiv="refresh" content={`1;url=/${role}`} />
+      </div>
+    );
   }
 
   return (
@@ -28,7 +32,6 @@ export default async function Home() {
         </div>
 
         <div className="text-center max-w-xl flex flex-col items-center justify-center">
-          <ForceRefreshOnLogin />
           <p className="mb-8">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse maxime
             quae numquam possimus dolor. Illum, ipsam laudantium. Reprehenderit
