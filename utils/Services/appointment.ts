@@ -1,5 +1,6 @@
 import db from "@/lib/db";
 import { Prisma } from "@prisma/client";
+
 export async function getAppointmentById(id: number) {
   try {
     if (!id) {
@@ -174,6 +175,47 @@ export async function getPatientAppointments({
       totalRecord,
       status: 200,
     };
+  } catch (error) {
+    console.log(error);
+    return { success: false, message: "Internal Server Error", status: 500 };
+  }
+}
+
+export async function getAppointmentWithMedicalRecordsById(id: number) {
+  try {
+    if (!id) {
+      return {
+        success: false,
+        message: "Appointment id does not exist.",
+        status: 404,
+      };
+    }
+
+    const data = await db.appointment.findUnique({
+      where: { id },
+      include: {
+        patient: true,
+        doctor: true,
+        bills: true,
+        medical: {
+          include: {
+            diagnosis: true,
+            lab_test: true,
+            vital_signs: true,
+          },
+        },
+      },
+    });
+
+    if (!data) {
+      return {
+        success: false,
+        message: "Appointment data not found",
+        status: 200,
+      };
+    }
+
+    return { success: true, data, status: 200 };
   } catch (error) {
     console.log(error);
     return { success: false, message: "Internal Server Error", status: 500 };
