@@ -1,5 +1,5 @@
 import db from "@/lib/db";
-import { Table } from "../table/table";
+import { Table } from "../tables/table";
 import { Payment } from "@prisma/client";
 import { format } from "date-fns";
 import { ViewAction } from "../action-options";

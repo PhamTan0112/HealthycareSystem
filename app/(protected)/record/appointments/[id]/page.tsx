@@ -7,7 +7,7 @@ import { PatientDetailsCard } from "@/components/appointment/patient-details-car
 import { PaymentsContainer } from "@/components/appointment/payment-container";
 import { VitalSigns } from "@/components/appointment/vital-signs";
 import { MedicalHistoryContainer } from "@/components/medical-history-container";
-import { getAppointmentWithMedicalRecordsById } from "@/utils/Services/appointment";
+import { getAppointmentWithMedicalRecordsById } from "@/utils/services/appointment";
 
 const AppointmentDetailsPage = async ({
   params,

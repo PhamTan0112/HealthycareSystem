@@ -1,5 +1,5 @@
 import { NewPatient } from "@/components/new-patient";
-import { getPatientById } from "@/utils/Services/patient";
+import { getPatientById } from "@/utils/services/patient";
 
 import { auth } from "@clerk/nextjs/server";
 import React from "react";

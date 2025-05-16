@@ -2,7 +2,7 @@ import db from "@/lib/db";
 import { calculateDiscount } from "@/utils";
 import { checkRole } from "@/utils/roles";
 import { ReceiptText } from "lucide-react";
-import { Table } from "../table/table";
+import { Table } from "../tables/table";
 import { PatientBills } from "@prisma/client";
 import { format, formatDate } from "date-fns";
 import { ActionDialog } from "../action-dialog";

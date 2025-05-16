@@ -2,11 +2,11 @@ import { AvailableDoctors } from "@/components/available-doctor";
 import { AppointmentChart } from "@/components/charts/appointment-chart";
 import { StatSummary } from "@/components/charts/stat-summary";
 import { StatCard } from "@/components/statCard";
-import { RecentAppointments } from "@/components/table/recent-appoinment";
+import { RecentAppointments } from "@/components/tables/recent-appoinment";
 
 import { Button } from "@/components/ui/button";
 import { checkRole, getRole } from "@/utils/roles";
-import { getDoctorDashboardStats } from "@/utils/Services/doctor";
+import { getDoctorDashboardStats } from "@/utils/services/doctor";
 import { currentUser } from "@clerk/nextjs/server";
 import { BriefcaseBusiness, BriefcaseMedical, User, Users } from "lucide-react";
 import Link from "next/link";

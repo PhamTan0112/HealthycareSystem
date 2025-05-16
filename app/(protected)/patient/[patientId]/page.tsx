@@ -2,7 +2,7 @@ import { MedicalHistoryContainer } from "@/components/medical-history-container"
 import { PatientRatingContainer } from "@/components/patient-rating-container";
 import { ProfileImage } from "@/components/profile-image";
 import { Card } from "@/components/ui/card";
-import { getPatientFullDataById } from "@/utils/Services/patient";
+import { getPatientFullDataById } from "@/utils/services/patient";
 import { auth } from "@clerk/nextjs/server";
 import { format } from "date-fns";
 import Link from "next/link";

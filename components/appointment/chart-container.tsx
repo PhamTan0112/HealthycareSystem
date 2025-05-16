@@ -1,4 +1,4 @@
-import { getVitalSignData } from "@/utils/Services/medical";
+import { getVitalSignData } from "@/utils/services/medical";
 import BloodPressureChart from "./blood-pressure-chart";
 
 export default async function ChartContainer({ id }: { id: string }) {

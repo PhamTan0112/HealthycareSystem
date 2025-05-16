@@ -1,10 +1,10 @@
-import { getAdminDashboardStats } from "@/utils/Services/admin";
+import { getAdminDashboardStats } from "@/utils/services/admin";
 import React from "react";
 import { BriefcaseBusiness, BriefcaseMedical, User, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { StatCard } from "@/components/statCard";
 import { AppointmentChart } from "@/components/charts/appointment-chart";
-import { RecentAppointments } from "@/components/table/recent-appoinment";
+import { RecentAppointments } from "@/components/tables/recent-appoinment";
 import { StatSummary } from "@/components/charts/stat-summary";
 import { AvailableDoctors } from "@/components/available-doctor";
 const AdminDashboard = async () => {

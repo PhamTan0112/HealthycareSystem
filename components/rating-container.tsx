@@ -1,4 +1,4 @@
-import { getRatingById } from "@/utils/Services/doctor";
+import { getRatingById } from "@/utils/services/doctor";
 import React from "react";
 import { RatingList } from "./rating-list";
 import { RatingChart } from "./charts/rating-chart";

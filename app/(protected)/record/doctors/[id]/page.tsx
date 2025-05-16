@@ -1,8 +1,8 @@
 import { availableDays } from "@/components/available-doctor";
 import { ProfileImage } from "@/components/profile-image";
 import { RatingContainer } from "@/components/rating-container";
-import { RecentAppointments } from "@/components/table/recent-appoinment";
-import { getDoctorById } from "@/utils/Services/doctor";
+import { RecentAppointments } from "@/components/tables/recent-appoinment";
+import { getDoctorById } from "@/utils/services/doctor";
 import { format } from "date-fns";
 import Link from "next/link";
 import React from "react";

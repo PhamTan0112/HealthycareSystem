@@ -1,7 +1,7 @@
 import { Diagnosis, LabTest, MedicalRecords, Patient } from "@prisma/client";
 import { BriefcaseBusiness } from "lucide-react";
 import React from "react";
-import { Table } from "./table/table";
+import { Table } from "./tables/table";
 import { ProfileImage } from "./profile-image";
 import { formatDateTime } from "@/utils";
 import { ViewAction } from "./action-options";

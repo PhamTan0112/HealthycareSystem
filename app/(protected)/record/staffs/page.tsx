@@ -3,7 +3,7 @@ import { ViewAction } from "@/components/action-options";
 import { Pagination } from "@/components/pagination";
 import { ProfileImage } from "@/components/profile-image";
 import SearchInput from "@/components/search-input";
-import { Table } from "@/components/table/table";
+import { Table } from "@/components/tables/table";
 import { Button } from "@/components/ui/button";
 import { SearchParamsProps } from "@/types";
 import { checkRole } from "@/utils/roles";
@@ -12,7 +12,7 @@ import { Staff } from "@prisma/client";
 import { format } from "date-fns";
 import { Users } from "lucide-react";
 import React from "react";
-import { getAllStaff } from "@/utils/Services/staff";
+import { getAllStaff } from "@/utils/services/staff";
 import { StaffForm } from "@/components/forms/staff-form";
 
 const columns = [

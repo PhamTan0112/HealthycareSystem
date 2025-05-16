@@ -1,4 +1,4 @@
-import { Table } from "@/components/table/table";
+import { Table } from "@/components/tables/table";
 import { clerkClient } from "@clerk/nextjs/server";
 import { format } from "date-fns";
 import { BriefcaseBusiness } from "lucide-react";
