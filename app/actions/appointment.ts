@@ -3,32 +3,8 @@
 import { VitalSignsFormData } from "@/components/dialogs/add-vital-signs";
 import db from "@/lib/db";
 import { AppointmentSchema, VitalSignsSchema } from "@/lib/schema";
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { AppointmentStatus } from "@prisma/client";
-
-export async function appointmentAction(
-  id: string | number,
-  status: AppointmentStatus,
-  reason: string
-) {
-  try {
-    await db.appointment.update({
-      where: { id: Number(id) },
-      data: {
-        status,
-        reason,
-      },
-    });
-    return {
-      success: true,
-      error: false,
-      msg: `Appointment ${status.toLocaleLowerCase()} successfully`,
-    };
-  } catch (error) {
-    console.log(error);
-    return { status: false, msg: "Internal Server Error" };
-  }
-}
 
 export async function createNewAppointment(data: any) {
   try {
@@ -59,6 +35,32 @@ export async function createNewAppointment(data: any) {
     return { success: false, msg: "Internal Server Error" };
   }
 }
+export async function appointmentAction(
+  id: string | number,
+
+  status: AppointmentStatus,
+  reason: string
+) {
+  try {
+    await db.appointment.update({
+      where: { id: Number(id) },
+      data: {
+        status,
+        reason,
+      },
+    });
+
+    return {
+      success: true,
+      error: false,
+      msg: `Appointment ${status.toLowerCase()} successfully`,
+    };
+  } catch (error) {
+    console.log(error);
+    return { success: false, msg: "Internal Server Error" };
+  }
+}
+
 export async function addVitalSigns(
   data: VitalSignsFormData,
   appointmentId: string,

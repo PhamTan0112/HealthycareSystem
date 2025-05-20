@@ -8,7 +8,7 @@ import { checkRole, getRole } from "@/utils/roles";
 import { DATA_LIMIT } from "@/utils/setings";
 import { getPatientAppointments } from "@/utils/services/appointment";
 import { auth } from "@clerk/nextjs/server";
-import { Appointment, Doctor, Patient, Role } from "@prisma/client";
+import { Appointment, Doctor, Patient } from "@prisma/client";
 import { format } from "date-fns";
 import { BriefcaseBusiness } from "lucide-react";
 import React from "react";

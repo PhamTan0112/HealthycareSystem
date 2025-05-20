@@ -163,7 +163,7 @@ export const BookAppointment = ({
                             <SelectValue placeholder="Select a physician" />
                           </SelectTrigger>
                         </FormControl>
-                        <SelectContent className="">
+                        <SelectContent className="max-h-60 overflow-y-auto">
                           {physicians?.map((i, id) => (
                             <SelectItem key={id} value={i.id} className="p-2">
                               <div className="flex flex-row gap-2 p-2">
