@@ -1,3 +1,4 @@
+import { ReviewForm } from "@/components/dialogs/review-form";
 import { MedicalHistoryContainer } from "@/components/medical-history-container";
 import { PatientRatingContainer } from "@/components/patient-rating-container";
 import { ProfileImage } from "@/components/profile-image";

@@ -191,3 +191,15 @@ export const ServicesSchema = z.object({
   price: z.string({ message: "Service price is required" }),
   description: z.string({ message: "Service description is required" }),
 });
+
+export const reviewSchema = z.object({
+  patient_id: z.string(),
+  staff_id: z.string(),
+  rating: z.number().min(1).max(5),
+  comment: z
+    .string()
+    .min(10, "Review must be at least 10 characters long")
+    .max(500, "Review must not exceed 500 characters"),
+});
+
+export type ReviewFormValues = z.infer<typeof reviewSchema>;

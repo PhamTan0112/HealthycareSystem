@@ -29,18 +29,19 @@ import { cn } from "@/lib/utils";
 import { Textarea } from "../ui/textarea";
 import { toast } from "sonner";
 import { createReview } from "@/app/actions/general";
+import { reviewSchema, ReviewFormValues } from "@/lib/schema";
 
-export const reviewSchema = z.object({
-  patient_id: z.string(),
-  staff_id: z.string(),
-  rating: z.number().min(1).max(5),
-  comment: z
-    .string()
-    .min(1, "Review must be at least 10 characters long")
-    .max(500, "Review must not exceed 500 characters"),
-});
+// export const reviewSchema = z.object({
+//   patient_id: z.string(),
+//   staff_id: z.string(),
+//   rating: z.number().min(1).max(5),
+//   comment: z
+//     .string()
+//     .min(1, "Review must be at least 10 characters long")
+//     .max(500, "Review must not exceed 500 characters"),
+// });
 
-export type ReviewFormValues = z.infer<typeof reviewSchema>;
+// export type ReviewFormValues = z.infer<typeof reviewSchema>;
 
 export const ReviewForm = ({ staffId }: { staffId: string }) => {
   const router = useRouter();

@@ -1,9 +1,11 @@
 "use server";
 
-import {
-  ReviewFormValues,
-  reviewSchema,
-} from "@/components/dialogs/review-form";
+// import {
+//   ReviewFormValues,
+//   reviewSchema,
+// } from "@/components/dialogs/review-form";
+import { ReviewFormValues, reviewSchema } from "@/lib/schema";
+
 import db from "@/lib/db";
 import { clerkClient } from "@clerk/nextjs/server";
 
@@ -16,16 +18,12 @@ export async function deleteDataById(
     switch (deleteType) {
       case "doctor":
         await db.doctor.delete({ where: { id: id } });
-        break;
       case "staff":
         await db.staff.delete({ where: { id: id } });
-        break;
       case "patient":
         await db.patient.delete({ where: { id: id } });
-        break;
       case "payment":
         await db.payment.delete({ where: { id: Number(id) } });
-        break;
     }
 
     if (
