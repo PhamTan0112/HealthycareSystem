@@ -20,60 +20,83 @@ export async function getDoctorDashboardStats() {
     const todayDate = new Date().getDay();
     const today = daysOfWeek[todayDate];
 
-    const [totalPatient, totalNurses, appointments, doctors] =
-      await Promise.all([
-        db.patient.count(),
-        db.staff.count({ where: { role: "NURSE" } }),
-        db.appointment.findMany({
-          where: { doctor_id: userId!, appointment_date: { lte: new Date() } },
-          include: {
-            patient: {
-              select: {
-                id: true,
-                first_name: true,
-                last_name: true,
-                gender: true,
-                date_of_birth: true,
-                colorCode: true,
-                img: true,
-              },
-            },
-            doctor: {
-              select: {
-                id: true,
-                name: true,
-                specialization: true,
-                img: true,
-                colorCode: true,
-              },
-            },
-          },
-          orderBy: { appointment_date: "desc" },
-        }),
-        db.doctor.findMany({
-          where: {
-            working_days: {
-              some: { day: { equals: today, mode: "insensitive" } },
+    const now = new Date();
+    const todayStart = new Date(now.setHours(0, 0, 0, 0));
+    const todayEnd = new Date(now.setHours(23, 59, 59, 999));
+
+    const [
+      totalPatient,
+      totalNurses,
+      appointments,
+      doctors,
+      remainingAppointmentsToday,
+    ] = await Promise.all([
+      db.patient.count(),
+      db.staff.count({ where: { role: "NURSE" } }),
+      db.appointment.findMany({
+        where: {
+          doctor_id: userId!,
+          appointment_date: { lte: new Date() },
+        },
+        include: {
+          patient: {
+            select: {
+              id: true,
+              first_name: true,
+              last_name: true,
+              gender: true,
+              date_of_birth: true,
+              colorCode: true,
+              img: true,
             },
           },
-          select: {
-            id: true,
-            name: true,
-            specialization: true,
-            img: true,
-            colorCode: true,
-            working_days: true,
+          doctor: {
+            select: {
+              id: true,
+              name: true,
+              specialization: true,
+              img: true,
+              colorCode: true,
+            },
           },
-          take: 5,
-        }),
-      ]);
+        },
+        orderBy: { appointment_date: "desc" },
+      }),
+      db.doctor.findMany({
+        where: {
+          working_days: {
+            some: { day: { equals: today, mode: "insensitive" } },
+          },
+        },
+        select: {
+          id: true,
+          name: true,
+          specialization: true,
+          img: true,
+          colorCode: true,
+          working_days: true,
+        },
+        take: 5,
+      }),
+      db.appointment.count({
+        where: {
+          doctor_id: userId!,
+          appointment_date: {
+            gte: todayStart,
+            lte: todayEnd,
+          },
+          status: {
+            notIn: ["COMPLETED", "CANCELLED"],
+          },
+        },
+      }),
+    ]);
 
     const { appointmentCounts, monthlyData } = await processAppointments(
       appointments
     );
 
     const last5Records = appointments.slice(0, 5);
-    // const availableDoctors = doctors.slice(0, 5);
 
     return {
       totalNurses,
@@ -81,7 +104,7 @@ export async function getDoctorDashboardStats() {
       appointmentCounts,
       last5Records,
       availableDoctors: doctors,
-      totalAppointment: appointments?.length,
+      totalAppointment: remainingAppointmentsToday, // ✅ dùng số cuộc hẹn còn lại hôm nay
       monthlyData,
     };
   } catch (error) {

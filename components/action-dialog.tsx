@@ -21,8 +21,9 @@ interface ActionDialogProps {
   type: "doctor" | "staff" | "delete";
   id: string;
   data?: any;
-  deleteType?: "doctor" | "staff" | "patient" | "payment" | "bill";
+  deleteType?: "doctor" | "staff" | "patient" | "payment" | "bill" | "labtest";
 }
+
 export const ActionDialog = ({
   id,
   data,
@@ -139,7 +140,6 @@ export const ActionDialog = ({
 
           <div className="mt-10 space-y-6">
             <div className="flex flex-col md:flex-row md:flex-wrap md:items-center  gap-y-4 md:gap-x-0 xl:justify-between">
-              {/* <SmallCard label="Full Name" value={data?.name} /> */}
               <SmallCard label="Email Address" value={data?.email} />
               <SmallCard label="Phone Number" value={data?.phone} />
             </div>
