@@ -111,6 +111,42 @@ async function seed() {
     });
   }
 
+  //creat Services
+  await prisma.services.createMany({
+    data: [
+      {
+        service_name: "General Consultation",
+        description: "General health check and consultation.",
+        price: 25,
+      },
+      {
+        service_name: "General Check Up",
+        description: "Full body examination with basic lab tests.",
+        price: 40,
+      },
+      {
+        service_name: "Antenatal Care",
+        description: "Pregnancy checkup, ultrasound and consultation.",
+        price: 35,
+      },
+      {
+        service_name: "Maternity Consultation",
+        description: "Pre-delivery consultation and pregnancy care planning.",
+        price: 50,
+      },
+      {
+        service_name: "Basic Lab Test",
+        description: "Includes blood, urine, and glucose testing.",
+        price: 15,
+      },
+      {
+        service_name: "ENT Consultation (ANT)",
+        description: "Ear, Nose and Throat specialist checkup.",
+        price: 30,
+      },
+    ],
+  });
+
   console.log("Seeding complete!");
   await prisma.$disconnect();
 }
