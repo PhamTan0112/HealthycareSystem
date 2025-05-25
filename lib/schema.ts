@@ -203,3 +203,17 @@ export const reviewSchema = z.object({
 });
 
 export type ReviewFormValues = z.infer<typeof reviewSchema>;
+
+export const LabTestSchema = z.object({
+  id: z.number().optional(), // Khi cập nhật
+  record_id: z.number({ required_error: "Missing medical record" }),
+  service_id: z.number({ required_error: "Missing service" }),
+  test_date: z.coerce.date({ required_error: "Missing test date" }),
+  result: z.string().min(3, "Result must be at least 3 characters"),
+  status: z.enum(["pending", "in-progress", "completed"], {
+    required_error: "Select a status",
+  }),
+  notes: z.string().optional(),
+});
+
+export type LabTestFormValues = z.infer<typeof LabTestSchema>;
