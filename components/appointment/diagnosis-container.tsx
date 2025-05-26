@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { checkRole } from "@/utils/roles";
 import { record } from "zod";
 import { MedicalHistoryCard } from "./medical-history-card";
+import { getAllServices } from "@/app/actions/medical";
 
 export const DiagnosisContainer = async ({
   patientId,
@@ -20,7 +21,7 @@ export const DiagnosisContainer = async ({
   const { userId } = await auth();
 
   if (!userId) redirect("/sign-in");
-
+  const services = await getAllServices();
   const data = await db.medicalRecords.findFirst({
     where: { appointment_id: Number(id) },
     include: {
@@ -31,7 +32,6 @@ export const DiagnosisContainer = async ({
     },
     orderBy: { created_at: "desc" },
   });
-
   const diagnosis = data?.diagnosis || null;
   const isPatient = await checkRole("PATIENT");
 
@@ -45,7 +45,8 @@ export const DiagnosisContainer = async ({
             patientId={patientId}
             doctorId={doctorId}
             appointmentId={id}
-            medicalId={data?.id.toString() || ""}
+            services={services}
+            medicalId={String(data?.id)}
           />
         </div>
       ) : (
@@ -60,7 +61,8 @@ export const DiagnosisContainer = async ({
                   patientId={patientId}
                   doctorId={doctorId}
                   appointmentId={id}
-                  medicalId={data?.id.toString() || ""}
+                  services={services}
+                  medicalId={String(data?.id)}
                 />
               )}
             </CardHeader>

@@ -1,43 +1,30 @@
 "use server";
 
-import { LabTestSchema } from "@/lib/schema";
 import db from "@/lib/db";
-import { z } from "zod";
-import { revalidatePath } from "next/cache";
-import { auth } from "@clerk/nextjs/server";
 
-export async function createOrUpdateLabTest(formData: FormData) {
-  const { userId } = await auth();
-  if (!userId) throw new Error("Unauthorized");
+interface UpdateLabTestInput {
+  id: number;
+  test_date: string;
+  result: string;
+  notes?: string;
+  status: string;
+}
 
-  const raw = Object.fromEntries(formData.entries());
-  const parsed = LabTestSchema.safeParse(raw);
-  if (!parsed.success) throw new Error("Invalid input");
-
-  const data = parsed.data;
-
-  if (data.id) {
+export const updateLabTest = async (data: UpdateLabTestInput) => {
+  try {
     await db.labTest.update({
       where: { id: data.id },
       data: {
+        test_date: new Date(data.test_date),
         result: data.result,
-        status: data.status,
         notes: data.notes,
-        test_date: data.test_date,
+        status: data.status,
       },
     });
-  } else {
-    await db.labTest.create({
-      data: {
-        record_id: data.record_id,
-        service_id: data.service_id,
-        test_date: data.test_date,
-        result: data.result,
-        status: data.status,
-        notes: data.notes,
-      },
-    });
-  }
 
-  revalidatePath("/record/labtest");
-}
+    return { success: true };
+  } catch (error) {
+    console.error("UpdateLabTest error:", error);
+    return { error: "Không thể cập nhật lab test" };
+  }
+};

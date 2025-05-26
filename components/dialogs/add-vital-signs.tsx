@@ -43,7 +43,7 @@ export const AddVitalSigns = ({
     resolver: zodResolver(VitalSignsSchema),
     defaultValues: {
       patient_id: patientId,
-      medical_id: medicalId,
+      medical_id: Number(medicalId),
       body_temperature: 0 || undefined,
       heartRate: undefined,
       systolic: 0 || undefined,

@@ -8,9 +8,23 @@ import {
   PaymentSchema,
 } from "@/lib/schema";
 import { checkRole } from "@/utils/roles";
+import { createLabTest } from "./labtest";
+
+interface ExtendedDiagnosisData {
+  patient_id: string;
+  doctor_id: string;
+  medical_id?: number;
+  symptoms: string;
+  diagnosis: string;
+  notes?: string;
+  prescribed_medications?: string;
+  follow_up_plan?: string;
+  request_labtest?: boolean;
+  service_id?: number;
+}
 
 export const addDiagnosis = async (
-  data: DiagnosisFormData,
+  data: ExtendedDiagnosisData,
   appointmentId: string
 ) => {
   try {
@@ -18,37 +32,49 @@ export const addDiagnosis = async (
 
     let medicalRecord = null;
 
-    if (!validatedData.medical_id) {
+    if (!data.medical_id) {
       medicalRecord = await db.medicalRecords.create({
         data: {
-          patient_id: validatedData.patient_id,
-          doctor_id: validatedData.doctor_id,
+          patient_id: data.patient_id,
+          doctor_id: data.doctor_id,
           appointment_id: Number(appointmentId),
         },
       });
     }
 
-    const med_id = validatedData.medical_id || medicalRecord?.id;
+    const med_id = data.medical_id || medicalRecord?.id;
+
+    // Tạo Diagnosis
     await db.diagnosis.create({
       data: {
-        ...validatedData,
+        patient_id: data.patient_id,
+        doctor_id: data.doctor_id,
         medical_id: Number(med_id),
+        symptoms: data.symptoms,
+        diagnosis: data.diagnosis,
+        notes: data.notes,
+        prescribed_medications: data.prescribed_medications,
+        follow_up_plan: data.follow_up_plan,
       },
     });
 
+    // Nếu có yêu cầu xét nghiệm → Gọi action riêng
+    if (data.request_labtest && data.service_id) {
+      await createLabTest({
+        medical_id: Number(med_id),
+        service_id: Number(data.service_id),
+      });
+    }
+
     return {
       success: true,
-      message: "Diagnosis added successfully",
-      status: 201,
+      message: "Diagnosis and lab test (if any) created successfully.",
     };
   } catch (error) {
-    console.log(error);
-    return {
-      error: "Failed to add diagnosis",
-    };
+    console.error("Add diagnosis error:", error);
+    return { error: "Failed to add diagnosis" };
   }
 };
-
 export async function addNewBill(data: any) {
   try {
     const isAdmin = await checkRole("ADMIN");
@@ -158,3 +184,29 @@ export async function generateBill(data: any) {
     return { success: false, msg: "Internal Server Error" };
   }
 }
+
+export const updateLabTestResult = async ({
+  id,
+  result,
+  notes,
+}: {
+  id: number;
+  result: string;
+  notes?: string;
+}) => {
+  await db.labTest.update({
+    where: { id },
+    data: {
+      result,
+      notes,
+      status: "DONE",
+      test_date: new Date(),
+    },
+  });
+};
+
+export const getAllServices = async () => {
+  return await db.services.findMany({
+    orderBy: { service_name: "asc" },
+  });
+};

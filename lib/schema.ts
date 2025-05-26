@@ -137,7 +137,7 @@ export const StaffSchema = z.object({
 
 export const VitalSignsSchema = z.object({
   patient_id: z.string(),
-  medical_id: z.string(),
+  medical_id: z.number(),
   body_temperature: z.coerce.number({
     message: "Enter recorded body temperature",
   }),
@@ -156,7 +156,7 @@ export const VitalSignsSchema = z.object({
 
 export const DiagnosisSchema = z.object({
   patient_id: z.string(),
-  medical_id: z.string(),
+  medical_id: z.number(),
   doctor_id: z.string(),
   symptoms: z.string({ message: "Symptoms required" }),
   diagnosis: z.string({ message: "Diagnosis required" }),

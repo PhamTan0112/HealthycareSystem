@@ -3,6 +3,7 @@ import AppointmentQuickLinks from "@/components/appointment/appointment-quick-li
 import { BillsContainer } from "@/components/appointment/bills-container";
 import ChartContainer from "@/components/appointment/chart-container";
 import { DiagnosisContainer } from "@/components/appointment/diagnosis-container";
+import LabtestContainer from "@/components/appointment/labtest-container";
 import { PatientDetailsCard } from "@/components/appointment/patient-details-card";
 import { PaymentsContainer } from "@/components/appointment/payment-container";
 import { VitalSigns } from "@/components/appointment/vital-signs";
@@ -51,6 +52,9 @@ const AppointmentDetailsPage = async ({
             doctorId={data?.doctor_id!}
           />
         )}
+
+        {cat === "lab-test" && <LabtestContainer />}
+
         {cat === "medical-history" && (
           <MedicalHistoryContainer id={id!} patientId={data?.patient_id!} />
         )}
