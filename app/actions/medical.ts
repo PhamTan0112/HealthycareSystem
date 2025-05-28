@@ -152,36 +152,66 @@ export async function addNewBill(data: any) {
 export async function generateBill(data: any) {
   try {
     const isValidData = PaymentSchema.safeParse(data);
+    if (!isValidData.success) {
+      return { success: false, error: true, msg: "Invalid data" };
+    }
 
     const validatedData = isValidData.data;
 
-    const discountAmount =
-      (Number(validatedData?.discount) / 100) *
-      Number(validatedData?.total_amount);
-
-    const res = await db.payment.update({
-      data: {
-        bill_date: validatedData?.bill_date,
-        discount: discountAmount,
-        total_amount: Number(validatedData?.total_amount)!,
-      },
-      where: { id: Number(validatedData?.id) },
+    // Lấy bản ghi payment
+    const payment = await db.payment.findUnique({
+      where: { id: Number(validatedData.id) },
+      include: { bills: true, appointment: true },
     });
 
+    if (!payment) {
+      return { success: false, error: true, msg: "Payment not found" };
+    }
+
+    // Không cho cập nhật nếu đã completed
+    // if (payment.appointment.status === "COMPLETED") {
+    //   return {
+    //     success: false,
+    //     error: true,
+    //     msg: "Appointment is already completed",
+    //   };
+    // }
+
+    // Tính lại total_amount từ bills
+    const totalAmount = payment.bills.reduce((acc, bill) => {
+      return acc + bill.total_cost;
+    }, 0);
+
+    // Tính discount
+    const discountPercent = Number(validatedData?.discount) || 0;
+    const discountAmount = (discountPercent / 100) * totalAmount;
+
+    // Cập nhật lại payment
+    await db.payment.update({
+      where: { id: payment.id },
+      data: {
+        total_amount: totalAmount,
+        discount: discountAmount,
+        bill_date: validatedData.bill_date,
+      },
+    });
+
+    // Đánh dấu appointment là đã hoàn tất
     await db.appointment.update({
+      where: { id: payment.appointment_id },
       data: {
         status: "COMPLETED",
       },
-      where: { id: res.appointment_id },
     });
+
     return {
       success: true,
       error: false,
-      msg: `Bill generated successfully`,
+      msg: "Bill generated successfully",
     };
   } catch (error) {
-    console.log(error);
-    return { success: false, msg: "Internal Server Error" };
+    console.error("Generate Bill Error:", error);
+    return { success: false, error: true, msg: "Internal server error" };
   }
 }
 
