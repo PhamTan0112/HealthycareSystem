@@ -1,6 +1,7 @@
 import { AvailableDoctors } from "@/components/available-doctor";
 import { AppointmentChart } from "@/components/charts/appointment-chart";
 import { StatSummary } from "@/components/charts/stat-summary";
+import { HealthBotDialog } from "@/components/dialogs/healthBot-dialog";
 import { PatientRatingContainer } from "@/components/patient-rating-container";
 import { StatCard } from "@/components/statCard";
 import { RecentAppointments } from "@/components/tables/recent-appoinment";
@@ -119,6 +120,7 @@ const PatientDashboard = async () => {
         />
 
         <PatientRatingContainer />
+        <HealthBotDialog />
       </div>
     </div>
   );
