@@ -53,12 +53,40 @@ const RenderInput = ({ field, props }: { field: any; props: InputProps }) => {
               <SelectValue placeholder={props.placeholder} />
             </SelectTrigger>
           </FormControl>
-          <SelectContent>
-            {props.selectList?.map((i, id) => (
-              <SelectItem key={id} value={i.value}>
-                {i.label}
-              </SelectItem>
-            ))}
+          <SelectContent className="max-h-60 overflow-y-auto">
+            {" "}
+            {/* Thêm class tại đây */}
+            {props.name === "time" ? (
+              <>
+                <div className="px-2 text-xs text-muted-foreground">
+                  Morning
+                </div>
+                {props.selectList
+                  ?.filter((i) => parseInt(i.value.split(":")[0]) < 12)
+                  .map((i, id) => (
+                    <SelectItem key={`morning-${id}`} value={i.value}>
+                      {i.label}
+                    </SelectItem>
+                  ))}
+
+                <div className="px-2 mt-2 text-xs text-muted-foreground">
+                  Afternoon
+                </div>
+                {props.selectList
+                  ?.filter((i) => parseInt(i.value.split(":")[0]) >= 12)
+                  .map((i, id) => (
+                    <SelectItem key={`afternoon-${id}`} value={i.value}>
+                      {i.label}
+                    </SelectItem>
+                  ))}
+              </>
+            ) : (
+              props.selectList?.map((i, id) => (
+                <SelectItem key={id} value={i.value}>
+                  {i.label}
+                </SelectItem>
+              ))
+            )}
           </SelectContent>
         </Select>
       );

@@ -1,6 +1,5 @@
 import db from "@/lib/db";
 import { getMonth, format, startOfYear, endOfMonth, isToday } from "date-fns";
-// import { daysOfWeek } from "..";
 
 type AppointmentStatus = "PENDING" | "SCHEDULED" | "COMPLETED" | "CANCELLED";
 
@@ -78,6 +77,8 @@ export async function getPatientDashboardStatistics(id: string) {
         data: null,
       };
     }
+
+    // Lấy thông tin bệnh nhân
     const data = await db.patient.findUnique({
       where: { id },
       select: {
@@ -97,8 +98,10 @@ export async function getPatientDashboardStatistics(id: string) {
         status: 200,
       };
     }
+
+    // Lấy lịch sử cuộc hẹn của bệnh nhân
     const appointments = await db.appointment.findMany({
-      where: { patient_id: data?.id },
+      where: { patient_id: data.id },
       include: {
         doctor: {
           select: {
@@ -121,33 +124,56 @@ export async function getPatientDashboardStatistics(id: string) {
       orderBy: { appointment_date: "desc" },
     });
 
+    // Xử lý thống kê và lịch sử gần nhất
     const { appointmentCounts, monthlyData } = await processAppointments(
       appointments
     );
     const lastRecords = appointments.slice(0, 5);
 
-    const availableDoctor = await db.doctor.findMany({
-      select: { id: true, name: true, specialization: true, img: true },
-      take: 6,
+    // Lấy ngày hôm nay (ví dụ "Friday")
+    const today = new Date().toLocaleDateString("en-US", { weekday: "long" });
+
+    // Lấy danh sách bác sĩ đang làm việc hôm nay
+    const availableDoctorRaw = await db.doctor.findMany({
+      where: {
+        working_days: {
+          some: { day: { equals: today, mode: "insensitive" } },
+        },
+      },
+      select: {
+        id: true,
+        name: true,
+        specialization: true,
+        img: true,
+        working_days: true,
+      },
     });
-    //TODO: process appointment info
+
+    // Không xử lý availableTimeSlots nữa — chỉ lấy bác sĩ đang làm hôm nay
+    const availableDoctor = availableDoctorRaw.map((doc) => ({
+      id: doc.id,
+      name: doc.name,
+      specialization: doc.specialization,
+      img: doc.img,
+      working_days: doc.working_days,
+    }));
+
+    // Trả kết quả
     return {
       success: true,
       data,
       appointmentCounts,
       lastRecords,
       totalAppointments: appointments.length,
-      availableDoctor: null,
+      availableDoctor,
       monthlyData,
       status: 200,
     };
-    return { success: true, data, status: 200 };
   } catch (error) {
     console.log(error);
     return { success: false, message: "Internal Server ERROR", status: 500 };
   }
 }
-
 export async function getPatientById(id: string) {
   try {
     const patient = await db.patient.findUnique({

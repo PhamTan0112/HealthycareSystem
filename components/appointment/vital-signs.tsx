@@ -41,7 +41,6 @@ export const VitalSigns = async ({
   const vitals = data?.vital_signs || null;
 
   const isPatient = await checkRole("PATIENT");
-  console.log("check role vital-signns: ", isPatient);
   return (
     <section id="vital-signs">
       <Card>

@@ -58,7 +58,7 @@ export const BookAppointment = ({
   const router = useRouter();
   const [physicians, setPhysicians] = useState<Doctor[] | undefined>(doctors);
 
-  const appointmentTimes = generateTimes(8, 17, 30);
+  const appointmentTimes = generateTimes(8, 22, 30);
 
   const patientName = `${data?.first_name} ${data?.last_name}`;
 
@@ -86,6 +86,10 @@ export const BookAppointment = ({
         form.reset({});
         router.refresh();
         toast.success("Appointment created successfully");
+      } else if (!res.success) {
+        toast.error(
+          "Doctor is not available at the selected time. Please choose another slot."
+        );
       }
     } catch (error) {
       console.log(error);

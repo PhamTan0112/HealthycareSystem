@@ -108,10 +108,7 @@ export default async function LabTestContainer() {
           {lab.result || <span className="italic text-gray-400">N/A</span>}
         </td>
         <td className="text-center py-2">
-          {
-            // isTech &&
-            <UpdateLabTestDialog labTest={lab} />
-          }
+          <UpdateLabTestDialog labTest={lab} />
         </td>
       </tr>
     );

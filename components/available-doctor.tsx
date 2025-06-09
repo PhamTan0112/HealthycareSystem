@@ -72,7 +72,9 @@ export const AvailableDoctors = async ({ data }: DataProps) => {
                 {doc?.specialization}
               </p>
               <p className="text-sm flex items-center">
-                <span className="hidden lg:flex">Available Time:</span>
+                <span className="hidden lg:flex">
+                  Available Time: <a />{" "}
+                </span>
                 {availableDays({ data: doc?.working_days })}
               </p>
             </div>

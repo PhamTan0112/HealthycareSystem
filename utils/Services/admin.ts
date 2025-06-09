@@ -46,7 +46,9 @@ export async function getAdminDashboardStats() {
             specialization: true,
             img: true,
             colorCode: true,
+            working_days: true,
           },
+          take: 5,
         }),
       ]);
 

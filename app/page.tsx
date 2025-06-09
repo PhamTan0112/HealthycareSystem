@@ -13,7 +13,7 @@ export default async function Home() {
   if (userId && role) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <p>Đang chuyển hướng tới trang {role}...</p>
+        {/* <p>Đang chuyển hướng tới trang {role}...</p> */}
         <meta httpEquiv="refresh" content={`1;url=/${role}`} />
       </div>
     );

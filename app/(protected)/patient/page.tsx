@@ -25,7 +25,6 @@ const PatientDashboard = async () => {
     availableDoctor,
     monthlyData,
   } = await getPatientDashboardStatistics(user?.id!);
-
   if (user && !data) {
     redirect("/patient/registration");
   }
@@ -115,9 +114,7 @@ const PatientDashboard = async () => {
           />
         </div>
 
-        <AvailableDoctors
-          data={availableDoctor ?? ([] as AvailableDoctorProps)}
-        />
+        <AvailableDoctors data={availableDoctor as any} />
 
         <PatientRatingContainer />
         <HealthBotDialog />

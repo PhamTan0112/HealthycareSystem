@@ -40,14 +40,16 @@ export const DiagnosisContainer = async ({
       {diagnosis?.length === 0 || !diagnosis ? (
         <div className="flex flex-col items-center justify-center mt-20">
           <NoDataFound note="No diagnosis found" />
-          <AddDiagnosis
-            key={new Date().getTime()}
-            patientId={patientId}
-            doctorId={doctorId}
-            appointmentId={id}
-            services={services}
-            medicalId={String(data?.id)}
-          />
+          {!isPatient && (
+            <AddDiagnosis
+              key={new Date().getTime()}
+              patientId={patientId}
+              doctorId={doctorId}
+              appointmentId={id}
+              services={services}
+              medicalId={String(data?.id)}
+            />
+          )}
         </div>
       ) : (
         <section className="space-y-6">

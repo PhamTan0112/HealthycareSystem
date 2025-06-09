@@ -83,10 +83,9 @@ export function generateRandomColor(): string {
 }
 
 function formatTime(hour: number, minute: number): string {
-  const period = hour >= 12 ? "PM" : "AM";
-  const adjustedHour = hour % 12 || 12;
-  const formattedMinute = minute.toString().padStart(2, "0");
-  return `${adjustedHour}:${formattedMinute} ${period}`;
+  const hourStr = hour.toString().padStart(2, "0");
+  const minuteStr = minute.toString().padStart(2, "0");
+  return `${hourStr}:${minuteStr}`; // ví dụ: "14:30"
 }
 
 export function generateTimes(
@@ -181,4 +180,20 @@ export function calculateDiscount({
       "Please provide either a discount amount or a discount percentage."
     );
   }
+}
+
+export function generateConflictTimeSlots(time: string): string[] {
+  const [hourStr, minStr] = time.split(":");
+  const hour = parseInt(hourStr);
+  const minute = parseInt(minStr);
+
+  const format = (h: number, m: number) =>
+    `${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}`;
+
+  const slots = [];
+  slots.push(format(hour, minute)); // chính giờ
+  if (minute === 0) slots.push(format(hour - 1, 30)); // trước đó 30p
+  if (minute === 30) slots.push(format(hour, 0)); // trước đó 30p
+
+  return slots;
 }
