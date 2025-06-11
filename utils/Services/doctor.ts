@@ -230,3 +230,35 @@ export async function getAllDoctors({
     return { success: false, message: "Internal Server Error", status: 500 };
   }
 }
+
+export async function getDoctorUpcomingAppointments() {
+  const { userId } = await auth();
+
+  if (!userId) return [];
+
+  const appointments = await db.appointment.findMany({
+    where: {
+      doctor_id: userId,
+      status: {
+        in: ["SCHEDULED", "PENDING"],
+      },
+    },
+    take: 5,
+    orderBy: {
+      appointment_date: "desc",
+    },
+    select: {
+      id: true,
+      appointment_date: true,
+      time: true,
+      patient: {
+        select: {
+          first_name: true,
+          last_name: true,
+        },
+      },
+    },
+  });
+
+  return appointments;
+}
