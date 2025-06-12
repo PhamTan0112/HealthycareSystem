@@ -92,9 +92,8 @@ export async function getDoctorDashboardStats() {
       }),
     ]);
 
-    const { appointmentCounts, monthlyData } = await processAppointments(
-      appointments
-    );
+    const { appointmentCounts, monthlyData } =
+      await processAppointments(appointments);
 
     const last5Records = appointments.slice(0, 5);
 
@@ -251,6 +250,7 @@ export async function getDoctorUpcomingAppointments() {
       id: true,
       appointment_date: true,
       time: true,
+      status: true,
       patient: {
         select: {
           first_name: true,

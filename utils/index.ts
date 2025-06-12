@@ -1,3 +1,5 @@
+import { Resend } from "resend";
+
 export function formatNumber(amount: number): string {
   return amount?.toLocaleString("en-US", {
     maximumFractionDigits: 0,
@@ -197,3 +199,41 @@ export function generateConflictTimeSlots(time: string): string[] {
 
   return slots;
 }
+
+// const resend = new Resend("re_asWTh6PN_AQu3UFHG4TvsPWajn6Lttwp8");
+// export async function sendAppointmentStatusEmail({
+//   to,
+//   patientName,
+//   doctorName,
+//   status,
+//   appointmentDate,
+//   time,
+// }: {
+//   to: string;
+//   patientName: string;
+//   doctorName: string;
+//   status: "SCHEDULED" | "COMPLETED";
+//   appointmentDate: string;
+//   time: string;
+// }) {
+//   const statusText =
+//     status === "SCHEDULED" ? "đã được lên lịch" : "đã được hoàn tất";
+
+//   const subject =
+//     status === "SCHEDULED"
+//       ? "Lịch hẹn của bạn đã được lên lịch"
+//       : "Lịch hẹn của bạn đã hoàn tất";
+
+//   const html = `
+//     <p>Xin chào <strong>${patientName}</strong>,</p>
+//     <p>Lịch hẹn với bác sĩ <strong>${doctorName}</strong> vào <strong>${appointmentDate} lúc ${time}</strong> ${statusText}.</p>
+//     <p>Trân trọng,<br/>HealthyCare Team</p>
+//   `;
+
+//   await resend.emails.send({
+//     from: "noreply@healthycare.app",
+//     to,
+//     subject,
+//     html,
+//   });
+// }
