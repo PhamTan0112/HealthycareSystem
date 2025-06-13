@@ -1,4 +1,5 @@
 import { Resend } from "resend";
+import db from "@/lib/db";
 
 export function formatNumber(amount: number): string {
   return amount?.toLocaleString("en-US", {
@@ -8,17 +9,13 @@ export function formatNumber(amount: number): string {
 
 export function getInitials(name: string): string {
   const words = name.trim().split(" ");
-
   const firstTwoWords = words.slice(0, 2);
-
   const initials = firstTwoWords.map((word) => word.charAt(0).toUpperCase());
-
   return initials.join("");
 }
 
 export function formatDateTime(isoDate: string): string {
   const date = new Date(isoDate);
-
   const options: Intl.DateTimeFormatOptions = {
     weekday: "short",
     year: "numeric",
@@ -27,9 +24,7 @@ export function formatDateTime(isoDate: string): string {
     hour: "numeric",
     minute: "numeric",
     second: "numeric",
-    // timeZoneName: "short", // "UTC"
   };
-
   return date.toLocaleString("en-US", options);
 }
 
@@ -42,22 +37,17 @@ export function calculateAge(dob: Date): string {
     years--;
     months += 12;
   }
-
   if (months === 0 && today.getDate() < dob.getDate()) {
     years--;
     months = 11;
   }
-
   if (years === 0) {
     return `${months} months old`;
   }
-
   let ageString = `${years} years`;
-
   if (months > 0) {
     ageString += ` ${months} months`;
   }
-
   return ageString + " old";
 }
 
@@ -75,19 +65,18 @@ export function generateRandomColor(): string {
   let hexColor = "";
   do {
     const randomInt = Math.floor(Math.random() * 16777216);
-
     hexColor = `#${randomInt.toString(16).padStart(6, "0")}`;
   } while (
     hexColor.toLowerCase() === "#ffffff" ||
     hexColor.toLowerCase() === "#000000"
-  ); // Ensure it’s not white or black
+  );
   return hexColor;
 }
 
 function formatTime(hour: number, minute: number): string {
   const hourStr = hour.toString().padStart(2, "0");
   const minuteStr = minute.toString().padStart(2, "0");
-  return `${hourStr}:${minuteStr}`; // ví dụ: "14:30"
+  return `${hourStr}:${minuteStr}`;
 }
 
 export function generateTimes(
@@ -96,29 +85,21 @@ export function generateTimes(
   interval_in_minutes: number
 ) {
   const times = [];
-  const startHour = start_hour;
-  const endHour = close_hour;
-  const intervalMinutes = interval_in_minutes;
-
-  for (let hour = startHour; hour <= endHour; hour++) {
-    for (let minute = 0; minute < 60; minute += intervalMinutes) {
-      if (hour === endHour && minute > 0) break;
+  for (let hour = start_hour; hour <= close_hour; hour++) {
+    for (let minute = 0; minute < 60; minute += interval_in_minutes) {
+      if (hour === close_hour && minute > 0) break;
       const formattedTime = formatTime(hour, minute);
       times.push({ label: formattedTime, value: formattedTime });
     }
   }
-
   return times;
 }
 
 export const calculateBMI = (weight: number, height: number) => {
   const heightInMeters = height / 100;
-
   const bmi = weight / (heightInMeters * heightInMeters);
-
   let status: string;
   let colorCode: string;
-
   if (bmi < 18.5) {
     status = "Underweight";
     colorCode = "#1E90FF";
@@ -132,7 +113,6 @@ export const calculateBMI = (weight: number, height: number) => {
     status = "Obesity";
     colorCode = "#FF5722";
   }
-
   return {
     bmi: parseFloat(bmi.toFixed(2)),
     status,
@@ -160,9 +140,7 @@ export function calculateDiscount({
       "Provide either discount amount or discount percentage, not both."
     );
   }
-
   if (discount != null) {
-    // Calculate discount percentage if a discount amount is provided
     const discountPercent = (discount / amount) * 100;
     return {
       finalAmount: amount - discount,
@@ -170,7 +148,6 @@ export function calculateDiscount({
       discountAmount: discount,
     };
   } else if (discountPercentage != null) {
-    // Calculate discount amount if a discount percentage is provided
     const discountAmount = (discountPercentage / 100) * amount;
     return {
       finalAmount: amount - discountAmount,
@@ -193,47 +170,57 @@ export function generateConflictTimeSlots(time: string): string[] {
     `${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}`;
 
   const slots = [];
-  slots.push(format(hour, minute)); // chính giờ
-  if (minute === 0) slots.push(format(hour - 1, 30)); // trước đó 30p
-  if (minute === 30) slots.push(format(hour, 0)); // trước đó 30p
+  slots.push(format(hour, minute));
+
+  if (minute === 0) {
+    slots.push(format(hour - 1, 30));
+    slots.push(format(hour, 30));
+  } else if (minute === 30) {
+    slots.push(format(hour, 0));
+    slots.push(format(hour + 1, 0));
+  }
 
   return slots;
 }
 
-// const resend = new Resend("re_asWTh6PN_AQu3UFHG4TvsPWajn6Lttwp8");
-// export async function sendAppointmentStatusEmail({
-//   to,
-//   patientName,
-//   doctorName,
-//   status,
-//   appointmentDate,
-//   time,
-// }: {
-//   to: string;
-//   patientName: string;
-//   doctorName: string;
-//   status: "SCHEDULED" | "COMPLETED";
-//   appointmentDate: string;
-//   time: string;
-// }) {
-//   const statusText =
-//     status === "SCHEDULED" ? "đã được lên lịch" : "đã được hoàn tất";
+function getDayOfWeek(date: Date): string {
+  return date.toLocaleDateString("en-US", { weekday: "long" });
+}
 
-//   const subject =
-//     status === "SCHEDULED"
-//       ? "Lịch hẹn của bạn đã được lên lịch"
-//       : "Lịch hẹn của bạn đã hoàn tất";
+export async function getAvailableSlotsForDoctor(doctorId: string, date: Date) {
+  console.log("doctorId", doctorId, date);
+  const dayName = getDayOfWeek(date);
+  console.log("day", dayName);
+  const workingDay = await db.workingDays.findFirst({
+    where: {
+      doctor_id: doctorId,
+      day: dayName.toLowerCase(),
+    },
+  });
 
-//   const html = `
-//     <p>Xin chào <strong>${patientName}</strong>,</p>
-//     <p>Lịch hẹn với bác sĩ <strong>${doctorName}</strong> vào <strong>${appointmentDate} lúc ${time}</strong> ${statusText}.</p>
-//     <p>Trân trọng,<br/>HealthyCare Team</p>
-//   `;
+  console.log("logtime", workingDay);
 
-//   await resend.emails.send({
-//     from: "noreply@healthycare.app",
-//     to,
-//     subject,
-//     html,
-//   });
-// }
+  if (!workingDay) return [];
+
+  const allSlots = generateTimes(
+    parseInt(workingDay.start_time.split(":")[0]),
+    parseInt(workingDay.close_time.split(":")[0]),
+    30
+  ).map((s) => s.value);
+
+  const appointments = await db.appointment.findMany({
+    where: {
+      doctor_id: doctorId,
+      appointment_date: date,
+    },
+    select: { time: true },
+  });
+
+  const conflictSet = new Set<string>();
+  for (const appt of appointments) {
+    const conflicts = generateConflictTimeSlots(appt.time);
+    conflicts.forEach((slot) => conflictSet.add(slot));
+  }
+
+  return allSlots.filter((slot) => !conflictSet.has(slot));
+}

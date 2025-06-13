@@ -15,6 +15,7 @@ export async function createNewAppointment(data: any) {
     if (!validatedData.success) {
       return { success: false, msg: "Invalid data" };
     }
+
     const validated = validatedData.data;
 
     const appointmentDate = new Date(validated.appointment_date);
@@ -30,25 +31,7 @@ export async function createNewAppointment(data: any) {
     const appointmentEnd = new Date(appointmentStart);
     appointmentEnd.setHours(appointmentEnd.getHours() + 1);
 
-    // ✅ Check nếu doctor đã có lịch trong khung giờ này
-    const existing = await db.appointment.findFirst({
-      where: {
-        doctor_id: validated.doctor_id,
-        appointment_date: appointmentDate,
-        status: { notIn: ["CANCELLED", "COMPLETED"] },
-        time: {
-          in: generateConflictTimeSlots(validated.time),
-        },
-      },
-    });
-
-    if (existing) {
-      return {
-        success: false,
-        msg: "Doctor is not available at the selected time. Please choose another slot.",
-      };
-    }
-
+    // ✅ Tạo lịch hẹn mới (bỏ check trùng)
     await db.appointment.create({
       data: {
         patient_id: data.patient_id,

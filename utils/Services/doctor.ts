@@ -1,6 +1,6 @@
 import db from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
-import { daysOfWeek } from "..";
+import { daysOfWeek, getAvailableSlotsForDoctor } from "..";
 import { processAppointments } from "./patient";
 
 export async function getDoctors() {

@@ -36,6 +36,7 @@ import {
 } from "../ui/select";
 import { toast } from "sonner";
 import { createNewAppointment } from "@/app/actions/appointment";
+import { CustomTimeSelectWithServerAction } from "../custom-time-select";
 
 const TYPES = [
   { label: "General Consultation", value: "General Consultation" },
@@ -204,13 +205,12 @@ export const BookAppointment = ({
                     label="Date"
                     inputType="date"
                   />
-                  <CustomInput
-                    type="select"
-                    control={form.control}
+                  <CustomTimeSelectWithServerAction
                     name="time"
-                    placeholder="Select time"
                     label="Time"
-                    selectList={appointmentTimes}
+                    control={form.control}
+                    doctorId={form.watch("doctor_id")}
+                    appointmentDate={form.watch("appointment_date")}
                   />
                 </div>
 
