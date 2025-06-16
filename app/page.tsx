@@ -3,6 +3,7 @@ export const dynamic = "force-dynamic";
 import { Button } from "@/components/ui/button";
 import { getRole } from "@/utils/roles";
 import { auth } from "@clerk/nextjs/server";
+import { HeartPulse } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -12,8 +13,9 @@ export default async function Home() {
 
   if (userId && role) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        {/* <p>Đang chuyển hướng tới trang {role}...</p> */}
+      <div className="flex flex-col items-center justify-center h-screen text-green-600">
+        <HeartPulse size={64} />
+        <p className="mt-4 text-lg font-semibold">HealthyCare</p>
         <meta httpEquiv="refresh" content={`1;url=/${role}`} />
       </div>
     );

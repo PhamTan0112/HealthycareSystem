@@ -71,9 +71,8 @@ export async function createReview(values: ReviewFormValues) {
       message: "Review created successfully",
       status: 200,
     };
-  } catch (error) {
-    console.log(error);
-
+  } catch (err: any) {
+    console.error("❌ Error in createReview:", err);
     return {
       success: false,
       message: "Internal Server Error",

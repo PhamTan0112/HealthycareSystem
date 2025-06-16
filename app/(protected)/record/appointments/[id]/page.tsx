@@ -65,7 +65,7 @@ const AppointmentDetailsPage = async ({
       </div>
       {/* RIGHT */}
       <div className="flex-1 space-y-6">
-        <AppointmentQuickLinks staffId={data?.doctor_id as string} />
+        <AppointmentQuickLinks userId={data?.doctor_id as string} />
         <PatientDetailsCard data={data?.patient!} />
       </div>
     </div>

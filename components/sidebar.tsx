@@ -104,12 +104,12 @@ export const Sidebar = async () => {
           access: ["nurse"],
           icon: Users,
         },
-        {
-          name: "Administer Medications",
-          href: "/nurse/administer-medications",
-          access: ["admin", "doctor", "nurse"],
-          icon: Pill,
-        },
+        // {
+        //   name: "Administer Medications",
+        //   href: "/nurse/administer-medications",
+        //   access: ["admin", "doctor", "nurse"],
+        //   icon: Pill,
+        // },
         {
           name: "Appointments",
           href: "/record/appointments",
@@ -136,29 +136,29 @@ export const Sidebar = async () => {
         },
       ],
     },
-    {
-      label: "System",
-      links: [
-        {
-          name: "Notifications",
-          href: "/notifications",
-          access: ACCESS_LEVELS_ALL,
-          icon: Bell,
-        },
-        {
-          name: "Audit Logs",
-          href: "/admin/audit-logs",
-          access: ["admin"],
-          icon: Logs,
-        },
-        {
-          name: "Settings",
-          href: "/admin/system-settings",
-          access: ["admin"],
-          icon: Settings,
-        },
-      ],
-    },
+    // {
+    //   label: "System",
+    //   links: [
+    //     {
+    //       name: "Notifications",
+    //       href: "/notifications",
+    //       access: ACCESS_LEVELS_ALL,
+    //       icon: Bell,
+    //     },
+    //     {
+    //       name: "Audit Logs",
+    //       href: "/admin/audit-logs",
+    //       access: ["admin"],
+    //       icon: Logs,
+    //     },
+    //     {
+    //       name: "Settings",
+    //       href: "/admin/system-settings",
+    //       access: ["admin"],
+    //       icon: Settings,
+    //     },
+    //   ],
+    // },
   ];
 
   return (

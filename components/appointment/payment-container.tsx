@@ -38,7 +38,7 @@ const columns = [
   },
   {
     header: "Paid",
-    key: "payable",
+    key: "paid",
     className: "hidden xl:table-cell",
   },
   {

@@ -11,6 +11,7 @@ import {
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Button } from "../ui/button";
+import { useRouter } from "next/navigation";
 
 interface BloodPressureChartProps {
   average: string;
@@ -23,6 +24,7 @@ interface BloodPressureChartProps {
 
 const BloodPressureChart = ({ data, average }: BloodPressureChartProps) => {
   const lastData = data[data.length - 1];
+  const router = useRouter();
   return (
     <Card className=" shadow-none col-span-2">
       <CardHeader>
@@ -41,7 +43,13 @@ const BloodPressureChart = ({ data, average }: BloodPressureChartProps) => {
             <p className=" text-lg xl:text-xl font-semibold">{average}</p>
             <p className="text-sm text-muted-foreground">7 Days Average</p>
           </div>
-          <Button variant={"outline"}>See Insight</Button>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => router.push("?cat=appointments")}
+          >
+            See Insights
+          </Button>
         </div>
         <ResponsiveContainer width="100%" height={400}>
           <BarChart data={data}>

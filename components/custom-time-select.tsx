@@ -14,7 +14,7 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import { getAvailableTimesAction } from "@/utils/services/docter2";
+import { getAvailableTimesAction } from "@/app/actions/docter2";
 
 type Props = {
   control: any;

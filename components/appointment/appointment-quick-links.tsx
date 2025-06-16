@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { checkRole } from "@/utils/roles";
 import { ReviewForm } from "../dialogs/review-form";
 
-const AppointmentQuickLinks = async ({ staffId }: { staffId: string }) => {
+const AppointmentQuickLinks = async ({ userId }: { userId: string }) => {
   const isPatient = await checkRole("PATIENT");
   return (
     <Card className="w-full rounded-xl bg-white shadow-none">
@@ -66,7 +66,7 @@ const AppointmentQuickLinks = async ({ staffId }: { staffId: string }) => {
           Vital Signs
         </Link>
 
-        {isPatient && <ReviewForm staffId={staffId} />}
+        {isPatient && <ReviewForm staffId={userId} />}
       </CardContent>
     </Card>
   );

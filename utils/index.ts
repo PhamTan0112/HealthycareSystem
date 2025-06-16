@@ -1,4 +1,3 @@
-import { Resend } from "resend";
 import db from "@/lib/db";
 
 export function formatNumber(amount: number): string {

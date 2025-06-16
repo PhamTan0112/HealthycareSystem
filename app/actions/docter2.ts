@@ -1,4 +1,3 @@
-// app/actions/doctor.ts
 "use server";
 
 import { getAvailableSlotsForDoctor } from "@/utils";

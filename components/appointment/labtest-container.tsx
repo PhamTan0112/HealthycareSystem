@@ -6,6 +6,7 @@ import { format } from "date-fns";
 import { LabTest } from "@prisma/client";
 import { Badge } from "@/components/ui/badge";
 import { UpdateLabTestDialog } from "../dialogs/update-labtest";
+import { ActionDialog } from "../action-dialog";
 
 const columns = [
   {
@@ -108,7 +109,12 @@ export default async function LabTestContainer() {
           {lab.result || <span className="italic text-gray-400">N/A</span>}
         </td>
         <td className="text-center py-2">
-          <UpdateLabTestDialog labTest={lab} />
+          {/* <UpdateLabTestDialog labTest={lab} /> */}
+          <ActionDialog
+            type="delete"
+            id={lab?.id?.toString()}
+            deleteType="labtest"
+          />
         </td>
       </tr>
     );

@@ -6,6 +6,7 @@ import { AppointmentSchema, VitalSignsSchema } from "@/lib/schema";
 import { generateConflictTimeSlots } from "@/utils";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { AppointmentStatus } from "@prisma/client";
+import { subMonths } from "date-fns";
 import { Resend } from "resend";
 
 export async function createNewAppointment(data: any) {

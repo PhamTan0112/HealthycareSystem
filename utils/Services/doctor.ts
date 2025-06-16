@@ -29,7 +29,7 @@ export async function getDoctorDashboardStats() {
       totalNurses,
       appointments,
       doctors,
-      remainingAppointmentsToday,
+      totalAppointments, // 👉 đổi tên biến cho rõ nghĩa
     ] = await Promise.all([
       db.patient.count(),
       db.staff.count({ where: { role: "NURSE" } }),
@@ -80,14 +80,7 @@ export async function getDoctorDashboardStats() {
       }),
       db.appointment.count({
         where: {
-          doctor_id: userId!,
-          appointment_date: {
-            gte: todayStart,
-            lte: todayEnd,
-          },
-          status: {
-            notIn: ["COMPLETED", "CANCELLED"],
-          },
+          doctor_id: userId!, // ✅ đếm toàn bộ lịch hẹn của bác sĩ
         },
       }),
     ]);
@@ -103,7 +96,7 @@ export async function getDoctorDashboardStats() {
       appointmentCounts,
       last5Records,
       availableDoctors: doctors,
-      totalAppointment: remainingAppointmentsToday, // ✅ dùng số cuộc hẹn còn lại hôm nay
+      totalAppointment: totalAppointments, // ✅ đổi lại biến trả về
       monthlyData,
     };
   } catch (error) {
@@ -261,4 +254,35 @@ export async function getDoctorUpcomingAppointments() {
   });
 
   return appointments;
+}
+
+export async function getActiveDoctorsToday() {
+  const today = new Date();
+  const weekday = today
+    .toLocaleDateString("en-US", { weekday: "long" })
+    .toLowerCase();
+
+  const doctors = await db.doctor.findMany({
+    where: {
+      working_days: {
+        some: { day: weekday },
+      },
+    },
+    select: {
+      id: true,
+      name: true,
+      specialization: true,
+      img: true,
+      working_days: {
+        where: { day: weekday },
+        select: {
+          day: true,
+          start_time: true,
+          close_time: true,
+        },
+      },
+    },
+  });
+
+  return doctors;
 }

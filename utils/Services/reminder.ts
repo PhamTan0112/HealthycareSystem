@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { sendAppointmentReminderEmails } from "./appointment";
+import { sendAppointmentReminderEmails } from "../../app/actions/appointment";
 
 export async function GET() {
   await sendAppointmentReminderEmails();
