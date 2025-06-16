@@ -129,6 +129,52 @@ export async function createNewDoctor(data: any) {
   }
 }
 
+export async function updateDoctorWorkingDays(doctorId: string, schedule: any) {
+  try {
+    const parsed = WorkingDaysSchema.safeParse(schedule);
+
+    if (!parsed.success) {
+      return {
+        success: false,
+        error: true,
+        message: "Invalid working day data",
+        details: parsed.error.flatten(),
+      };
+    }
+    console.log("check parsed: ", parsed);
+    const workingDays = parsed.data; // TypeScript biết đây không undefined
+
+    await db.$transaction(async (tx) => {
+      await tx.workingDays.deleteMany({
+        where: { doctor_id: doctorId },
+      });
+
+      await Promise.all(
+        (workingDays ?? []).map((day) =>
+          tx.workingDays.create({
+            data: {
+              ...day,
+              doctor_id: doctorId,
+            },
+          })
+        )
+      );
+    });
+    return {
+      success: true,
+      error: false,
+      message: "Working days updated successfully",
+    };
+  } catch (error) {
+    console.error("updateDoctorWorkingDays error:", error);
+    return {
+      success: false,
+      error: true,
+      message: "Failed to update working days",
+    };
+  }
+}
+
 export async function addNewService(data: any) {
   try {
     const isValidData = ServicesSchema.safeParse(data);

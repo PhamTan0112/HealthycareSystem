@@ -140,7 +140,7 @@ export const BillsContainer = async ({ id }: { id: string }) => {
 
       <Separator />
 
-      <div className="flex flex-wrap lg:flex-nowrap items-center justify-between md:text-center py-2 space-y-6">
+      <div className="flex flex-wrap lg:flex-nowrap items-center justify-between md:text-center py-2 gap-6">
         <div className="w-[120px]">
           <span className="text-gray-500">Total Bill</span>
           <p className="text-xl font-semibold">
@@ -163,12 +163,7 @@ export const BillsContainer = async ({ id }: { id: string }) => {
             {(discount?.finalAmount || 0.0).toFixed(2)}
           </p>
         </div>
-        <div className="w-[120px]">
-          <span className="text-gray-500">Amount Paid</span>
-          <p className="text-xl font-semibold text-emerald-600">
-            {(data?.amount_paid || 0.0).toFixed(2)}
-          </p>
-        </div>
+
         <div className="w-[120px]">
           <span className="text-gray-500">Unpaid Amount</span>
           <p className="text-xl font-semibold text-red-600">

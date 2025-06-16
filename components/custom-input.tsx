@@ -182,39 +182,53 @@ interface SwitchProps {
   setWorkSchedule: React.Dispatch<React.SetStateAction<Day[]>>;
 }
 
-export const SwitchInput = ({ data, setWorkSchedule }: SwitchProps) => {
-  const handleChange = (day: string, field: any, value: string) => {
-    setWorkSchedule((prevDays) => {
-      const dayExist = prevDays.find((d) => d.day === day);
+interface SwitchProps {
+  data: { label: string; value: string }[];
+  setWorkSchedule: React.Dispatch<React.SetStateAction<Day[]>>;
+  currentSchedule: Day[];
+}
 
-      if (dayExist) {
-        return prevDays.map((d) =>
-          d.day === day ? { ...d, [field]: value } : d
-        );
+export const SwitchInput = ({
+  data,
+  setWorkSchedule,
+  currentSchedule,
+}: SwitchProps) => {
+  const handleToggleDay = (day: string, isChecked: boolean) => {
+    setWorkSchedule((prev) => {
+      if (isChecked) {
+        const exist = prev.find((d) => d.day === day);
+        if (exist) return prev;
+        return [...prev, { day, start_time: "09:00", close_time: "17:00" }];
       } else {
-        if (field === true) {
-          return [
-            ...prevDays,
-            { day, start_time: "09:00", close_time: "17:00" },
-          ];
-        } else {
-          return [...prevDays, { day, [field]: value }];
-        }
+        return prev.filter((d) => d.day !== day);
       }
     });
   };
 
+  const handleChange = (day: string, field: string, value: string) => {
+    setWorkSchedule((prev) =>
+      prev.map((d) => (d.day === day ? { ...d, [field]: value } : d))
+    );
+  };
+
+  const isDayChecked = (day: string) =>
+    currentSchedule?.some((d) => d.day === day);
+
+  const getValue = (day: string, field: "start_time" | "close_time") =>
+    currentSchedule.find((d) => d.day === day)?.[field] || "";
+
   return (
-    <div className="">
+    <div>
       {data?.map((el, id) => (
         <div
           key={id}
-          className="w-full  flex items-center space-y-3 border-t border-t-gray-200  py-3"
+          className="w-full flex items-center space-y-3 border-t border-t-gray-200 py-3"
         >
           <Switch
             id={el.value}
             className="data-[state=checked]:bg-blue-600 peer"
-            onCheckedChange={(e) => handleChange(el.value, true, "09:00")}
+            checked={isDayChecked(el.value)}
+            onCheckedChange={(checked) => handleToggleDay(el.value, checked)}
           />
           <Label htmlFor={el.value} className="w-20 capitalize">
             {el.value}
@@ -224,19 +238,17 @@ export const SwitchInput = ({ data, setWorkSchedule }: SwitchProps) => {
             Not working on this day
           </Label>
 
-          <div className="hidden peer-data-[state=checked]:flex items-center gap-2 pl-6:">
+          <div className="hidden peer-data-[state=checked]:flex items-center gap-2 pl-6">
             <Input
-              name={`${el.label}.start_time`}
               type="time"
-              defaultValue="09:00"
+              value={getValue(el.value, "start_time")}
               onChange={(e) =>
                 handleChange(el.value, "start_time", e.target.value)
               }
             />
             <Input
-              name={`${el.label}.close_time`}
               type="time"
-              defaultValue="17:00"
+              value={getValue(el.value, "close_time")}
               onChange={(e) =>
                 handleChange(el.value, "close_time", e.target.value)
               }

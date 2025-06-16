@@ -3,7 +3,7 @@
 import { DoctorSchema } from "@/lib/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import React, { useActionState, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import {
@@ -79,7 +79,6 @@ export const DoctorForm = () => {
 
       if (resp.success) {
         toast.success("Doctor added successfully!");
-
         setWorkSchedule([]);
         form.reset();
         router.refresh();
@@ -87,7 +86,7 @@ export const DoctorForm = () => {
         toast.error(resp.message);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       toast.error("Something went wrong");
     } finally {
       setIsLoading(false);
@@ -101,7 +100,6 @@ export const DoctorForm = () => {
       const department = SPECIALIZATION.find(
         (el) => el.value === selectedSpecialization
       );
-
       if (department) {
         form.setValue("department", department.department);
       }
@@ -171,6 +169,7 @@ export const DoctorForm = () => {
                 placeholder="License Number"
                 label="License Number"
               />
+
               <div className="flex items-center gap-2">
                 <CustomInput
                   type="input"
@@ -208,10 +207,10 @@ export const DoctorForm = () => {
 
               <div className="mt-6">
                 <Label>Working Days</Label>
-
                 <SwitchInput
                   data={WORKING_DAYS}
                   setWorkSchedule={setWorkSchedule}
+                  currentSchedule={workSchedule} // ✅ quan trọng
                 />
               </div>
 

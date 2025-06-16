@@ -70,7 +70,6 @@ const MedicalRecordsPage = async (props: SearchParamsProps) => {
   const renderRow = (item: ExtendedProps) => {
     const name = item?.patient?.first_name + " " + item?.patient?.last_name;
     const patient = item?.patient;
-
     return (
       <tr
         key={item?.id}
@@ -87,6 +86,9 @@ const MedicalRecordsPage = async (props: SearchParamsProps) => {
             <h3 className="uppercase">{name}</h3>
             <span className="text-sm capitalize">{patient?.gender}</span>
           </div>
+        </td>
+        <td className="hidden md:table-cell">
+          <span className="text-sm">{patient?.email || "N/A"}</span>
         </td>
         <td className="hidden md:table-cell">
           {format(item?.created_at, "yyyy-MM-dd HH:mm:ss")}

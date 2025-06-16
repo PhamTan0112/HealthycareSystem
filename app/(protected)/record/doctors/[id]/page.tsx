@@ -1,4 +1,5 @@
 import { availableDays } from "@/components/available-doctor";
+import { DoctorWorkingDaysForm } from "@/components/forms/update-doctor-form";
 import { ProfileImage } from "@/components/profile-image";
 import { RatingContainer } from "@/components/rating-container";
 import { RecentAppointments } from "@/components/tables/recent-appoinment";
@@ -136,7 +137,10 @@ const DoctorProfile = async (props: { params: Promise<{ id: string }> }) => {
             </Link>
           </div>
         </div>
-
+        <DoctorWorkingDaysForm
+          doctorId={data.id}
+          initialSchedule={data.working_days}
+        />
         <RatingContainer id={params?.id} />
       </div>
     </div>

@@ -2,6 +2,7 @@ import { getRole } from "@/utils/roles";
 import { link } from "fs";
 import {
   Bell,
+  CalendarDays,
   Icon,
   LayoutDashboard,
   List,
@@ -20,6 +21,7 @@ import {
 import Link from "next/link";
 import React from "react";
 import { LogoutButton } from "./logoutButton";
+import { currentUser } from "@clerk/nextjs/server";
 
 const ACCESS_LEVELS_ALL = [
   "admin",
@@ -34,7 +36,7 @@ const SidebarIcon = ({ icon: Icon }: { icon: LucideIcon }) => {
 };
 export const Sidebar = async () => {
   const role = await getRole();
-
+  const user = await currentUser();
   const SIDEBAR_LINKS = [
     {
       label: "MENU",
@@ -65,7 +67,7 @@ export const Sidebar = async () => {
         {
           name: "Doctors",
           href: "/record/doctors",
-          access: ["admin"],
+          access: ["admin", "patient"],
           icon: User,
         },
         {
@@ -122,12 +124,12 @@ export const Sidebar = async () => {
           access: ["patient"],
           icon: List,
         },
-        {
-          name: "Prescription",
-          href: "#",
-          access: ["patient"],
-          icon: Pill,
-        },
+        // {
+        //   name: "Prescription",
+        //   href: "#",
+        //   access: ["patient"],
+        //   icon: Pill,
+        // },
         {
           name: "Billing",
           href: "/record/billing",
@@ -136,29 +138,35 @@ export const Sidebar = async () => {
         },
       ],
     },
-    // {
-    //   label: "System",
-    //   links: [
-    //     {
-    //       name: "Notifications",
-    //       href: "/notifications",
-    //       access: ACCESS_LEVELS_ALL,
-    //       icon: Bell,
-    //     },
-    //     {
-    //       name: "Audit Logs",
-    //       href: "/admin/audit-logs",
-    //       access: ["admin"],
-    //       icon: Logs,
-    //     },
-    //     {
-    //       name: "Settings",
-    //       href: "/admin/system-settings",
-    //       access: ["admin"],
-    //       icon: Settings,
-    //     },
-    //   ],
-    // },
+    {
+      label: "System",
+      links: [
+        // {
+        //   name: "Audit Logs",
+        //   href: "/admin/audit-logs",
+        //   access: ["admin"],
+        //   icon: Logs,
+        // },
+        // {
+        //   name: "Settings",
+        //   href: "/admin/system-settings",
+        //   access: ["admin"],
+        //   icon: Settings,
+        // },
+        {
+          name: "Working Days",
+          href: `/record/doctors/${user?.id}`,
+          access: ["doctor"],
+          icon: CalendarDays,
+        },
+        {
+          name: "Notifications",
+          href: "/notifications",
+          access: ACCESS_LEVELS_ALL,
+          icon: Bell,
+        },
+      ],
+    },
   ];
 
   return (
