@@ -223,37 +223,85 @@ export async function getAllDoctors({
   }
 }
 
-export async function getDoctorUpcomingAppointments() {
+export async function getUpcomingAppointmentsByRole(): Promise<
+  {
+    id: number;
+    appointment_date: Date;
+    time: string;
+    status: "SCHEDULED" | "COMPLETED" | "CANCELLED" | "PENDING";
+    patient: {
+      first_name: string;
+      last_name: string;
+    };
+  }[]
+> {
   const { userId } = await auth();
-
   if (!userId) return [];
 
-  const appointments = await db.appointment.findMany({
-    where: {
+  const isDoctor = await db.doctor.findUnique({ where: { id: userId } });
+  const isPatient = await db.patient.findUnique({ where: { id: userId } });
+  const isStaff = await db.staff.findUnique({
+    where: { id: userId },
+    select: { role: true },
+  });
+
+  let whereClause = {};
+  let includeClause = {};
+
+  if (isDoctor) {
+    whereClause = {
       doctor_id: userId,
-      status: {
-        in: ["SCHEDULED", "PENDING"],
-      },
-    },
+      status: { in: ["SCHEDULED", "PENDING"] },
+    };
+    includeClause = {
+      patient: { select: { first_name: true, last_name: true } },
+    };
+  } else if (isPatient) {
+    whereClause = {
+      patient_id: userId,
+      status: { in: ["SCHEDULED", "PENDING"] },
+    };
+    includeClause = {
+      doctor: { select: { name: true } }, // We'll map this to fake "patient"
+    };
+  } else if (isStaff) {
+    whereClause = {
+      status: { in: ["SCHEDULED", "PENDING"] },
+    };
+    includeClause = {
+      patient: { select: { first_name: true, last_name: true } },
+    };
+  } else {
+    return [];
+  }
+
+  const appointments = await db.appointment.findMany({
+    where: whereClause,
     take: 5,
-    orderBy: {
-      appointment_date: "desc",
-    },
+    orderBy: { appointment_date: "desc" },
     select: {
       id: true,
       appointment_date: true,
       time: true,
       status: true,
-      patient: {
-        select: {
-          first_name: true,
-          last_name: true,
-        },
-      },
+      ...includeClause,
     },
   });
 
-  return appointments;
+  // Chuẩn hóa để mọi record đều có `.patient`
+  return appointments.map((a: any) => {
+    if (a.patient) return a;
+
+    // Nếu là patient, dùng doctor làm "fake" patient
+    const [firstName, ...rest] = (a.doctor?.name || "").split(" ");
+    return {
+      ...a,
+      patient: {
+        first_name: firstName || "N/A",
+        last_name: rest.join(" ") || "Doctor",
+      },
+    };
+  });
 }
 
 export async function getActiveDoctorsToday() {

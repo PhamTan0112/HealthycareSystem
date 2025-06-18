@@ -66,11 +66,11 @@ export async function createNewStaff(data: any) {
 
     return {
       success: true,
-      message: "Doctor added successfully",
+      message: "Staff added successfully",
       error: false,
     };
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    console.error("Create user error:", error.errors || error);
     return { error: true, success: false, message: "Something went wrong" };
   }
 }

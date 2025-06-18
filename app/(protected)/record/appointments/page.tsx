@@ -66,13 +66,11 @@ const Appointments = async (props: {
   if (
     userRole == "admin" ||
     (userRole == "doctor" && id) ||
-    (userRole === "nurse" && id)
+    userRole === "nurse"
   ) {
     queryId = id;
   } else if (userRole === "doctor" || userRole === "patient") {
     queryId = userId;
-  } else if (userRole === "nurse") {
-    queryId = undefined;
   }
 
   const { data, totalPages, totalRecord, currentPage } =

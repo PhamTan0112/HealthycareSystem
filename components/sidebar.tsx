@@ -136,37 +136,37 @@ export const Sidebar = async () => {
           access: ["patient"],
           icon: Receipt,
         },
-      ],
-    },
-    {
-      label: "System",
-      links: [
-        // {
-        //   name: "Audit Logs",
-        //   href: "/admin/audit-logs",
-        //   access: ["admin"],
-        //   icon: Logs,
-        // },
-        // {
-        //   name: "Settings",
-        //   href: "/admin/system-settings",
-        //   access: ["admin"],
-        //   icon: Settings,
-        // },
         {
           name: "Working Days",
           href: `/record/doctors/${user?.id}`,
           access: ["doctor"],
           icon: CalendarDays,
         },
-        {
-          name: "Notifications",
-          href: "/notifications",
-          access: ACCESS_LEVELS_ALL,
-          icon: Bell,
-        },
       ],
     },
+    // {
+    //   label: "System",
+    //   links: [
+    //     // {
+    //     //   name: "Audit Logs",
+    //     //   href: "/admin/audit-logs",
+    //     //   access: ["admin"],
+    //     //   icon: Logs,
+    //     // },
+    //     // {
+    //     //   name: "Settings",
+    //     //   href: "/admin/system-settings",
+    //     //   access: ["admin"],
+    //     //   icon: Settings,
+    //     // },
+    //     // {
+    //     //   name: "Notifications",
+    //     //   href: "/notifications",
+    //     //   access: ACCESS_LEVELS_ALL,
+    //     //   icon: Bell,
+    //     // },
+    //   ],
+    // },
   ];
 
   return (

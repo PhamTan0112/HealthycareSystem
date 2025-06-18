@@ -42,11 +42,9 @@ export const NotificationBellClient = ({ appointments }: Props) => {
         </div>
       </PopoverTrigger>
       <PopoverContent className="w-80 p-2 translate-x-[-20px] bg-gray-50 shadow-md rounded-md">
-        <h4 className="text-sm font-semibold mb-2 text-gray-700">
-          Lịch hẹn gần nhất
-        </h4>
+        <h4 className="text-sm font-semibold mb-2 text-gray-700">Thông báo</h4>
         {appointments.length === 0 ? (
-          <p className="text-sm text-gray-400">Không có lịch hẹn</p>
+          <p className="text-sm text-gray-400">Không có thông báo mới!</p>
         ) : (
           <div className="space-y-2 max-h-64 overflow-y-auto">
             {appointments.map((a) => (
