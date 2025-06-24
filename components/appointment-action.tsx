@@ -12,6 +12,7 @@ interface ActionProps {
   id: string | number;
   status: string;
 }
+
 export const AppointmentAction = ({ id, status }: ActionProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [selected, setSelected] = useState("");
@@ -23,7 +24,7 @@ export const AppointmentAction = ({ id, status }: ActionProps) => {
       setIsLoading(true);
       const newReason =
         reason ||
-        `Appointment has ben ${selected.toLowerCase()} on ${new Date()}`;
+        `Lịch hẹn đã được chuyển sang trạng thái ${selected.toLowerCase()} vào ${new Date()}`;
 
       const resp = await appointmentAction(
         id,
@@ -33,14 +34,13 @@ export const AppointmentAction = ({ id, status }: ActionProps) => {
 
       if (resp.success) {
         toast.success(resp.msg);
-
         router.refresh();
       } else if (resp.error) {
         toast.error(resp.msg);
       }
     } catch (error) {
       console.log(error);
-      toast.error("Something went wrong. Try again later.");
+      toast.error("Đã xảy ra lỗi. Vui lòng thử lại sau.");
     } finally {
       setIsLoading(false);
     }
@@ -55,7 +55,7 @@ export const AppointmentAction = ({ id, status }: ActionProps) => {
           className="bg-yellow-200 text-black"
           onClick={() => setSelected("PENDING")}
         >
-          Pending
+          Đang chờ
         </Button>
         <Button
           variant="outline"
@@ -65,7 +65,7 @@ export const AppointmentAction = ({ id, status }: ActionProps) => {
           className="bg-blue-200 text-black"
           onClick={() => setSelected("SCHEDULED")}
         >
-          Approve
+          Đã xác nhận
         </Button>
         <Button
           variant="outline"
@@ -75,7 +75,7 @@ export const AppointmentAction = ({ id, status }: ActionProps) => {
           className="bg-emerald-200 text-black"
           onClick={() => setSelected("COMPLETED")}
         >
-          Completed
+          Đã hoàn tất
         </Button>
         <Button
           variant="outline"
@@ -85,25 +85,24 @@ export const AppointmentAction = ({ id, status }: ActionProps) => {
           className="bg-red-200 text-black"
           onClick={() => setSelected("CANCELLED")}
         >
-          Cancel
+          Huỷ lịch
         </Button>
       </div>
+
       {selected === "CANCELLED" && (
-        <>
-          <Textarea
-            disabled={isLoading}
-            className="mt-4"
-            placeholder="Enter reason...."
-            onChange={(e) => setReason(e.target.value)}
-          ></Textarea>
-        </>
+        <Textarea
+          disabled={isLoading}
+          className="mt-4"
+          placeholder="Nhập lý do huỷ lịch..."
+          onChange={(e) => setReason(e.target.value)}
+        />
       )}
 
       {selected && (
         <div className="flex items-center justify-between mt-6 bg-red-100 p-4 rounded">
-          <p className="">Are you sure you want to perform this action?</p>
+          <p className="">Bạn có chắc chắn không?</p>
           <Button disabled={isLoading} type="button" onClick={handleAction}>
-            Yes
+            Xác nhận
           </Button>
         </div>
       )}

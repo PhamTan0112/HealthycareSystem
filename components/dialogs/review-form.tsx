@@ -36,11 +36,10 @@ export const ReviewForm = ({ staffId }: { staffId: string }) => {
   const { userId, isLoaded } = useAuth();
   const [loading, setLoading] = useState(false);
 
-  // ⚠️ Không return sớm! Dùng `if` để kiểm soát flow trong JSX
   const form = useForm<ReviewFormValues>({
     resolver: zodResolver(reviewSchema),
     defaultValues: {
-      patient_id: userId ?? "", // fallback nếu userId chưa có
+      patient_id: userId ?? "",
       staff_id: staffId,
       rating: 1,
       comment: "",
@@ -52,21 +51,21 @@ export const ReviewForm = ({ staffId }: { staffId: string }) => {
     try {
       const response = await createReview(values);
       if (response.success) {
-        toast.success(response.message);
+        toast.success("Đánh giá đã được gửi!");
         router.refresh();
       } else {
         toast.error(response.message);
       }
     } catch (error) {
-      toast.error("Failed to create review");
+      toast.error("Không thể gửi đánh giá.");
     } finally {
       setLoading(false);
     }
   };
 
-  if (!isLoaded) return null; // có thể giữ lại vì vẫn chưa vào React tree
+  if (!isLoaded) return null;
   if (!userId) {
-    toast.error("Bạn cần đăng nhập để viết đánh giá.");
+    toast.error("Bạn cần đăng nhập để đánh giá.");
     return null;
   }
 
@@ -77,15 +76,15 @@ export const ReviewForm = ({ staffId }: { staffId: string }) => {
           size="sm"
           className="px-4 py-2 rounded-lg bg-black/10 text-black hover:bg-transparent font-light"
         >
-          <Plus /> Add New Review
+          <Plus /> Viết đánh giá
         </Button>
       </DialogTrigger>
 
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add New Review</DialogTitle>
+          <DialogTitle>Gửi đánh giá của bạn</DialogTitle>
           <DialogDescription>
-            Please fill in the form below to add a new review.
+            Hãy chia sẻ trải nghiệm của bạn với bác sĩ hoặc nhân viên y tế.
           </DialogDescription>
         </DialogHeader>
 
@@ -99,7 +98,7 @@ export const ReviewForm = ({ staffId }: { staffId: string }) => {
               name="rating"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Rating</FormLabel>
+                  <FormLabel>Chọn số sao</FormLabel>
                   <FormControl>
                     <div className="flex items-center space-x-3">
                       {[1, 2, 3, 4, 5].map((star) => (
@@ -121,7 +120,7 @@ export const ReviewForm = ({ staffId }: { staffId: string }) => {
                     </div>
                   </FormControl>
                   <FormDescription>
-                    Please rate the staff based on your experience.
+                    Đánh giá dựa trên trải nghiệm của bạn.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -133,16 +132,16 @@ export const ReviewForm = ({ staffId }: { staffId: string }) => {
               name="comment"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Comment</FormLabel>
+                  <FormLabel>Nhận xét</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Write your review here..."
+                      placeholder="Viết đánh giá chi tiết tại đây..."
                       className="resize-none"
                       {...field}
                     />
                   </FormControl>
                   <FormDescription>
-                    Please write a detailed review of your experience.
+                    Ghi nhận xét cụ thể để tham khảo thêm.
                   </FormDescription>
                 </FormItem>
               )}
@@ -153,7 +152,7 @@ export const ReviewForm = ({ staffId }: { staffId: string }) => {
               disabled={loading || !userId}
               className="w-full"
             >
-              {loading ? "Submitting..." : "Submit"}
+              {loading ? "Đang gửi..." : "Gửi đánh giá"}
             </Button>
           </form>
         </Form>

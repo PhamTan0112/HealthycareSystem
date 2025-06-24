@@ -3,10 +3,8 @@
 import { VitalSignsFormData } from "@/components/dialogs/add-vital-signs";
 import db from "@/lib/db";
 import { AppointmentSchema, VitalSignsSchema } from "@/lib/schema";
-import { generateConflictTimeSlots } from "@/utils";
-import { auth, currentUser } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import { AppointmentStatus } from "@prisma/client";
-import { subMonths } from "date-fns";
 import { Resend } from "resend";
 
 export async function createNewAppointment(data: any) {
@@ -64,6 +62,7 @@ export async function sendAppointmentStatusEmail({
   appointmentDate,
   time,
   reason,
+  appointmentId,
 }: {
   to: string;
   patientName: string;
@@ -72,28 +71,53 @@ export async function sendAppointmentStatusEmail({
   appointmentDate: string;
   time: string;
   reason?: string;
+  appointmentId?: string;
 }) {
   let subject = "";
   let html = "";
 
+  // Trạng thái bị huỷ
   if (status === "CANCELLED") {
     subject = "Lịch hẹn của bạn đã bị hủy";
     html = `
       <p>Xin chào <strong>${patientName}</strong>,</p>
       <p>Lịch hẹn với bác sĩ <strong>${doctorName}</strong> vào <strong>${appointmentDate} lúc ${time}</strong> đã bị <strong>hủy</strong>.</p>
       ${reason ? `<p><strong>Lý do:</strong> ${reason}</p>` : ""}
-      <p>Vui lòng đặt lại lịch nếu cần. Trân trọng,<br/>HealthyCare</p>
+      <p>Vui lòng đặt lại lịch nếu cần.</p>
+      <p>Trân trọng,<br/>HealthyCare</p>
     `;
-  } else {
-    const statusText =
-      status === "SCHEDULED" ? "đã được lên lịch" : "đã hoàn tất";
-    subject =
-      status === "SCHEDULED"
-        ? "Lịch hẹn của bạn đã được lên lịch"
-        : "Lịch hẹn của bạn đã hoàn tất";
+  }
+
+  // Trạng thái đã hoàn tất
+  else if (status === "COMPLETED") {
+    subject = "Lịch hẹn của bạn đã hoàn tất";
     html = `
       <p>Xin chào <strong>${patientName}</strong>,</p>
-      <p>Lịch hẹn với bác sĩ <strong>${doctorName}</strong> vào <strong>${appointmentDate} lúc ${time}</strong> ${statusText}.</p>
+      <p>Lịch hẹn với bác sĩ <strong>${doctorName}</strong> vào <strong>${appointmentDate} lúc ${time}</strong> đã <strong>hoàn tất</strong>.</p>
+      <p>Chúc bạn sức khỏe và mau hồi phục!</p>
+      <p>Trân trọng,<br/>HealthyCare</p>
+    `;
+  } else if (status === "SCHEDULED") {
+    subject = "Lịch hẹn của bạn đã được lên lịch";
+    console.log("check: ", appointmentId);
+    let qrImageHTML = "";
+    if (appointmentId) {
+      const payload = {
+        appointmentId,
+        checkinToken: `hc-${appointmentId} - ${status}`,
+      };
+      const qrData = encodeURIComponent(JSON.stringify(payload));
+      const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${qrData}`;
+      qrImageHTML = `
+        <p>Vui lòng mang theo mã QR dưới đây để check-in:</p>
+        <img src="${qrUrl}" alt="QR Check-in" width="200" />
+      `;
+    }
+
+    html = `
+      <p>Xin chào <strong>${patientName}</strong>,</p>
+      <p>Lịch hẹn với bác sĩ <strong>${doctorName}</strong> đã được <strong>lên lịch</strong> vào <strong>${appointmentDate} lúc ${time}</strong>.</p>
+      ${qrImageHTML}
       <p>Trân trọng,<br/>HealthyCare</p>
     `;
   }
@@ -157,7 +181,7 @@ export async function sendAppointmentReminderEmails() {
     const time = appointment.time;
 
     await resend.emails.send({
-      from: "onboarding@resend.dev", // đổi thành domain riêng nếu cần
+      from: "onboarding@resend.dev",
       to: email,
       subject: "Nhắc lịch khám bệnh từ HealthyCare",
       html: `
@@ -188,6 +212,7 @@ export async function appointmentAction(
         patient: {
           select: {
             email: true,
+            id: true,
             first_name: true,
             last_name: true,
           },
@@ -214,6 +239,7 @@ export async function appointmentAction(
           updatedAppointment.appointment_date.toLocaleDateString("vi-VN"),
         time: updatedAppointment.time,
         reason,
+        appointmentId: String(updatedAppointment.id),
       });
     }
     return {

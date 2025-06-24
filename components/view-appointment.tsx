@@ -32,16 +32,16 @@ export const ViewAppointment = async ({ id }: { id: string | undefined }) => {
           variant="outline"
           className="flex items-center justify-center rounded-full bg-blue-500/10 hover:underline text-blue-600 px-1.5 py-1 text-xs md:text-sm"
         >
-          View
+          Xem
         </Button>
       </DialogTrigger>
 
       <DialogContent className="max-w-[425px] max-h-[95%] md:max-w-2xl 2xl:max-w-3xl p-8 overflow-y-auto">
         <>
           <DialogHeader>
-            <DialogTitle>Patient Appointment</DialogTitle>
+            <DialogTitle>Chi tiết cuộc hẹn</DialogTitle>
             <DialogDescription>
-              This appointment was booked on the{" "}
+              Cuộc hẹn được đặt vào ngày{" "}
               {formatDateTime(data?.created_at.toString())}
             </DialogDescription>
           </DialogHeader>
@@ -49,17 +49,17 @@ export const ViewAppointment = async ({ id }: { id: string | undefined }) => {
           {data?.status === "CANCELLED" && (
             <div className="bg-yellow-100 p-4 mt-4 rounded-md">
               <span className="font-semibold text-sm">
-                This appointment has been cancelled
+                Cuộc hẹn này đã bị hủy
               </span>
               <p className="text-sm">
-                <strong>Reason</strong>: {data?.reason}
+                <strong>Lý do</strong>: {data?.reason}
               </p>
             </div>
           )}
 
           <div className="grid gap-4 py-4">
             <p className="w-fit bg-blue-100 text-blue-600 py-1 rounded text-xs md:text-sm">
-              Personal Information
+              Thông tin cá nhân
             </p>
 
             <div className="flex flex-col md:flex-row gap-6 mb-16">
@@ -80,7 +80,7 @@ export const ViewAppointment = async ({ id }: { id: string | undefined }) => {
 
                   <p className="flex items-center gap-2 text-gray-600">
                     <Calendar size={20} className="text-gray-500" />
-                    {calculateAge(data?.patient?.date_of_birth)}
+                    {calculateAge(data?.patient?.date_of_birth)} tuổi
                   </p>
 
                   <span className="flex items-center text-sm gap-2">
@@ -91,7 +91,7 @@ export const ViewAppointment = async ({ id }: { id: string | undefined }) => {
               </div>
 
               <div>
-                <span className="text-sm text-gray-500">Address</span>
+                <span className="text-sm text-gray-500">Địa chỉ</span>
                 <p className="text-gray-600 capitalize">
                   {data?.patient?.address}
                 </p>
@@ -99,35 +99,37 @@ export const ViewAppointment = async ({ id }: { id: string | undefined }) => {
             </div>
 
             <p className="w-fit bg-blue-100 text-blue-600 py-1 rounded text-xs md:text-sm">
-              Appointment Information
+              Thông tin cuộc hẹn
             </p>
 
             <div className="grid grid-cols-3 gap-10">
               <div>
-                <span className="text-sm text-gray-500">Date</span>
+                <span className="text-sm text-gray-500">Ngày</span>
                 <p className="text-sm text-gray-600">
-                  {format(data?.appointment_date, "MMM dd, yyyy")}
+                  {format(data?.appointment_date, "dd/MM/yyyy")}
                 </p>
               </div>
               <div>
-                <span className="text-sm text-gray-500">Time</span>
+                <span className="text-sm text-gray-500">Thời gian</span>
                 <p>{data?.time}</p>
               </div>
               <div>
-                <span className="text-sm text-gray-500">Status</span>
+                <span className="text-sm text-gray-500">Trạng thái</span>
                 <AppointmentStatusIndicator status={data?.status} />
               </div>
             </div>
 
             {data?.note && (
               <div>
-                <span className="text-sm text-gray-500">Note from Patient</span>
+                <span className="text-sm text-gray-500">
+                  Ghi chú từ bệnh nhân
+                </span>
                 <p>{data?.note}</p>
               </div>
             )}
 
             <p className="w-fit bg-blue-100 text-blue-600 py-1 px-2 rounded text-xs md:text-sm mt-16">
-              Physician Information
+              Thông tin bác sĩ
             </p>
             <div className="w-full flex flex-col md:flex-row gap-8 mb-8">
               <div className="flex gap-3">
@@ -151,7 +153,7 @@ export const ViewAppointment = async ({ id }: { id: string | undefined }) => {
             {((await checkRole("ADMIN")) || data?.doctor_id === userId) && (
               <>
                 <p className="w-fit bg-blue-100 text-blue-600 py-1 px-2 rounded text-xs md:text-sm mt-4">
-                  Perform Action
+                  Thao tác quản lý
                 </p>
                 <AppointmentAction id={data.id} status={data?.status} />
               </>

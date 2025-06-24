@@ -35,7 +35,6 @@ interface Props {
   doctorId: string;
   initialSchedule: Day[];
 }
-
 export const DoctorWorkingDaysForm = ({ doctorId, initialSchedule }: Props) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -45,7 +44,7 @@ export const DoctorWorkingDaysForm = ({ doctorId, initialSchedule }: Props) => {
 
   const handleSubmit = async () => {
     if (workSchedule.length < 3) {
-      toast.error("Please select at least 3 working days");
+      toast.error("Vui lòng chọn ít nhất 3 ngày làm việc");
       return;
     }
 
@@ -54,31 +53,32 @@ export const DoctorWorkingDaysForm = ({ doctorId, initialSchedule }: Props) => {
       const res = await updateDoctorWorkingDays(doctorId, workSchedule);
 
       if (res.success) {
-        toast.success("Working days updated successfully 123");
+        toast.success("Cập nhật lịch làm việc thành công");
         router.refresh();
       } else {
-        toast.error(res.message || "Update failed");
+        toast.error(res.message || "Cập nhật thất bại");
       }
     } catch (error) {
-      console.error("Error submitting schedule:", error);
-      toast.error("Something went wrong while updating schedule");
+      console.error("Lỗi khi cập nhật lịch:", error);
+      toast.error("Đã xảy ra lỗi khi cập nhật lịch");
     } finally {
       setIsLoading(false);
     }
   };
+
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="outline">Update Working Days</Button>
+        <Button variant="outline">Cập nhật lịch làm việc</Button>
       </SheetTrigger>
 
       <SheetContent className="rounded-xl md:h-[90%] md:top-[5%] md:right-[1%] w-full overflow-y-scroll">
         <SheetHeader>
-          <SheetTitle>Update Working Days</SheetTitle>
+          <SheetTitle>Lịch làm việc của bác sĩ</SheetTitle>
         </SheetHeader>
 
         <div className="mt-6 space-y-4">
-          <Label className="text-base">Select at least 3 days</Label>
+          <Label className="text-base">Chọn ít nhất 3 ngày</Label>
           <SwitchInput
             data={WORKING_DAYS}
             setWorkSchedule={setWorkSchedule}
@@ -89,7 +89,7 @@ export const DoctorWorkingDaysForm = ({ doctorId, initialSchedule }: Props) => {
             disabled={isLoading}
             className="w-full"
           >
-            {isLoading ? "Updating..." : "Save Schedule"}
+            {isLoading ? "Đang lưu..." : "Lưu lịch làm việc"}
           </Button>
         </div>
       </SheetContent>

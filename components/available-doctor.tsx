@@ -25,6 +25,7 @@ interface DataProps {
   data: AvailableDoctorProps;
 }
 
+// Hàm xử lý giờ làm việc hôm nay
 export const availableDays = ({ data }: { data: Days[] }) => {
   const isTodayWorkingDay = data?.find(
     (dayObj) => dayObj?.day?.toLowerCase() === todayDay
@@ -32,13 +33,14 @@ export const availableDays = ({ data }: { data: Days[] }) => {
 
   return isTodayWorkingDay
     ? `${isTodayWorkingDay?.start_time} - ${isTodayWorkingDay?.close_time}`
-    : "Not Available";
+    : "Không làm việc hôm nay";
 };
+
 export const AvailableDoctors = async ({ data }: DataProps) => {
   return (
     <div className="bg-white rounded-xl p-4">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-lg font-semibold">Available Doctors</h1>
+        <h1 className="text-lg font-semibold">Bác sĩ đang làm việc</h1>
 
         {(await checkRole("ADMIN")) && (
           <Button
@@ -47,7 +49,7 @@ export const AvailableDoctors = async ({ data }: DataProps) => {
             disabled={data?.length === 0}
             className="disabled:cursor-not-allowed disabled:text-gray-200"
           >
-            <Link href="/record/doctors">View all</Link>
+            <Link href="/record/doctors">Xem tất cả</Link>
           </Button>
         )}
       </div>
@@ -56,7 +58,7 @@ export const AvailableDoctors = async ({ data }: DataProps) => {
         {data?.slice(0, 5).map((doc, id) => (
           <Card
             key={id}
-            className=" border-none  w-full md:w-[300px] min-h-28 xl:w-full p-4 flex  gap-4 odd:bg-emerald-600/5 even:bg-yellow-600/5"
+            className="border-none w-full md:w-[300px] min-h-28 xl:w-full p-4 flex gap-4 odd:bg-emerald-600/5 even:bg-yellow-600/5"
           >
             <ProfileImage
               url={doc?.img}
@@ -65,17 +67,16 @@ export const AvailableDoctors = async ({ data }: DataProps) => {
               textClassName="text-2xl font-semibold text-black"
               bgColor={doc?.colorCode!}
             />
-            {/* <p>{doc.colorCode}</p> */}
             <div>
               <h2 className="font-semibold text-lg md:text-xl">{doc?.name}</h2>
               <p className="text-base capitalize text-gray-600">
                 {doc?.specialization}
               </p>
               <p className="text-sm flex items-center">
-                <span className="hidden lg:flex">
-                  Available Time: <a />{" "}
+                <span className="hidden lg:flex">Giờ làm: </span>
+                <span className="ml-2">
+                  {availableDays({ data: doc?.working_days })}
                 </span>
-                {availableDays({ data: doc?.working_days })}
               </p>
             </div>
           </Card>

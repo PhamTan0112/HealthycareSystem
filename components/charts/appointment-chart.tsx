@@ -20,7 +20,7 @@ export const AppointmentChart = ({ data }: DataProps) => {
   return (
     <div className="bg-white rounded-xl p-4 h-full">
       <div className="flex justify-between items-center">
-        <h1 className="text-lg font-semibold">Appointments</h1>
+        <h1 className="text-lg font-semibold">Cuộc hẹn</h1>
       </div>
 
       <ResponsiveContainer width={"100%"} height="90%">

@@ -4,8 +4,6 @@ import { ClipboardList } from "lucide-react";
 import { Table } from "@/components/tables/table";
 import { format } from "date-fns";
 import { LabTest } from "@prisma/client";
-import { Badge } from "@/components/ui/badge";
-import { UpdateLabTestDialog } from "../dialogs/update-labtest";
 import { ActionDialog } from "../action-dialog";
 
 const columns = [
@@ -15,29 +13,29 @@ const columns = [
     className: "hidden md:table-cell",
   },
   {
-    header: "Patient",
+    header: "Bệnh nhân",
     key: "patient",
   },
   {
-    header: "Service",
+    header: "Dịch vụ",
     key: "service",
   },
   {
-    header: "Test Date",
+    header: "Ngày xét nghiệm",
     key: "test_date",
     className: "hidden md:table-cell",
   },
   {
-    header: "Status",
+    header: "Trạng thái",
     key: "status",
     className: "hidden md:table-cell",
   },
   {
-    header: "Result",
+    header: "Kết quả",
     key: "result",
   },
   {
-    header: "Action",
+    header: "Thao tác",
     key: "action",
     className: "text-center",
   },
@@ -46,7 +44,6 @@ const columns = [
 export default async function LabTestContainer() {
   const { userId } = await auth();
   const staff = await db.staff.findUnique({ where: { id: userId || "" } });
-  const isTech = staff?.role === "LAB_TECHNICIAN";
 
   const labTests = await db.labTest.findMany({
     orderBy: { test_date: "desc" },
@@ -62,6 +59,12 @@ export default async function LabTestContainer() {
     PENDING: "bg-yellow-100 text-yellow-800",
     PROCESSING: "bg-blue-100 text-blue-800",
     COMPLETED: "bg-green-100 text-green-800",
+  };
+
+  const statusLabel = {
+    PENDING: "Chờ xử lý",
+    PROCESSING: "Đang thực hiện",
+    COMPLETED: "Hoàn thành",
   };
 
   const renderRow = (
@@ -102,14 +105,13 @@ export default async function LabTestContainer() {
               statusColor[lab.status as keyof typeof statusColor]
             }`}
           >
-            {lab.status}
+            {statusLabel[lab.status as keyof typeof statusLabel]}
           </span>
         </td>
         <td className="py-2 max-w-[200px] truncate">
-          {lab.result || <span className="italic text-gray-400">N/A</span>}
+          {lab.result || <span className="italic text-gray-400">Chưa có</span>}
         </td>
         <td className="text-center py-2">
-          {/* <UpdateLabTestDialog labTest={lab} /> */}
           <ActionDialog
             type="delete"
             id={lab?.id?.toString()}
@@ -122,19 +124,17 @@ export default async function LabTestContainer() {
 
   return (
     <div className="bg-white rounded-xl p-2 2xl:p-4">
-      {/* Header */}
       <div className="w-full flex flex-col md:flex-row md:items-center justify-between mb-6">
         <div className="">
-          <h1 className="font-semibold text-xl">Lab Tests</h1>
+          <h1 className="font-semibold text-xl">Xét nghiệm</h1>
           <div className="hidden lg:flex items-center gap-1">
             <ClipboardList size={20} className="text-gray-500" />
             <p className="text-2xl font-semibold">{labTests?.length}</p>
             <span className="text-gray-600 text-sm xl:text-base">
-              total records
+              tổng lượt
             </span>
           </div>
         </div>
-        {/* Bạn có thể thêm filter ở đây sau */}
       </div>
 
       <Table columns={columns} renderRow={renderRow} data={labTests} />

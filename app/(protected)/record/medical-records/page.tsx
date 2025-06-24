@@ -13,35 +13,35 @@ import { BriefcaseBusiness } from "lucide-react";
 
 const columns = [
   {
-    header: "No",
+    header: "Bản ghi",
     key: "no",
   },
   {
-    header: "Info",
+    header: "Thông tin",
     key: "name",
   },
   {
-    header: "Date & Time",
+    header: "Ngày & Giờ",
     key: "medical_date",
     className: "hidden md:table-cell",
   },
   {
-    header: "Doctor",
+    header: "Bác sĩ",
     key: "doctor",
     className: "hidden 2xl:table-cell",
   },
   {
-    header: "Diagnosis",
+    header: "Chẩn đoán",
     key: "diagnosis",
     className: "hidden lg:table-cell",
   },
   {
-    header: "Lab Test",
+    header: "Xét nghiệm",
     key: "lab_test",
     className: "hidden 2xl:table-cell",
   },
   {
-    header: "Action",
+    header: "Thao tác",
     key: "action",
     className: "",
   },
@@ -96,14 +96,14 @@ const MedicalRecordsPage = async (props: SearchParamsProps) => {
         <td className="hidden 2xl:table-cell">{item?.doctor_id}</td>
         <td className="hidden lg:table-cell">
           {item?.diagnosis?.length === 0 ? (
-            <span className="text-gray-400 italic">No diagnosis found</span>
+            <span className="text-gray-400 italic">Không tìm thấy</span>
           ) : (
             <span>{item?.diagnosis.length}</span>
           )}
         </td>
         <td className="hidden xl:table-cell">
           {item?.lab_test?.length === 0 ? (
-            <span className="text-gray-400 italic">No lab found</span>
+            <span className="text-gray-400 italic">Không tìm thấy</span>
           ) : (
             <span>{item?.lab_test.length}</span>
           )}
@@ -123,9 +123,7 @@ const MedicalRecordsPage = async (props: SearchParamsProps) => {
           <BriefcaseBusiness size={20} className="text-gray-500" />
 
           <p className="text-2xl font-semibold">{totalRecords}</p>
-          <span className="text-gray-600 text-sm xl:text-base">
-            total records
-          </span>
+          <span className="text-gray-600 text-sm xl:text-base">hồ sơ</span>
         </div>
         <div className="w-full lg:w-fit flex items-center justify-between lg:justify-start gap-2">
           <SearchInput />

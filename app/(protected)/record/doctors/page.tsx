@@ -17,16 +17,16 @@ import { DoctorForm } from "@/components/forms/doctor-form";
 
 const columns = [
   {
-    header: "Info",
+    header: "Thông tin",
     key: "name",
   },
   {
-    header: "License #",
+    header: "Mã",
     key: "license",
     className: "hidden md:table-cell",
   },
   {
-    header: "Phone",
+    header: "Số điện thoại",
     key: "contact",
     className: "hidden md:table-cell",
   },
@@ -36,12 +36,12 @@ const columns = [
     className: "hidden lg:table-cell",
   },
   {
-    header: "Joined Date",
+    header: "Ngày tham gia",
     key: "created_at",
     className: "hidden xl:table-cell",
   },
   {
-    header: "Actions",
+    header: "Thao tác",
     key: "action",
   },
 ];
@@ -100,9 +100,7 @@ const DoctorsList = async (props: SearchParamsProps) => {
           <Users size={20} className="text-gray-500" />
 
           <p className="text-2xl font-semibold">{totalRecords}</p>
-          <span className="text-gray-600 text-sm xl:text-base">
-            total doctors
-          </span>
+          <span className="text-gray-600 text-sm xl:text-base">bác sĩ</span>
         </div>
         <div className="w-full lg:w-fit flex items-center justify-between lg:justify-start gap-2">
           <SearchInput />

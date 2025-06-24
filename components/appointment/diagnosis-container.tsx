@@ -55,7 +55,7 @@ export const DiagnosisContainer = async ({
         <section className="space-y-6">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle>Medical Records</CardTitle>
+              <CardTitle>Hồ sơ y tế</CardTitle>
 
               {!isPatient && (
                 <AddDiagnosis

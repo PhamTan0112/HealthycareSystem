@@ -25,7 +25,6 @@ export const Pagination = ({
     (name: string, value: string) => {
       const params = new URLSearchParams(searchParams.toString());
       params.set(name, value);
-
       return params.toString();
     },
     [searchParams]
@@ -36,13 +35,11 @@ export const Pagination = ({
       router.push(
         pathname + "?" + createQueryString("p", (currentPage - 1).toString())
       );
-      // router.push(`?p=${currentPage - 1}`);
     }
   };
 
   const handleNext = () => {
     if (currentPage < totalPages) {
-      // router.push(`?p=${currentPage + 1}`);
       router.push(
         pathname + "?" + createQueryString("p", (currentPage + 1).toString())
       );
@@ -54,33 +51,33 @@ export const Pagination = ({
   return (
     <div className="p-4 flex items-center justify-between text-gray600 mt-5">
       <Button
-        size={"sm"}
-        variant={"outline"}
+        size="sm"
+        variant="outline"
         disabled={currentPage === 1}
         onClick={handlePrevious}
         className="py-2 px-4 rounded-md bg-slate-200 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-50"
       >
-        Prev
+        Trước
       </Button>
-      {/* 10 - 9 = 11 - 20 of 20 */}
+
       <div className="flex items-center gap-2 text-sm">
         <span className="text-xs lg:text-sm">
-          Showing {currentPage * limit - (limit - 1)} to{" "}
+          Hiển thị {currentPage * limit - (limit - 1)} đến{" "}
           {currentPage * limit <= totalRecords
             ? currentPage * limit
             : totalRecords}{" "}
-          of {totalRecords}
+          trên tổng số {totalRecords} bản ghi
         </span>
       </div>
 
       <Button
-        size={"sm"}
-        variant={"outline"}
+        size="sm"
+        variant="outline"
         disabled={currentPage === totalPages}
         onClick={handleNext}
         className="py-2 px-4 rounded-md bg-slate-200 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-50"
       >
-        Next
+        Tiếp theo
       </Button>
     </div>
   );

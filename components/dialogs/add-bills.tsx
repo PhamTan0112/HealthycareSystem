@@ -52,17 +52,15 @@ export const AddBills = ({ id, appId, servicesData }: DataProps) => {
       const resp = await addNewBill(values);
 
       if (resp.success) {
-        toast.success("Patient bill added successfully!");
-
+        toast.success("Thêm hóa đơn thành công!");
         router.refresh();
-
         form.reset();
       } else if (resp.error) {
         toast.error(resp.msg);
       }
     } catch (error) {
       console.log(error);
-      toast.error("Something went wrong. Please try again.");
+      toast.error("Đã có lỗi xảy ra. Vui lòng thử lại.");
     } finally {
       setIsLoading(false);
     }
@@ -101,83 +99,81 @@ export const AddBills = ({ id, appId, servicesData }: DataProps) => {
   }, [selectedService, quantity]);
 
   return (
-    <>
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button size="sm" className="text-sm font-normal">
-            <Plus size={22} className="text-gray-400" />
-            Add Bill
-          </Button>
-        </DialogTrigger>
-        <DialogContent>
-          <CardHeader className="px-0">
-            <DialogTitle>Add Patient Bill</DialogTitle>
-            <CardDescription>
-              Ensure accurate readings are perform as this may affect the
-              diagnosis and other medical processes.
-            </CardDescription>
-          </CardHeader>
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button size="sm" className="text-sm font-normal">
+          <Plus size={22} className="text-gray-400" />
+          Thêm hóa đơn
+        </Button>
+      </DialogTrigger>
+      <DialogContent>
+        <CardHeader className="px-0">
+          <DialogTitle>Thêm hóa đơn khám bệnh</DialogTitle>
+          <CardDescription>
+            Vui lòng nhập đầy đủ và chính xác để đảm bảo quy trình khám chữa
+            bệnh.
+          </CardDescription>
+        </CardHeader>
 
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(handleOnSubmit)}
-              className="space-y-8"
-            >
-              <div className="flex items-center gap-2">
-                <CustomInput
-                  type="select"
-                  control={form.control}
-                  name="service_id"
-                  placeholder="Select service"
-                  label="Service Name"
-                  selectList={data!}
-                />
-                <CustomInput
-                  type="input"
-                  control={form.control}
-                  name="unit_cost"
-                  placeholder=""
-                  label="Unit Cost"
-                />
-              </div>
-
-              <div className="flex items-center gap-2">
-                <CustomInput
-                  type="input"
-                  control={form.control}
-                  name="quantity"
-                  placeholder="Enter quantity"
-                  label="Quantity"
-                />
-                <CustomInput
-                  type="input"
-                  control={form.control}
-                  name="total_cost"
-                  placeholder="0.00"
-                  label="Total Cost"
-                />
-              </div>
-
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(handleOnSubmit)}
+            className="space-y-8"
+          >
+            <div className="flex items-center gap-2">
+              <CustomInput
+                type="select"
+                control={form.control}
+                name="service_id"
+                placeholder="Chọn dịch vụ"
+                label="Tên dịch vụ"
+                selectList={data!}
+              />
               <CustomInput
                 type="input"
                 control={form.control}
-                name="service_date"
-                label="Service Date"
+                name="unit_cost"
                 placeholder=""
-                inputType="date"
+                label="Đơn giá"
               />
+            </div>
 
-              <Button
-                type="submit"
-                disabled={isLoading}
-                className="bg-blue-600 w-full"
-              >
-                Submit
-              </Button>
-            </form>
-          </Form>
-        </DialogContent>
-      </Dialog>
-    </>
+            <div className="flex items-center gap-2">
+              <CustomInput
+                type="input"
+                control={form.control}
+                name="quantity"
+                placeholder="Nhập số lượng"
+                label="Số lượng"
+              />
+              <CustomInput
+                type="input"
+                control={form.control}
+                name="total_cost"
+                placeholder="0.00"
+                label="Thành tiền"
+              />
+            </div>
+
+            <CustomInput
+              type="input"
+              control={form.control}
+              name="service_date"
+              label="Ngày sử dụng"
+              placeholder=""
+              inputType="date"
+            />
+
+            <Button
+              type="submit"
+              disabled={isLoading}
+              className="bg-blue-600 w-full"
+            >
+              Lưu hóa đơn
+            </Button>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
   );
 };

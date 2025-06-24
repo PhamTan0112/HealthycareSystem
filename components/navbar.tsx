@@ -26,7 +26,6 @@ export const Navbar = ({ notificationSlot }: NavbarProps) => {
       </h1>
 
       <div className="flex items-center gap-4">
-        {/* Gắn chuông vào đây */}
         {notificationSlot}
         {user?.userId && <UserButton />}
       </div>

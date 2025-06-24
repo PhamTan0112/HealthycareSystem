@@ -42,13 +42,13 @@ export const Sidebar = async () => {
       label: "MENU",
       links: [
         {
-          name: "Dashboard",
+          name: "Tổng quan",
           href: "/",
           access: ACCESS_LEVELS_ALL,
           icon: LayoutDashboard,
         },
         {
-          name: "Profile",
+          name: "Hồ sơ cá nhân",
           href: "/patient/self",
           access: ["patient"],
           icon: User,
@@ -56,117 +56,82 @@ export const Sidebar = async () => {
       ],
     },
     {
-      label: "Manage",
+      label: "QUẢN LÝ",
       links: [
         {
-          name: "Users",
+          name: "Người dùng",
           href: "/record/users",
           access: ["admin"],
           icon: Users,
         },
         {
-          name: "Doctors",
+          name: "Bác sĩ",
           href: "/record/doctors",
           access: ["admin", "patient"],
           icon: User,
         },
         {
-          name: "Staffs",
+          name: "Nhân viên",
           href: "/record/staffs",
           access: ["admin", "doctor"],
           icon: UserRound,
         },
         {
-          name: "Patients",
+          name: "Bệnh nhân",
           href: "/record/patients",
           access: ["admin", "doctor", "nurse"],
           icon: UsersRound,
         },
         {
-          name: "Appointments",
+          name: "Lịch hẹn",
           href: "/record/appointments",
           access: ["admin", "doctor", "nurse"],
           icon: ListOrdered,
         },
         {
-          name: "Medical Records",
+          name: "Hồ sơ bệnh án",
           href: "/record/medical-records",
           access: ["admin", "doctor", "nurse"],
           icon: SquareActivity,
         },
         {
-          name: "Billing Overview",
+          name: "Hóa đơn",
           href: "/record/billing",
           access: ["admin", "doctor"],
           icon: Receipt,
         },
-        {
-          name: "Patient Management",
-          href: "/nurse/patient-management",
-          access: ["nurse"],
-          icon: Users,
-        },
         // {
-        //   name: "Administer Medications",
-        //   href: "/nurse/administer-medications",
-        //   access: ["admin", "doctor", "nurse"],
-        //   icon: Pill,
+        //   name: "Quản lý bệnh nhân",
+        //   href: "/nurse/patient-management",
+        //   access: ["nurse"],
+        //   icon: Users,
         // },
         {
-          name: "Appointments",
+          name: "Lịch hẹn",
           href: "/record/appointments",
           access: ["patient"],
           icon: ListOrdered,
         },
         {
-          name: "Records",
+          name: "Hồ sơ",
           href: "/patient/self",
           access: ["patient"],
           icon: List,
         },
-        // {
-        //   name: "Prescription",
-        //   href: "#",
-        //   access: ["patient"],
-        //   icon: Pill,
-        // },
         {
-          name: "Billing",
+          name: "Thanh toán",
           href: "/record/billing",
           access: ["patient"],
           icon: Receipt,
         },
         {
-          name: "Working Days",
+          name: "Ngày làm việc",
           href: `/record/doctors/${user?.id}`,
           access: ["doctor"],
           icon: CalendarDays,
         },
       ],
     },
-    // {
-    //   label: "System",
-    //   links: [
-    //     // {
-    //     //   name: "Audit Logs",
-    //     //   href: "/admin/audit-logs",
-    //     //   access: ["admin"],
-    //     //   icon: Logs,
-    //     // },
-    //     // {
-    //     //   name: "Settings",
-    //     //   href: "/admin/system-settings",
-    //     //   access: ["admin"],
-    //     //   icon: Settings,
-    //     // },
-    //     // {
-    //     //   name: "Notifications",
-    //     //   href: "/notifications",
-    //     //   access: ACCESS_LEVELS_ALL,
-    //     //   icon: Bell,
-    //     // },
-    //   ],
-    // },
   ];
 
   return (
@@ -180,7 +145,7 @@ export const Sidebar = async () => {
             href="/"
             className="hidden lg:flex text-base 2xl:text-xl font-blod"
           >
-            Kinda HMS
+            Healthycare System
           </Link>
         </div>
         <div className="mt-4 text-sm">

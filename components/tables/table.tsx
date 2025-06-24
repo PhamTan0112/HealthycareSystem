@@ -24,7 +24,7 @@ export const Table = ({ columns, renderRow, data }: TableProps) => {
               colSpan={3}
               className="text-center py-10 text-gray-400 text-base"
             >
-              No Data Found
+              Không có dữ liệu
             </td>
           </tr>
         )}

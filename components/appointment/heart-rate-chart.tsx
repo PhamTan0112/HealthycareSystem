@@ -27,7 +27,7 @@ export function HeartRateChart({ average, data }: DataProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Heart Rate</CardTitle>
+        <CardTitle>Nhịp tim</CardTitle>
       </CardHeader>
 
       <CardContent>
@@ -36,14 +36,14 @@ export function HeartRateChart({ average, data }: DataProps) {
             <p className="text-lg xl:text-xl font-semibold">
               {lastData?.value1 || 0}-{lastData?.value2 || 0}
             </p>
-            <p className="text-sm text-gray-500">Recent Reading</p>
+            <p className="text-sm text-gray-500">Lần đo gần nhất</p>
           </div>
           <div>
             <p className="text-lg xl:text-xl font-semibold">{average}</p>
-            <p className="text-sm text-gray-500">Average Rate</p>
+            <p className="text-sm text-gray-500">Trung bình 7 ngày</p>
           </div>
           <Button size="sm" variant="outline">
-            See Insights
+            Chi tiết
           </Button>
         </div>
 

@@ -17,16 +17,16 @@ import { UserPen, Users } from "lucide-react";
 
 const columns = [
   {
-    header: "Patient Name",
+    header: "Tên",
     key: "name",
   },
   {
-    header: "Gender",
+    header: "Giới tính",
     key: "gender",
     className: "hidden md:table-cell",
   },
   {
-    header: "Phone",
+    header: "Điện thoại",
     key: "contact",
     className: "hidden md:table-cell",
   },
@@ -36,22 +36,22 @@ const columns = [
     className: "hidden lg:table-cell",
   },
   {
-    header: "Address",
+    header: "Địa chỉ",
     key: "address",
     className: "hidden xl:table-cell",
   },
   {
-    header: "Last Visit",
+    header: "Khám gần nhất",
     key: "created_at",
     className: "hidden lg:table-cell",
   },
   {
-    header: "Last Treatment",
+    header: "Điều trị",
     key: "treatment",
     className: "hidden 2xl:table-cell",
   },
   {
-    header: "Actions",
+    header: "Thao tác",
     key: "action",
   },
 ];
@@ -109,14 +109,14 @@ const PatientList = async (props: SearchParamsProps) => {
           {lastVisit ? (
             format(lastVisit?.created_at, "yyyy-MM-dd HH:mm:ss")
           ) : (
-            <span className="text-gray-400 italic">No last visit</span>
+            <span className="text-gray-400 italic">Chưa có lần khám nào</span>
           )}
         </td>
         <td className="hidden xl:table-cell">
           {lastVisit ? (
             lastVisit?.treatment_plan
           ) : (
-            <span className="text-gray-400 italic">No last treatment</span>
+            <span className="text-gray-400 italic">Chưa có điều trị</span>
           )}
         </td>
         <td>
@@ -152,9 +152,7 @@ const PatientList = async (props: SearchParamsProps) => {
           <Users size={20} className="text-gray-500" />
 
           <p className="text-2xl font-semibold">{totalRecords}</p>
-          <span className="text-gray-600 text-sm xl:text-base">
-            total patients
-          </span>
+          <span className="text-gray-600 text-sm xl:text-base">bệnh nhân</span>
         </div>
         <div className="w-full lg:w-fit flex items-center justify-between lg:justify-start gap-2">
           <SearchInput />

@@ -17,7 +17,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
         />
         <div className="absolute top-0 w-full h-full bg-black/40 z-10 flex flex-col items-center justify-center">
           <h1 className="text-3xl 2xl:text-5xl font-bold text-white">
-            Kinda HMS
+            Hospital Management System
           </h1>
           <p className="text-yellow-600 text-base">You're welcome</p>
         </div>

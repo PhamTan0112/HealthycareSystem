@@ -17,16 +17,16 @@ import { StaffForm } from "@/components/forms/staff-form";
 
 const columns = [
   {
-    header: "Info",
+    header: "Thông tin",
     key: "name",
   },
   {
-    header: "Role",
+    header: "Vai trò",
     key: "role",
     className: "hidden md:table-cell",
   },
   {
-    header: "Phone",
+    header: "Điện thoại",
     key: "contact",
     className: "hidden md:table-cell",
   },
@@ -36,12 +36,12 @@ const columns = [
     className: "hidden lg:table-cell",
   },
   {
-    header: "Joined Date",
+    header: "Ngày vào",
     key: "created_at",
     className: "hidden xl:table-cell",
   },
   {
-    header: "Actions",
+    header: "Thao tác",
     key: "action",
   },
 ];
@@ -101,9 +101,7 @@ const StaffList = async (props: SearchParamsProps) => {
           <Users size={20} className="text-gray-500" />
 
           <p className="text-2xl font-semibold">{totalRecords}</p>
-          <span className="text-gray-600 text-sm xl:text-base">
-            total staffs
-          </span>
+          <span className="text-gray-600 text-sm xl:text-base">nhân viên</span>
         </div>
         <div className="w-full lg:w-fit flex items-center justify-between lg:justify-start gap-2">
           <SearchInput />

@@ -2,7 +2,7 @@ import { analyzePatientData } from "@/app/actions/analyzePatient";
 import { getActiveDoctorsToday } from "@/utils/services/doctor";
 import { NextResponse, type NextRequest } from "next/server";
 
-export async function GET(req: NextRequest, context: { params?: any }) {
+export async function GET(req: NextRequest, context: { params: any }) {
   try {
     const params = await context.params;
     const user_id = params?.user_id;

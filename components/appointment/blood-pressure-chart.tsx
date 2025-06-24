@@ -26,29 +26,29 @@ const BloodPressureChart = ({ data, average }: BloodPressureChartProps) => {
   const lastData = data[data.length - 1];
   const router = useRouter();
   return (
-    <Card className=" shadow-none col-span-2">
+    <Card className="shadow-none col-span-2">
       <CardHeader>
-        <CardTitle>Blood Pressure</CardTitle>
+        <CardTitle>Huyết áp</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className=" flex justify-between items-center mb-4">
+        <div className="flex justify-between items-center mb-4">
           <div>
-            <p className=" text-lg xl:text-xl font-semibold">
-              {lastData?.systolic || 0}/{lastData?.diastolic || 0} mg/dL
+            <p className="text-lg xl:text-xl font-semibold">
+              {lastData?.systolic || 0}/{lastData?.diastolic || 0} mmHg
             </p>
-            <p className="text-sm text-muted-foreground">Recent Reading</p>
+            <p className="text-sm text-muted-foreground">Gần nhất</p>
           </div>
 
           <div>
-            <p className=" text-lg xl:text-xl font-semibold">{average}</p>
-            <p className="text-sm text-muted-foreground">7 Days Average</p>
+            <p className="text-lg xl:text-xl font-semibold">{average}</p>
+            <p className="text-sm text-muted-foreground">Trung bình 7 ngày</p>
           </div>
           <Button
             size="sm"
             variant="outline"
             onClick={() => router.push("?cat=appointments")}
           >
-            See Insights
+            Chi tiết
           </Button>
         </div>
         <ResponsiveContainer width="100%" height={400}>
@@ -57,8 +57,8 @@ const BloodPressureChart = ({ data, average }: BloodPressureChartProps) => {
               strokeDasharray="3 3"
               vertical={false}
               stroke="#ddd"
-            ></CartesianGrid>
-            <XAxis dataKey="lable" axisLine={false} tickLine={false} />
+            />
+            <XAxis dataKey="label" axisLine={false} tickLine={false} />
             <YAxis
               axisLine={false}
               tick={{ fill: "#9ca3af" }}
@@ -67,7 +67,6 @@ const BloodPressureChart = ({ data, average }: BloodPressureChartProps) => {
             <Tooltip
               contentStyle={{ borderRadius: "10px", borderColor: "#fff" }}
             />
-
             <Legend
               align="left"
               verticalAlign="top"
@@ -82,12 +81,14 @@ const BloodPressureChart = ({ data, average }: BloodPressureChartProps) => {
               fill="#000000"
               legendType="circle"
               radius={[10, 10, 0, 0]}
+              name="Tâm thu"
             />
             <Bar
               dataKey="diastolic"
               fill="#2563eb"
               legendType="circle"
               radius={[10, 10, 0, 0]}
+              name="Tâm trương"
             />
           </BarChart>
         </ResponsiveContainer>

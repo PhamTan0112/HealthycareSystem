@@ -28,12 +28,11 @@ export const DialogPayment = ({ paymentId }: DialogPaymentProps) => {
     startTransition(async () => {
       try {
         const url = await createPaymentAction(paymentId);
-        toast.success("Đang chuyển tới PayOS...");
-        console.log("kiểm tra url: ", url);
+        toast.success("Đang chuyển sang cổng thanh toán PayOS...");
         window.location.href = url;
       } catch (error) {
-        console.error("❌ createPaymentAction failed", error);
-        toast.error("Tạo thanh toán thất bại.");
+        console.error("Lỗi khi tạo thanh toán:", error);
+        toast.error("Không thể tạo thanh toán. Vui lòng thử lại.");
       }
     });
   };
@@ -54,7 +53,7 @@ export const DialogPayment = ({ paymentId }: DialogPaymentProps) => {
       <DialogContent className="max-w-sm p-4 space-y-3 text-sm">
         <DialogTitle>Xác nhận thanh toán</DialogTitle>
         <p className="text-muted-foreground">
-          Bạn sẽ được chuyển sang PayOS để hoàn tất thanh toán hóa đơn.
+          Bạn sẽ được chuyển sang cổng thanh toán PayOS để hoàn tất giao dịch.
         </p>
 
         <Button
@@ -63,7 +62,7 @@ export const DialogPayment = ({ paymentId }: DialogPaymentProps) => {
           className="w-full"
           size="sm"
         >
-          {isPending ? "Đang xử lý..." : "Tiếp tục tới PayOS"}
+          {isPending ? "Đang xử lý..." : "Tiếp tục đến PayOS"}
         </Button>
       </DialogContent>
     </Dialog>

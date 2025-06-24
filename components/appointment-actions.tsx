@@ -5,7 +5,6 @@ import { Button } from "./ui/button";
 import { EllipsisVertical, User } from "lucide-react";
 import Link from "next/link";
 import { AppointmentActionDialog } from "./appointment-action-dialog";
-// import { AppointmentActionDialog } from "./appointment-action-dialog";
 
 interface ActionsProps {
   userId: string;
@@ -38,7 +37,8 @@ export const AppointmentActionOptions = async ({
 
       <PopoverContent className="w-56 p-3">
         <div className="space-y-3 flex flex-col items-start">
-          <span className="text-gray-400 text-xs">Perform Actions</span>
+          <span className="text-gray-400 text-xs uppercase">Thao tác</span>
+
           <Button
             size="sm"
             variant="ghost"
@@ -46,7 +46,8 @@ export const AppointmentActionOptions = async ({
             asChild
           >
             <Link href={`appointments/${appointmentId}`}>
-              <User size={16} /> View Full Details
+              <User size={16} className="mr-1" />
+              Chi tiết
             </Link>
           </Button>
 
@@ -57,6 +58,7 @@ export const AppointmentActionOptions = async ({
               disabled={isAdmin || user.userId === doctorId}
             />
           )}
+
           <AppointmentActionDialog
             type="cancel"
             id={appointmentId}

@@ -13,7 +13,7 @@ export const LogoutButton = () => {
       onClick={() => signOut({ redirectUrl: "/sign-in" })}
     >
       <LogOut />
-      <span className="hidden lg:block">Logout</span>
+      <span className="hidden lg:block">Đăng xuất</span>
     </Button>
   );
 };

@@ -6,14 +6,13 @@ import { PatientRatingContainer } from "@/components/patient-rating-container";
 import { StatCard } from "@/components/statCard";
 import { RecentAppointments } from "@/components/tables/recent-appoinment";
 import { Button } from "@/components/ui/button";
-import { AvailableDoctorProps } from "@/types/data-types";
 import { getPatientDashboardStatistics } from "@/utils/services/patient";
 import { currentUser } from "@clerk/nextjs/server";
 import { Briefcase, BriefcaseBusiness, BriefcaseMedical } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import React from "react";
-
+export const revalidate = 60;
 const PatientDashboard = async () => {
   const user = await currentUser();
 
@@ -33,38 +32,38 @@ const PatientDashboard = async () => {
 
   const cardData = [
     {
-      title: "appointments",
+      title: "Tổng cuộc hẹn",
       value: totalAppointments ?? 0,
       icon: Briefcase,
       className: "bg-blue-600/15",
       iconClassName: "bg-blue-600/25 text-blue-600",
-      note: "Total Appointments",
+      note: "Cuộc hẹn",
     },
     {
-      title: "cancelled",
+      title: "Đã hủy",
       value: appointmentCounts?.CANCELLED ?? 0,
       icon: Briefcase,
       className: "bg-rose-600/15",
       iconClassName: "bg-rose-600/25 text-rose-600",
-      note: "Cancelled Appointments",
+      note: "Cuộc hẹn đã hủy",
     },
     {
-      title: "pending",
+      title: "Đang chờ",
       value:
         (appointmentCounts?.PENDING! ?? 0) +
         (appointmentCounts?.SCHEDULED! ?? 0),
       icon: BriefcaseBusiness,
       className: "bg-yellow-600/15",
       iconClassName: "bg-yellow-600/25 text-yellow-600",
-      note: "Pending Appointments",
+      note: "Cuộc hẹn đang chờ",
     },
     {
-      title: "completed",
+      title: "Hoàn tất",
       value: appointmentCounts?.COMPLETED ?? 0,
       icon: BriefcaseMedical,
       className: "bg-emerald-600/15",
       iconClassName: "bg-emerald-600/25 text-emerald-600",
-      note: "Successfully Appointments",
+      note: "Cuộc hẹn hoàn tất",
     },
   ];
 
@@ -84,15 +83,13 @@ const PatientDashboard = async () => {
             <div className="space-x-2">
               <Button size={"sm"}>{new Date().getFullYear()}</Button>
               <Button size="sm" variant="outline" className="hover:underline">
-                <Link href="/patient/self">View Profile</Link>
+                <Link href="/patient/self">Xem hồ sơ</Link>
               </Button>
             </div>
           </div>
 
           <div className="w-full flex flex-wrap gap-5">
-            {cardData?.map((el, id) => (
-              <StatCard key={id} {...el} link="#" />
-            ))}
+            {cardData?.map((el, id) => <StatCard key={id} {...el} link="#" />)}
           </div>
         </div>
 

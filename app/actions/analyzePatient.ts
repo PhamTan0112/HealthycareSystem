@@ -23,7 +23,7 @@ export interface PatientSummary {
     date: string;
     doctor: string;
     specialization: string;
-  }[]; // ✅ thêm mới
+  }[];
   summary_text: string;
   abnormal_flags: string[];
 }
@@ -104,7 +104,6 @@ export async function analyzePatientData(
   const lastDoctorName = lastVisit?.doctor?.name || "Không rõ";
   const lastDoctorSpec = lastVisit?.doctor?.specialization || "Không rõ";
 
-  // ✅ 3 cuộc hẹn gần nhất
   const recentAppointments = appointments.slice(0, 3).map((appt) => ({
     date: appt.appointment_date.toLocaleDateString("vi-VN"),
     doctor: appt.doctor?.name || "Không rõ",
@@ -146,7 +145,7 @@ export async function analyzePatientData(
       name: lastDoctorName,
       specialization: lastDoctorSpec,
     },
-    recent_appointments: recentAppointments, // ✅ thêm vào response
+    recent_appointments: recentAppointments,
     summary_text: summary,
     abnormal_flags: abnormalFlags,
   };

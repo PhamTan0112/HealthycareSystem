@@ -70,109 +70,105 @@ export const AddVitalSigns = ({
       }
     } catch (error) {
       console.log(error);
-      toast.error("Failed to add vital signs");
+      toast.error("Không thể thêm chỉ số");
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <>
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button size="sm" variant="outline" className="text-sm font-normal">
-            <Plus size={22} className="text-gray-500" /> Add Vital Signs
-          </Button>
-        </DialogTrigger>
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button size="sm" variant="outline" className="text-sm font-normal">
+          <Plus size={22} className="text-gray-500" /> Thêm chỉ số
+        </Button>
+      </DialogTrigger>
 
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Add Vital Signs</DialogTitle>
-            <DialogDescription>
-              Add vital signs for the patient
-            </DialogDescription>
-          </DialogHeader>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Thêm chỉ số</DialogTitle>
+          <DialogDescription>Nhập các chỉ số cho bệnh nhân</DialogDescription>
+        </DialogHeader>
 
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(handleOnSubmit)}
-              className="space-y-8"
-            >
-              <div className="flex items-center gap-4">
-                <CustomInput
-                  type="input"
-                  control={form.control}
-                  name="body_temperature"
-                  label="Body Temperature (°C)"
-                  placeholder="eg.:37.5"
-                />
-                <CustomInput
-                  type="input"
-                  control={form.control}
-                  name="heartRate"
-                  placeholder="eg: 54-123"
-                  label="Heart Rate (BPM)"
-                />
-              </div>
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(handleOnSubmit)}
+            className="space-y-8"
+          >
+            <div className="flex items-center gap-4">
+              <CustomInput
+                type="input"
+                control={form.control}
+                name="body_temperature"
+                label="Nhiệt độ cơ thể (°C)"
+                placeholder="VD: 37.5"
+              />
+              <CustomInput
+                type="input"
+                control={form.control}
+                name="heartRate"
+                placeholder="VD: 54-123"
+                label="Nhịp tim (BPM)"
+              />
+            </div>
 
-              <div className="flex items-center gap-4">
-                <CustomInput
-                  type="input"
-                  control={form.control}
-                  name="systolic"
-                  placeholder="eg: 120"
-                  label="Systolic BP"
-                />
-                <CustomInput
-                  type="input"
-                  control={form.control}
-                  name="diastolic"
-                  placeholder="eg: 80"
-                  label="Diastolic BP"
-                />
-              </div>
+            <div className="flex items-center gap-4">
+              <CustomInput
+                type="input"
+                control={form.control}
+                name="systolic"
+                placeholder="VD: 120"
+                label="Huyết áp tâm thu"
+              />
+              <CustomInput
+                type="input"
+                control={form.control}
+                name="diastolic"
+                placeholder="VD: 80"
+                label="Huyết áp tâm trương"
+              />
+            </div>
 
-              <div className="flex items-center gap-4">
-                <CustomInput
-                  type="input"
-                  control={form.control}
-                  name="weight"
-                  placeholder="eg.: 80"
-                  label="Weight (Kg)"
-                />
-                <CustomInput
-                  type="input"
-                  control={form.control}
-                  name="height"
-                  placeholder="eg.: 175"
-                  label="Height (Cm)"
-                />
-              </div>
+            <div className="flex items-center gap-4">
+              <CustomInput
+                type="input"
+                control={form.control}
+                name="weight"
+                placeholder="VD: 80"
+                label="Cân nặng (Kg)"
+              />
+              <CustomInput
+                type="input"
+                control={form.control}
+                name="height"
+                placeholder="VD: 175"
+                label="Chiều cao (Cm)"
+              />
+            </div>
 
-              <div className="flex items-center gap-4">
-                <CustomInput
-                  type="input"
-                  control={form.control}
-                  name="respiratory_rate"
-                  placeholder="Optional"
-                  label="Respiratory Rate"
-                />
-                <CustomInput
-                  type="input"
-                  control={form.control}
-                  name="oxygen_saturation"
-                  placeholder="Optional"
-                  label="Oxygen Saturation"
-                />
-              </div>
+            <div className="flex items-center gap-4">
+              <CustomInput
+                type="input"
+                control={form.control}
+                name="respiratory_rate"
+                placeholder="Không bắt buộc"
+                label="Nhịp thở"
+              />
+              <CustomInput
+                type="input"
+                control={form.control}
+                name="oxygen_saturation"
+                placeholder="Không bắt buộc"
+                label="Độ bão hòa Oxy"
+              />
+            </div>
 
-              <Button type="submit" disabled={isLoading} className="w-full">
-                {isLoading ? "Submitting..." : "Submit"}
-              </Button>
-            </form>
-          </Form>
-        </DialogContent>
-      </Dialog>
-    </>
+            <Button type="submit" disabled={isLoading} className="w-full">
+              {isLoading ? "Đang lưu..." : "Lưu thông tin"}
+            </Button>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
   );
 };

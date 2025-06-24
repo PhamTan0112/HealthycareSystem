@@ -45,8 +45,8 @@ type Day = {
 
 export const DoctorForm = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
   const [workSchedule, setWorkSchedule] = useState<Day[]>([]);
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof DoctorSchema>>({
     resolver: zodResolver(DoctorSchema),
@@ -67,7 +67,7 @@ export const DoctorForm = () => {
   const handleSubmit = async (values: z.infer<typeof DoctorSchema>) => {
     try {
       if (workSchedule.length === 0) {
-        toast.error("Please select work schedule");
+        toast.error("Vui lòng chọn lịch làm việc");
         return;
       }
 
@@ -78,16 +78,16 @@ export const DoctorForm = () => {
       });
 
       if (resp.success) {
-        toast.success("Doctor added successfully!");
+        toast.success("Thêm bác sĩ thành công!");
         setWorkSchedule([]);
         form.reset();
         router.refresh();
-      } else if (resp.error) {
-        toast.error(resp.message);
+      } else {
+        toast.error(resp.message || "Thêm bác sĩ thất bại.");
       }
     } catch (error) {
       console.error(error);
-      toast.error("Something went wrong");
+      toast.error("Đã xảy ra lỗi, vui lòng thử lại.");
     } finally {
       setIsLoading(false);
     }
@@ -111,28 +111,27 @@ export const DoctorForm = () => {
       <SheetTrigger asChild>
         <Button>
           <Plus size={20} />
-          Add Doctor
+          Thêm bác sĩ
         </Button>
       </SheetTrigger>
 
       <SheetContent className="rounded-xl rounded-r-xl md:h-[90%] md:top-[5%] md:right-[1%] w-full overflow-y-scroll">
         <SheetHeader>
-          <SheetTitle>Add New Doctor</SheetTitle>
+          <SheetTitle>Thêm bác sĩ mới</SheetTitle>
         </SheetHeader>
 
         <div>
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(handleSubmit)}
-              className="space-y-8 mt-5 2xl:mt-10"
+              className="space-y-8 mt-5"
             >
               <CustomInput
                 type="radio"
                 selectList={TYPES}
                 control={form.control}
                 name="type"
-                label="Type"
-                placeholder=""
+                label="Hình thức làm việc"
                 defaultValue="FULL"
               />
 
@@ -140,8 +139,8 @@ export const DoctorForm = () => {
                 type="input"
                 control={form.control}
                 name="name"
-                placeholder="Doctor's name"
-                label="Full Name"
+                placeholder="Nhập họ tên bác sĩ"
+                label="Họ và tên"
               />
 
               <div className="flex items-center gap-2">
@@ -149,16 +148,16 @@ export const DoctorForm = () => {
                   type="select"
                   control={form.control}
                   name="specialization"
-                  placeholder="Select specialization"
-                  label="Specialization"
+                  placeholder="Chọn chuyên khoa"
+                  label="Chuyên khoa"
                   selectList={SPECIALIZATION}
                 />
                 <CustomInput
                   type="input"
                   control={form.control}
                   name="department"
-                  placeholder="OPD"
-                  label="Department"
+                  placeholder="Ví dụ: Khoa nội"
+                  label="Khoa"
                 />
               </div>
 
@@ -166,8 +165,8 @@ export const DoctorForm = () => {
                 type="input"
                 control={form.control}
                 name="license_number"
-                placeholder="License Number"
-                label="License Number"
+                placeholder="Số giấy phép hành nghề"
+                label="Mã giấy phép"
               />
 
               <div className="flex items-center gap-2">
@@ -175,16 +174,15 @@ export const DoctorForm = () => {
                   type="input"
                   control={form.control}
                   name="email"
-                  placeholder="john@example.com"
-                  label="Email Address"
+                  placeholder="example@email.com"
+                  label="Email"
                 />
-
                 <CustomInput
                   type="input"
                   control={form.control}
                   name="phone"
-                  placeholder="9225600735"
-                  label="Contact Number"
+                  placeholder="Số điện thoại"
+                  label="Số điện thoại"
                 />
               </div>
 
@@ -192,30 +190,30 @@ export const DoctorForm = () => {
                 type="input"
                 control={form.control}
                 name="address"
-                placeholder="1479 Street, Apt 1839-G, NY"
-                label="Address"
+                placeholder="Địa chỉ bác sĩ"
+                label="Địa chỉ"
               />
 
               <CustomInput
                 type="input"
                 control={form.control}
                 name="password"
-                placeholder=""
-                label="Password"
+                placeholder="********"
+                label="Mật khẩu đăng nhập"
                 inputType="password"
               />
 
               <div className="mt-6">
-                <Label>Working Days</Label>
+                <Label>Chọn ngày làm việc</Label>
                 <SwitchInput
                   data={WORKING_DAYS}
                   setWorkSchedule={setWorkSchedule}
-                  currentSchedule={workSchedule} // ✅ quan trọng
+                  currentSchedule={workSchedule}
                 />
               </div>
 
               <Button type="submit" disabled={isLoading} className="w-full">
-                Submit
+                {isLoading ? "Đang lưu..." : "Xác nhận thêm"}
               </Button>
             </form>
           </Form>

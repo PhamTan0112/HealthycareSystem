@@ -65,9 +65,9 @@ export const CustomTimeSelectWithServerAction = ({
             defaultValue={field.value}
           >
             <SelectTrigger>
-              <SelectValue placeholder="Select time" />
+              <SelectValue placeholder="Chọn giờ khám" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="max-h-60 overflow-y-auto">
               {options.map((opt) => (
                 <SelectItem key={opt.value} value={opt.value}>
                   {opt.label}
@@ -77,7 +77,7 @@ export const CustomTimeSelectWithServerAction = ({
           </Select>
           {loading && (
             <p className="text-xs text-muted-foreground mt-1">
-              Loading times...
+              Đang tải giờ khám...
             </p>
           )}
           <FormMessage />

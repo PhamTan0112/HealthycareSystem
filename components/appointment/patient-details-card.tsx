@@ -9,7 +9,7 @@ export const PatientDetailsCard = ({ data }: { data: Patient }) => {
   return (
     <Card className="shadow-none bg-white">
       <CardHeader>
-        <CardTitle>Patient Details</CardTitle>
+        <CardTitle>Thông tin bệnh nhân</CardTitle>
 
         <div className="relative size-20 xl:size-24 rounded-full overflow-hidden">
           <Image
@@ -28,32 +28,32 @@ export const PatientDetailsCard = ({ data }: { data: Patient }) => {
             {data?.email} - {data?.phone}
           </p>
           <p className="text-sm text-gray-500">
-            {data?.gender} - {calculateAge(data?.date_of_birth)}
+            {data?.gender} - {calculateAge(data?.date_of_birth)} tuổi
           </p>
         </div>
       </CardHeader>
       <CardContent className="mt-4 space-y-4">
-        <div className="flex items-start gap-3 ">
+        <div className="flex items-start gap-3">
           <Calendar size={22} className="text-gray-400" />
           <div>
-            <p className="text-sm text-gray-500">Date of Birth</p>
+            <p className="text-sm text-gray-500">Ngày sinh</p>
             <p className="text-base font-medium text-muted-foreground">
-              {format(new Date(data?.date_of_birth), "MMM d, yyyy")}
+              {format(new Date(data?.date_of_birth), "dd/MM/yyyy")}
             </p>
           </div>
         </div>
 
-        <div className="flex items-start gap-3 ">
+        <div className="flex items-start gap-3">
           <Home size={22} className="text-gray-400" />
           <div>
-            <p className="text-sm text-gray-500">Address</p>
+            <p className="text-sm text-gray-500">Địa chỉ</p>
             <p className="text-base font-medium text-muted-foreground">
               {data?.address}
             </p>
           </div>
         </div>
 
-        <div className="flex items-start gap-3 ">
+        <div className="flex items-start gap-3">
           <Mail size={22} className="text-gray-400" />
           <div>
             <p className="text-sm text-gray-500">Email</p>
@@ -63,40 +63,40 @@ export const PatientDetailsCard = ({ data }: { data: Patient }) => {
           </div>
         </div>
 
-        <div className="flex items-start gap-3 ">
+        <div className="flex items-start gap-3">
           <Phone size={22} className="text-gray-400" />
           <div>
-            <p className="text-sm text-gray-500">Phone</p>
+            <p className="text-sm text-gray-500">Số điện thoại</p>
             <p className="text-base font-medium text-muted-foreground">
               {data?.phone}
             </p>
           </div>
         </div>
 
-        <div className="flex items-start gap-3 ">
+        <div className="flex items-start gap-3">
           <Info size={22} className="text-gray-400" />
           <div>
-            <p className="text-sm text-gray-500">Physician</p>
+            <p className="text-sm text-gray-500">Bác sĩ phụ trách</p>
             <p className="text-base font-medium text-muted-foreground">
-              Dr Codewave, MBBS, FCPS
+              Bác sĩ Google, MBBS, FCPS
             </p>
           </div>
         </div>
 
-        <div className="flex items-start gap-3 ">
+        <div className="flex items-start gap-3">
           <div>
-            <p className="text-sm text-gray-500">Active Conditions</p>
+            <p className="text-sm text-gray-500">Bệnh đang điều trị</p>
             <p className="text-base font-medium text-muted-foreground">
-              {data?.medical_conditions}
+              {data?.medical_conditions || "Không có"}
             </p>
           </div>
         </div>
 
-        <div className="flex items-start gap-3 ">
+        <div className="flex items-start gap-3">
           <div>
-            <p className="text-sm text-gray-500">Allergies</p>
+            <p className="text-sm text-gray-500">Dị ứng</p>
             <p className="text-base font-medium text-muted-foreground">
-              {data?.allergies}
+              {data?.allergies || "Không có"}
             </p>
           </div>
         </div>

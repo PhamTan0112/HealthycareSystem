@@ -38,7 +38,7 @@ export const StatCard = ({
           variant="outline"
           className="font-normal text-xs bg-transparent px-2 py-1 hover:underline"
         >
-          <Link href={link}>See details</Link>
+          <Link href={link}>Chi tiết</Link>
         </Button>
       </CardHeader>
 

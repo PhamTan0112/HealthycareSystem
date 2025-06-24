@@ -3,14 +3,11 @@ import { AppointmentChart } from "@/components/charts/appointment-chart";
 import { StatSummary } from "@/components/charts/stat-summary";
 import { StatCard } from "@/components/statCard";
 import { RecentAppointments } from "@/components/tables/recent-appoinment";
-
 import { Button } from "@/components/ui/button";
-import { checkRole, getRole } from "@/utils/roles";
 import { getDoctorDashboardStats } from "@/utils/services/doctor";
 import { currentUser } from "@clerk/nextjs/server";
 import { BriefcaseBusiness, BriefcaseMedical, User, Users } from "lucide-react";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import React from "react";
 
 const DoctorDashboard = async () => {
@@ -28,39 +25,39 @@ const DoctorDashboard = async () => {
 
   const cardData = [
     {
-      title: "Patients",
+      title: "Bệnh nhân",
       value: totalPatient,
       icon: Users,
       className: "bg-blue-600/15",
       iconClassName: "bg-blue-600/25 text-blue-600",
-      note: "Total patients",
+      note: "Tổng số bệnh nhân",
       link: "/record/patients",
     },
     {
-      title: "Nurses",
+      title: "Y tá",
       value: totalNurses,
       icon: User,
       className: "bg-rose-600/15",
       iconClassName: "bg-rose-600/25 text-rose-600",
-      note: "Total nurses",
+      note: "Tổng số y tá",
       link: "",
     },
     {
-      title: "Appointments",
+      title: "Cuộc hẹn",
       value: totalAppointment,
       icon: BriefcaseBusiness,
       className: "bg-yellow-600/15",
       iconClassName: "bg-yellow-600/25 text-yellow-600",
-      note: "Total appointments",
+      note: "Tổng số cuộc hẹn",
       link: "/record/appointments",
     },
     {
-      title: "Consultation",
+      title: "Tư vấn",
       value: appointmentCounts?.COMPLETED,
       icon: BriefcaseMedical,
       className: "bg-emerald-600/15",
       iconClassName: "bg-emerald-600/25 text-emerald-600",
-      note: "Total consultation",
+      note: "Tổng số buổi tư vấn",
       link: "/record/appointments",
     },
   ];
@@ -75,7 +72,7 @@ const DoctorDashboard = async () => {
               Welcome, Dr. {user?.firstName}
             </h1>
             <Button size="sm" variant="outline" asChild>
-              <Link href={`/record/doctors/${user?.id}`}>View profile</Link>
+              <Link href={`/record/doctors/${user?.id}`}>Xem hồ sơ</Link>
             </Button>
           </div>
 

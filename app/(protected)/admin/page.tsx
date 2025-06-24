@@ -19,49 +19,50 @@ const AdminDashboard = async () => {
   } = await getAdminDashboardStats();
   const cardData = [
     {
-      title: "Patients",
+      title: "Bệnh nhân",
       value: totalPatient,
       icon: Users,
       className: "bg-blue-600/15",
       iconClassName: "bg-blue-600/25 text-blue-600",
-      note: "Total patients",
+      note: "Tổng số bệnh nhân",
       link: "/manage-patients",
     },
     {
-      title: "Doctors",
+      title: "Bác sĩ",
       value: totalDoctors,
       icon: User,
       className: "bg-rose-600/15",
       iconClassName: "bg-rose-600/25 text-rose-600",
-      note: "Total doctors",
+      note: "Tổng số bác sĩ",
       link: "/manage-doctors",
     },
     {
-      title: "Appointments",
+      title: "Cuộc hẹn",
       value: totalAppointments,
       icon: BriefcaseBusiness,
       className: "bg-yellow-600/15",
       iconClassName: "bg-yellow-600/25 text-yellow-600",
-      note: "Total appointments",
+      note: "Tổng số cuộc hẹn",
       link: "/manage-appointments",
     },
     {
-      title: "Consultation",
+      title: "Tư vấn",
       value: appointmentCounts?.COMPLETED,
       icon: BriefcaseMedical,
       className: "bg-emerald-600/15",
       iconClassName: "bg-emerald-600/25 text-emerald-600",
-      note: "Total consultation",
+      note: "Tổng số buổi tư vấn",
       link: "/manage-appointments",
     },
   ];
+
   return (
     <div className="py-6 px-3 flex flex-col xl:flex-row rounded-xl gap-6 cursor-default select-none">
       {/* LEFT */}
       <div className="w-full xl:w-[69%]">
         <div className="bg-white rounded-xl p-4 mb-8">
           <div className="flex items-center justify-between mb-4">
-            <h1 className="text-lg font-semibold">Statistics</h1>
+            <h1 className="text-lg font-semibold">Thống kê</h1>
             <Button size={"sm"} variant={"outline"}>
               {new Date().getFullYear()}
             </Button>

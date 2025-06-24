@@ -4,7 +4,7 @@ import { checkRole } from "@/utils/roles";
 import { ReceiptText } from "lucide-react";
 import { Table } from "../tables/table";
 import { PatientBills } from "@prisma/client";
-import { format, formatDate } from "date-fns";
+import { format } from "date-fns";
 import { ActionDialog } from "../action-dialog";
 import { Separator } from "../ui/separator";
 import { AddBills } from "../dialogs/add-bills";
@@ -12,36 +12,36 @@ import { GenerateFinalBills } from "./generate-final-bill";
 
 const columns = [
   {
-    header: "No",
+    header: "STT",
     key: "no",
     className: "hidden md:table-cell",
   },
   {
-    header: "Service",
+    header: "Dịch vụ",
     key: "service",
   },
   {
-    header: "Date",
+    header: "Ngày",
     key: "date",
     className: "",
   },
   {
-    header: "Quantity",
+    header: "Số lượng",
     key: "qnty",
     className: "hidden md:table-cell",
   },
   {
-    header: "Unit Price",
+    header: "Đơn giá",
     key: "price",
     className: "hidden md:table-cell",
   },
   {
-    header: "Total Cost",
+    header: "Thành tiền",
     key: "total",
     className: "",
   },
   {
-    header: "Action",
+    header: "Hành động",
     key: "action",
     className: "hidden xl:table-cell",
   },
@@ -117,13 +117,11 @@ export const BillsContainer = async ({ id }: { id: string }) => {
     <div className="bg-white rounded-xl p-2 2xl:p-4">
       <div className="w-full flex flex-col md:flex-row md:items-center justify-between mb-6">
         <div className="">
-          <h1 className="font-semibold text-xl">Patient Bills</h1>
+          <h1 className="font-semibold text-xl">Hóa đơn khám bệnh</h1>
           <div className="hidden lg:flex items-center gap-1">
             <ReceiptText size={20} className="text-gray-500" />
             <p className="text-2xl font-semibold">{billData?.length}</p>
-            <span className="text-gray-600 text-sm xl:text-base">
-              total records
-            </span>
+            <span className="text-gray-600 text-sm xl:text-base">tổng mục</span>
           </div>
         </div>
 
@@ -142,30 +140,29 @@ export const BillsContainer = async ({ id }: { id: string }) => {
 
       <div className="flex flex-wrap lg:flex-nowrap items-center justify-between md:text-center py-2 gap-6">
         <div className="w-[120px]">
-          <span className="text-gray-500">Total Bill</span>
+          <span className="text-gray-500">Tổng cộng</span>
           <p className="text-xl font-semibold">
             {(data?.total_amount || totalBills).toFixed(2)}
           </p>
         </div>
         <div className="w-[120px]">
-          <span className="text-gray-500">Discount</span>
+          <span className="text-gray-500">Giảm giá</span>
           <p className="text-xl font-semibold text-yellow-600">
             {(data?.discount || 0.0).toFixed(2)}{" "}
             <span className="text-sm text-gray-600">
-              {" "}
-              ({discount?.discountPercentage?.toFixed(2) || "0.0"}%)
+              ( {discount?.discountPercentage?.toFixed(2) || "0.0"}% )
             </span>
           </p>
         </div>
         <div className="w-[120px]">
-          <span className="text-gray-500">Payable</span>
+          <span className="text-gray-500">Cần thanh toán</span>
           <p className="text-xl font-semibold ">
             {(discount?.finalAmount || 0.0).toFixed(2)}
           </p>
         </div>
 
         <div className="w-[120px]">
-          <span className="text-gray-500">Unpaid Amount</span>
+          <span className="text-gray-500">Chưa thanh toán</span>
           <p className="text-xl font-semibold text-red-600">
             {(discount?.finalAmount! - data?.amount_paid! || 0.0).toFixed(2)}
           </p>

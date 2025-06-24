@@ -8,41 +8,41 @@ import { ActionDialog } from "../action-dialog";
 
 const columns = [
   {
-    header: "No",
+    header: "STT",
     key: "id",
   },
   {
-    header: "Bill Date",
+    header: "Ngày tạo",
     key: "bill_date",
     className: "",
   },
   {
-    header: "Payment Date",
+    header: "Ngày thanh toán",
     key: "pay_date",
     className: "hidden md:table-cell",
   },
   {
-    header: "Total",
+    header: "Tổng tiền",
     key: "total",
     className: "",
   },
   {
-    header: "Discount",
+    header: "Giảm giá",
     key: "discount",
     className: "hidden xl:table-cell",
   },
   {
-    header: "Payable",
+    header: "Cần trả",
     key: "payable",
     className: "hidden xl:table-cell",
   },
   {
-    header: "Paid",
+    header: "Đã trả",
     key: "paid",
     className: "hidden xl:table-cell",
   },
   {
-    header: "Actions",
+    header: "Thao tác",
     key: "action",
   },
 ];
@@ -69,9 +69,9 @@ export const PaymentsContainer = async ({
           #{item?.id}
         </td>
 
-        <td className="lowercase">{format(item?.bill_date, "MMM d, yyyy")}</td>
-        <td className="hidden  items-center py-2  md:table-cell">
-          {format(item?.payment_date, "MMM d, yyyy")}
+        <td className="lowercase">{format(item?.bill_date, "dd/MM/yyyy")}</td>
+        <td className="hidden items-center py-2 md:table-cell">
+          {format(item?.payment_date, "dd/MM/yyyy")}
         </td>
         <td className="">{item?.total_amount.toFixed(2)}</td>
         <td className="hidden xl:table-cell">{item?.discount.toFixed(2)}</td>
@@ -103,9 +103,7 @@ export const PaymentsContainer = async ({
       <div className="flex items-center justify-between">
         <div className="hidden lg:flex items-center gap-1">
           <p className="text-2xl font-semibold">{data?.length ?? 0}</p>
-          <span className="text-gray-600 text-sm xl:text-base">
-            total records
-          </span>
+          <span className="text-gray-600 text-sm xl:text-base">tổng lượt</span>
         </div>
       </div>
 

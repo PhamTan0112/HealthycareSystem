@@ -19,9 +19,7 @@ export const ActionOptions = ({ children }: { children: React.ReactNode }) => {
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-56 p-3">
-        <span className="text-xs text-gray-400 mb-4 uppercase">
-          Perform Action
-        </span>
+        <span className="text-xs text-gray-400 mb-4 uppercase">Thao tác</span>
         {children}
       </PopoverContent>
     </Popover>
@@ -41,7 +39,7 @@ export const ViewAction = ({
   return (
     <Link href={href}>
       <button disabled={disabled} className={className}>
-        View
+        Xem
       </button>
     </Link>
   );
@@ -50,7 +48,7 @@ export const ViewAction = ({
 export const ViewActionButton = () => {
   return (
     <button type="button" className={className}>
-      View
+      Xem
     </button>
   );
 };

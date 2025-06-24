@@ -25,10 +25,10 @@ interface DataProps {
   id?: string | number;
   total_bill: number;
 }
+
 export const GenerateFinalBills = ({ id, total_bill }: DataProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  let discountInfo = null;
 
   const form = useForm<z.infer<typeof PaymentSchema>>({
     resolver: zodResolver(PaymentSchema),
@@ -43,82 +43,77 @@ export const GenerateFinalBills = ({ id, total_bill }: DataProps) => {
   const handleOnSubmit = async (values: z.infer<typeof PaymentSchema>) => {
     try {
       setIsLoading(true);
-
       const resp = await generateBill(values);
 
       if (resp.success) {
-        toast.success("Patient bill generated successfully!");
-
+        toast.success("Tạo hóa đơn thành công!");
         router.refresh();
-
         form.reset();
       } else if (resp.error) {
         toast.error(resp.msg);
       }
     } catch (error) {
       console.log(error);
-      toast.error("Something went wrong. Please try again.");
+      toast.error("Đã xảy ra lỗi, vui lòng thử lại.");
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <>
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button variant="outline" size="sm" className="text-sm font-normal">
-            <Plus size={22} className="text-gray-400" />
-            Generate Final Bill
-          </Button>
-        </DialogTrigger>
-        <DialogContent>
-          <CardHeader className="px-0">
-            <DialogTitle>Patient Medical Bill</DialogTitle>
-          </CardHeader>
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="outline" size="sm" className="text-sm font-normal">
+          <Plus size={22} className="text-gray-400" />
+          Tạo hóa đơn cuối
+        </Button>
+      </DialogTrigger>
+      <DialogContent>
+        <CardHeader className="px-0">
+          <DialogTitle>Hóa đơn khám bệnh</DialogTitle>
+        </CardHeader>
 
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(handleOnSubmit)}
-              className="space-y-8"
-            >
-              <div className="flex items-center gap-2">
-                <div className="">
-                  <span>Total Bill</span>
-                  <p className="text-3xl font-semibold">
-                    {total_bill?.toFixed(2)}
-                  </p>
-                </div>
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(handleOnSubmit)}
+            className="space-y-8"
+          >
+            <div className="flex items-center gap-2">
+              <div className="">
+                <span>Tổng cộng</span>
+                <p className="text-3xl font-semibold">
+                  {total_bill?.toFixed(2)}
+                </p>
               </div>
+            </div>
 
-              <CustomInput
-                type="input"
-                control={form.control}
-                name="discount"
-                placeholder="eg.: 5"
-                label="Discount (%)"
-              />
+            <CustomInput
+              type="input"
+              control={form.control}
+              name="discount"
+              placeholder="vd: 5"
+              label="Giảm giá (%)"
+            />
 
-              <CustomInput
-                type="input"
-                control={form.control}
-                name="bill_date"
-                label="Bill Date"
-                placeholder=""
-                inputType="date"
-              />
+            <CustomInput
+              type="input"
+              control={form.control}
+              name="bill_date"
+              label="Ngày tạo hóa đơn"
+              placeholder=""
+              inputType="date"
+            />
 
-              <Button
-                type="submit"
-                disabled={isLoading}
-                className="bg-blue-600 w-full"
-              >
-                Generate Bill
-              </Button>
-            </form>
-          </Form>
-        </DialogContent>
-      </Dialog>
-    </>
+            <Button
+              type="submit"
+              disabled={isLoading}
+              className="bg-blue-600 w-full"
+            >
+              Tạo hóa đơn
+            </Button>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
   );
 };

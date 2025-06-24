@@ -6,12 +6,12 @@ import React from "react";
 
 const columns = [
   {
-    header: "user ID",
+    header: "ID user",
     key: "id",
     className: "hidden lg:table-cell",
   },
   {
-    header: "Name",
+    header: "Tên",
     key: "name",
   },
   {
@@ -20,15 +20,15 @@ const columns = [
     className: "hidden md:table-cell",
   },
   {
-    header: "Role",
+    header: "Vai trò",
     key: "role",
   },
   {
-    header: "Status",
+    header: "Trạng thái",
     key: "status",
   },
   {
-    header: "Last Login",
+    header: "Đăng nhập gần nhất",
     key: "last_login",
     className: "hidden xl:table-cell",
   },
@@ -75,9 +75,7 @@ const UserPage = async () => {
           <BriefcaseBusiness size={20} className="text-gray-500" />
 
           <p className="text-xl font-semibold">{totalCount}</p>
-          <span className="text-gray-600 text-sm xl:text-base">
-            total users
-          </span>
+          <span className="text-gray-600 text-sm xl:text-base">người dùng</span>
         </div>
       </div>
 

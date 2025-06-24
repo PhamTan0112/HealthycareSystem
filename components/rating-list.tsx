@@ -5,16 +5,16 @@ interface DataProps {
   id: number;
   staff_id: string;
   rating: number;
-  comment?: string;
+  comment?: string | null;
   created_at: Date | string;
   patient: { last_name: string; first_name: string };
 }
 
-export const RatingList = ({ data }: { data: any[] }) => {
+export const RatingList = ({ data }: { data: DataProps[] }) => {
   return (
     <div className="bg-white rounded-lg">
       <div className="flex items-center justify-between p-4">
-        <h1 className="text-xl font-semibold">Patient Reviews</h1>
+        <h1 className="text-xl font-semibold">Đánh giá của bệnh nhân</h1>
       </div>
 
       <div className="space-y-2 p-2">
@@ -26,7 +26,7 @@ export const RatingList = ({ data }: { data: any[] }) => {
                   {rate?.patient?.first_name + " " + rate?.patient?.last_name}
                 </p>
                 <span className="text-sm text-gray-500">
-                  {new Date(rate?.created_at).toLocaleDateString()}
+                  {new Date(rate?.created_at).toLocaleDateString("vi-VN")}
                 </span>
               </div>
 
@@ -35,11 +35,6 @@ export const RatingList = ({ data }: { data: any[] }) => {
                   {Array.from({ length: rate.rating }, (_, index) => (
                     <Star key={index} className="text-lg" />
                   ))}
-
-                  {/* <div className="flex items-center">
-                    <Star className="text-lg" />
-                    <span>{rate.rating}</span>
-                  </div> */}
                 </div>
                 <span className="">{rate.rating.toFixed(1)}</span>
               </div>
@@ -49,7 +44,7 @@ export const RatingList = ({ data }: { data: any[] }) => {
 
         {data?.length === 0 && (
           <div className="px-2 text-gray-600">
-            <p>No Reviews</p>
+            <p>Chưa có đánh giá nào</p>
           </div>
         )}
       </div>

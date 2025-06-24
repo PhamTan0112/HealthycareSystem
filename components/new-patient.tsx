@@ -124,12 +124,12 @@ export const NewPatient = ({ data, type }: DataProps) => {
   }, [user]);
 
   return (
-    <Card className="max-w-6xl w-full p-4 ">
+    <Card className="max-w-6xl w-full p-4">
       <CardHeader>
-        <CardTitle>Patient Registration</CardTitle>
+        <CardTitle>Đăng ký bệnh nhân</CardTitle>
         <CardDescription>
-          Please provide all the information below to help us understand better
-          and provide good and quality service to you.
+          Vui lòng cung cấp đầy đủ thông tin bên dưới để chúng tôi hiểu rõ hơn
+          và mang đến dịch vụ chăm sóc sức khỏe chất lượng cho bạn.
         </CardDescription>
       </CardHeader>
 
@@ -139,196 +139,180 @@ export const NewPatient = ({ data, type }: DataProps) => {
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-8 mt-5"
           >
-            <h3 className="text-lg font-semibold">Personal Information</h3>
-            <>
-              {/* PROFILE IMAGE */}
+            <h3 className="text-lg font-semibold">Thông tin cá nhân</h3>
 
-              {/* <ImageUploader
-          
-              /> */}
-              <div className="flex flex-col lg:flex-row  gap-y-6 items-center gap-2 md:gap-x-4">
-                <CustomInput
-                  type="input"
-                  control={form.control}
-                  name="first_name"
-                  placeholder="John"
-                  label="First Name"
-                />
-                <CustomInput
-                  type="input"
-                  control={form.control}
-                  name="last_name"
-                  placeholder="Doe"
-                  label="Last Name"
-                />
-              </div>
+            <div className="flex flex-col lg:flex-row gap-y-6 items-center gap-2 md:gap-x-4">
               <CustomInput
                 type="input"
                 control={form.control}
-                name="email"
-                placeholder="john@example.com"
-                label="Email Address"
+                name="first_name"
+                placeholder="Nguyễn"
+                label="Họ"
               />
-              <div className="flex flex-col lg:flex-row  gap-y-6 items-center gap-2 md:gap-x-4">
-                <CustomInput
-                  type="select"
-                  control={form.control}
-                  name="gender"
-                  placeholder="Select gender"
-                  label="Gender"
-                  selectList={GENDER!}
-                />
-                <CustomInput
-                  type="input"
-                  control={form.control}
-                  name="date_of_birth"
-                  placeholder="01-05-2000"
-                  label="Date of Birth"
-                  inputType="date"
-                />
-              </div>
-              <div className="flex flex-col lg:flex-row  gap-y-6 items-center gap-2 md:gap-x-4">
-                <CustomInput
-                  type="input"
-                  control={form.control}
-                  name="phone"
-                  placeholder="9225600735"
-                  label="Contact Number"
-                />
-                <CustomInput
-                  type="select"
-                  control={form.control}
-                  name="marital_status"
-                  placeholder="Select marital status"
-                  label="Marital Status"
-                  selectList={MARITAL_STATUS!}
-                />
-              </div>
               <CustomInput
                 type="input"
                 control={form.control}
-                name="address"
-                placeholder="1479 Street, Apt 1839-G, NY"
-                label="Address"
+                name="last_name"
+                placeholder="Văn A"
+                label="Tên"
               />
-            </>
+            </div>
+
+            <CustomInput
+              type="input"
+              control={form.control}
+              name="email"
+              placeholder="nguyenvana@example.com"
+              label="Địa chỉ email"
+            />
+
+            <div className="flex flex-col lg:flex-row gap-y-6 items-center gap-2 md:gap-x-4">
+              <CustomInput
+                type="select"
+                control={form.control}
+                name="gender"
+                placeholder="Chọn giới tính"
+                label="Giới tính"
+                selectList={GENDER!}
+              />
+              <CustomInput
+                type="input"
+                control={form.control}
+                name="date_of_birth"
+                placeholder="01-01-2000"
+                label="Ngày sinh"
+                inputType="date"
+              />
+            </div>
+
+            <div className="flex flex-col lg:flex-row gap-y-6 items-center gap-2 md:gap-x-4">
+              <CustomInput
+                type="input"
+                control={form.control}
+                name="phone"
+                placeholder="0912345678"
+                label="Số điện thoại"
+              />
+              <CustomInput
+                type="select"
+                control={form.control}
+                name="marital_status"
+                placeholder="Chọn tình trạng hôn nhân"
+                label="Tình trạng hôn nhân"
+                selectList={MARITAL_STATUS!}
+              />
+            </div>
+
+            <CustomInput
+              type="input"
+              control={form.control}
+              name="address"
+              placeholder="123 Đường ABC, Quận 1, TP.HCM"
+              label="Địa chỉ"
+            />
 
             <div className="space-y-8">
-              <h3 className="text-lg font-semibold">Family Information</h3>
+              <h3 className="text-lg font-semibold">Thông tin người thân</h3>
               <CustomInput
                 type="input"
                 control={form.control}
                 name="emergency_contact_name"
-                placeholder="Anne Smith"
-                label="Emergency contact name"
+                placeholder="Nguyễn Thị B"
+                label="Họ tên người liên hệ khẩn cấp"
               />
               <CustomInput
                 type="input"
                 control={form.control}
                 name="emergency_contact_number"
-                placeholder="675444467"
-                label="Emergency contact"
+                placeholder="0987654321"
+                label="Số điện thoại người liên hệ"
               />
               <CustomInput
                 type="select"
                 control={form.control}
                 name="relation"
-                placeholder="Select relation with contact person"
-                label="Relation"
+                placeholder="Chọn mối quan hệ"
+                label="Mối quan hệ"
                 selectList={RELATION}
               />
             </div>
 
             <div className="space-y-8">
-              <h3 className="text-lg font-semibold">Medical Information</h3>
+              <h3 className="text-lg font-semibold">Thông tin y tế</h3>
 
               <CustomInput
                 type="input"
                 control={form.control}
                 name="blood_group"
                 placeholder="A+"
-                label="Blood group"
+                label="Nhóm máu"
               />
               <CustomInput
                 type="input"
                 control={form.control}
                 name="allergies"
-                placeholder="Milk"
-                label="Allergies"
+                placeholder="Ví dụ: sữa, trứng..."
+                label="Dị ứng"
               />
               <CustomInput
                 type="input"
                 control={form.control}
                 name="medical_conditions"
-                placeholder="Medical conditions"
-                label="Medical conditions"
+                placeholder="Bệnh lý đang mắc phải"
+                label="Tình trạng bệnh lý"
               />
               <CustomInput
                 type="input"
                 control={form.control}
                 name="medical_history"
-                placeholder="Medical history"
-                label="Medical history"
+                placeholder="Tiền sử bệnh"
+                label="Tiền sử bệnh"
               />
-              <div className="flex flex-col lg:flex-row  gap-y-6 items-center gap-2 md:gap-4">
+              <div className="flex flex-col lg:flex-row gap-y-6 items-center gap-2 md:gap-4">
                 <CustomInput
                   type="input"
                   control={form.control}
                   name="insurance_provider"
-                  placeholder="Insurance provider"
-                  label="Insurance provider"
-                />{" "}
+                  placeholder="Tên công ty bảo hiểm"
+                  label="Nhà cung cấp bảo hiểm"
+                />
                 <CustomInput
                   type="input"
                   control={form.control}
                   name="insurance_number"
-                  placeholder="Insurance number"
-                  label="Insurance number"
+                  placeholder="Số hợp đồng bảo hiểm"
+                  label="Số bảo hiểm"
                 />
               </div>
             </div>
 
             {type !== "update" && (
-              <div className="">
-                <h3 className="text-lg font-semibold mb-2">Consent</h3>
+              <div>
+                <h3 className="text-lg font-semibold mb-2">
+                  Đồng ý điều khoản
+                </h3>
 
                 <div className="space-y-6">
                   <CustomInput
                     name="privacy_consent"
-                    label=" Privacy Policy Agreement"
-                    placeholder=" I consent to the collection, storage, and use of my
-                    personal and health information as outlined in the Privacy
-                    Policy. I understand how my data will be used, who it may
-                    be shared with, and my rights regarding access,
-                    correction, and deletion of my data."
+                    label="Đồng ý chính sách quyền riêng tư"
+                    placeholder="Tôi đồng ý cho phép thu thập, lưu trữ và sử dụng thông tin cá nhân cũng như dữ liệu sức khỏe của tôi như đã trình bày trong Chính sách quyền riêng tư. Tôi hiểu rõ quyền lợi của mình về việc truy cập, chỉnh sửa và xóa dữ liệu."
                     type="checkbox"
                     control={form.control}
                   />
-
                   <CustomInput
                     control={form.control}
                     type="checkbox"
                     name="service_consent"
-                    label=" Terms of Service Agreement"
-                    placeholder=" I agree to the Terms of Service, including my
-                    responsibilities as a user of this healthcare management
-                    system, the limitations of liability, and the dispute
-                    resolution process. I understand that continued use of
-                    this service is contingent upon my adherence to these
-                    terms."
+                    label="Đồng ý điều khoản dịch vụ"
+                    placeholder="Tôi đồng ý với các điều khoản sử dụng, bao gồm quyền lợi và trách nhiệm khi sử dụng hệ thống quản lý y tế, cũng như các giới hạn trách nhiệm pháp lý."
                   />
-
                   <CustomInput
                     control={form.control}
                     type="checkbox"
                     name="medical_consent"
-                    label="Informed Consent for Medical Treatment"
-                    placeholder="I provide informed consent to receive medical treatment
-                    and services through this healthcare management system. I
-                    acknowledge that I have been informed of the nature,
-                    risks, benefits, and alternatives to the proposed
-                    treatments and that I have the right to ask questions and
-                    receive further information before proceeding."
+                    label="Đồng ý điều trị"
+                    placeholder="Tôi đồng ý được điều trị và nhận dịch vụ y tế qua hệ thống này. Tôi đã được thông báo rõ về phương án điều trị, rủi ro, lợi ích và quyền đặt câu hỏi trước khi tiến hành."
                   />
                 </div>
               </div>
@@ -339,7 +323,7 @@ export const NewPatient = ({ data, type }: DataProps) => {
               type="submit"
               className="w-full md:w-fit px-6"
             >
-              {type === "create" ? "Submit" : "Update"}
+              {type === "create" ? "Gửi đăng ký" : "Cập nhật"}
             </Button>
           </form>
         </Form>

@@ -1,3 +1,5 @@
+export const revalidate = 60;
+
 import { AppointmentActionOptions } from "@/components/appointment-actions";
 import { AppointmentStatusIndicator } from "@/components/appointment-status-indicator";
 import { ProfileImage } from "@/components/profile-image";
@@ -14,33 +16,34 @@ import { BriefcaseBusiness } from "lucide-react";
 import React from "react";
 import { Pagination } from "@/components/pagination";
 import { AppointmentContainer } from "@/components/appointment-container";
+
 const columns = [
   {
-    header: "Info",
+    header: "Thông tin",
     key: "name",
   },
   {
-    header: "Date",
+    header: "Ngày",
     key: "appointment_date",
     className: "hidden md:table-cell",
   },
   {
-    header: "Time",
+    header: "Giờ",
     key: "time",
     className: "hidden md:table-cell",
   },
   {
-    header: "Doctor",
+    header: "Bác sĩ",
     key: "doctor",
     className: "hidden md:table-cell",
   },
   {
-    header: "Status",
+    header: "Trạng thái",
     key: "status",
     className: "hidden xl:table-cell",
   },
   {
-    header: "Actions",
+    header: "Thao tác",
     key: "action",
   },
 ];
@@ -66,11 +69,13 @@ const Appointments = async (props: {
   if (
     userRole == "admin" ||
     (userRole == "doctor" && id) ||
-    userRole === "nurse"
+    (userRole === "nurse" && id)
   ) {
     queryId = id;
   } else if (userRole === "doctor" || userRole === "patient") {
     queryId = userId;
+  } else if (userRole === "nurse") {
+    queryId = undefined;
   }
 
   const { data, totalPages, totalRecord, currentPage } =
@@ -152,9 +157,7 @@ const Appointments = async (props: {
         <div className="hidden lg:flex items-center gap-1">
           <BriefcaseBusiness size={20} className="text-gray-500" />
           <p className="text-2xl font-semibold">{totalRecord ?? 0}</p>
-          <span className="text-gray-600 text-sm xl:text-base">
-            total appointments
-          </span>
+          <span className="text-gray-600 text-sm xl:text-base">cuộc hẹn</span>
         </div>
 
         <div className="w-full lg:w-fit flex items-center justify-between lg:justify-start gap-2">

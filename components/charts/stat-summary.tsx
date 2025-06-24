@@ -8,13 +8,13 @@ import { formatNumber } from "@/utils";
 
 export const StatSummary = ({ data, total }: { data: any; total: number }) => {
   const dataInfo = [
-    { name: "Total", count: total || 0, fill: "white" },
+    { name: "Tổng", count: total || 0, fill: "white" },
     {
-      name: "Appointments",
+      name: "Lịch hẹn",
       count: data?.PENDING + data?.SCHEDULED || 0,
       fill: "#000000",
     },
-    { name: "Consultation", count: data?.COMPLETED || 0, fill: "#2563eb" },
+    { name: "Đã hoàn thành", count: data?.COMPLETED || 0, fill: "#2563eb" },
   ];
 
   const appointment = dataInfo[1].count;
@@ -23,7 +23,7 @@ export const StatSummary = ({ data, total }: { data: any; total: number }) => {
   return (
     <div className="bg-white rounded-xl w-full h-full p-4">
       <div className="flex justify-between items-center">
-        <h1 className="text-lg font-semibold">Summary</h1>
+        <h1 className="text-lg font-semibold">Tổng quan</h1>
 
         <Button
           asChild
@@ -31,7 +31,7 @@ export const StatSummary = ({ data, total }: { data: any; total: number }) => {
           variant="outline"
           className="font-normal text-xs"
         >
-          <Link href="/record/appointments">See details</Link>
+          <Link href="/record/appointments">Chi tiết</Link>
         </Button>
       </div>
 
@@ -62,8 +62,8 @@ export const StatSummary = ({ data, total }: { data: any; total: number }) => {
             <h1 className="font-bold">{formatNumber(appointment)}</h1>
           </div>
           <h2 className="text-xs text-gray-400">
-            {dataInfo[1].name}(
-            {((appointment / (appointment + consultation)) * 100).toFixed(0)})
+            {dataInfo[1].name} (
+            {((appointment / (appointment + consultation)) * 100).toFixed(0)}%)
           </h2>
         </div>
 
@@ -74,8 +74,8 @@ export const StatSummary = ({ data, total }: { data: any; total: number }) => {
           </div>
 
           <h2 className="text-xs text-gray-400">
-            {dataInfo[2].name}(
-            {((consultation / (appointment + consultation)) * 100).toFixed(0)})
+            {dataInfo[2].name} (
+            {((consultation / (appointment + consultation)) * 100).toFixed(0)}%)
           </h2>
         </div>
       </div>

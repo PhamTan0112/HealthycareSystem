@@ -12,33 +12,35 @@ import { AppointmentStatusIndicator } from "../appointment-status-indicator";
 interface DataProps {
   data: any[];
 }
+
 const columns = [
-  { header: "Info", key: "name" },
+  { header: "Thông tin", key: "name" },
   {
-    header: "Date",
+    header: "Ngày",
     key: "appointment_date",
     className: "hidden md:table-cell",
   },
   {
-    header: "Time",
+    header: "Giờ",
     key: "time",
     className: "hidden md:table-cell",
   },
   {
-    header: "Doctor",
+    header: "Bác sĩ",
     key: "doctor",
     className: "hidden md:table-cell",
   },
   {
-    header: "Status",
+    header: "Trạng thái",
     key: "status",
     className: "hidden xl:table-cell",
   },
   {
-    header: "Actions",
+    header: "Thao tác",
     key: "action",
   },
 ];
+
 export const RecentAppointments = ({ data }: DataProps) => {
   const renderRow = (item: Appointment) => {
     const name = item?.patient?.first_name + " " + item?.patient?.last_name;
@@ -69,10 +71,7 @@ export const RecentAppointments = ({ data }: DataProps) => {
         </td>
         <td className="hidden md:table-cell">{item?.time}</td>
         <td className="hidden md:table-cell items-center py-2">
-          <div
-            className="flex items-center gap-2 2x:gap-4
-          "
-          >
+          <div className="flex items-center gap-2 2x:gap-4">
             <ProfileImage
               url={item?.doctor?.img!}
               name={item?.doctor?.name}
@@ -96,8 +95,7 @@ export const RecentAppointments = ({ data }: DataProps) => {
         <td>
           <div className="flex items-center gap-x-2">
             <ViewAppointment id={item?.id} />
-
-            <Link href={`/record/appointments/${item?.id}`}>See all</Link>
+            <Link href={`/record/appointments/${item?.id}`}>Chi tiết</Link>
           </div>
         </td>
       </tr>
@@ -107,10 +105,10 @@ export const RecentAppointments = ({ data }: DataProps) => {
   return (
     <div className="bg-white rounded-xl p-2 2xl:p-4">
       <div className="flex justify-between items-center">
-        <h1 className="text-lg font-semibold">Recent Appointments</h1>
+        <h1 className="text-lg font-semibold">Lịch hẹn gần đây</h1>
 
         <Button asChild variant={"outline"}>
-          <Link href="/record/appointments">View All</Link>
+          <Link href="/record/appointments">Xem tất cả</Link>
         </Button>
       </div>
 

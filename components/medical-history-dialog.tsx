@@ -32,7 +32,7 @@ export const MedicalHistoryDialog = async ({
           doctor_id={doctor_id!}
         /> */}
 
-        <p>Diagnosis container form</p>
+        <p>Mẫu chuẩn đoán</p>
       </DialogContent>
     </Dialog>
   );

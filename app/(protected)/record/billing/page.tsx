@@ -44,7 +44,7 @@ const BillingPage = async (props: SearchParamsProps) => {
     try {
       await updatePaymentStatus({ receiptNumber });
     } catch (error) {
-      console.error("❌ Lỗi cập nhật trạng thái payment:", error);
+      console.error("Lỗi cập nhật trạng thái payment:", error);
     }
   }
 
@@ -96,8 +96,8 @@ const BillingPage = async (props: SearchParamsProps) => {
               item.status === "PAID"
                 ? "text-emerald-600"
                 : item.status === "UNPAID"
-                ? "text-red-600"
-                : "text-gray-600"
+                  ? "text-red-600"
+                  : "text-gray-600"
             )}
           >
             {item.status}
@@ -127,9 +127,7 @@ const BillingPage = async (props: SearchParamsProps) => {
         <div className="hidden lg:flex items-center gap-1">
           <ReceiptText size={20} className="text-gray-500" />
           <p className="text-2xl font-semibold">{totalRecords}</p>
-          <span className="text-gray-600 text-sm xl:text-base">
-            total records
-          </span>
+          <span className="text-gray-600 text-sm xl:text-base">hồ sơ</span>
         </div>
         <div className="w-full lg:w-fit flex items-center justify-between lg:justify-start gap-2">
           <SearchInput />

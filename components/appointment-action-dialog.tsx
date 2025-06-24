@@ -35,7 +35,7 @@ export const AppointmentActionDialog = ({
 
   const handleAction = async () => {
     if (type === "cancel" && !reason) {
-      toast.error("Please provide a reason for cancellation.");
+      toast.error("Vui lòng nhập lý do huỷ lịch.");
       return;
     }
 
@@ -43,9 +43,9 @@ export const AppointmentActionDialog = ({
       setIsLoading(true);
       const newReason =
         reason ||
-        `Appointment has ben ${
-          type === "approve" ? "scheduled" : "cancelled"
-        } on ${new Date()}`;
+        `Cuộc hẹn đã được ${
+          type === "approve" ? "xác nhận" : "huỷ"
+        } vào ${new Date()}`;
 
       const resp = await appointmentAction(
         id,
@@ -62,7 +62,7 @@ export const AppointmentActionDialog = ({
       }
     } catch (error) {
       console.log(error);
-      toast.error("Something went wrong. Try again later.");
+      toast.error("Có lỗi xảy ra. Vui lòng thử lại sau.");
     } finally {
       setIsLoading(false);
     }
@@ -73,7 +73,7 @@ export const AppointmentActionDialog = ({
       <DialogTrigger asChild disabled={!disabled}>
         {type === "approve" ? (
           <Button size="sm" variant="ghost" className="w-full justify-start">
-            <Check size={16} /> Approve
+            <Check size={16} /> Xác nhận
           </Button>
         ) : (
           <Button
@@ -81,7 +81,7 @@ export const AppointmentActionDialog = ({
             variant="outline"
             className="w-full flex items-center justify-start gap-2 rounded-full text-red-500 disabled:cursor-not-allowed"
           >
-            <Ban size={16} /> Cancel
+            <Ban size={16} /> Huỷ lịch
           </Button>
         )}
       </DialogTrigger>
@@ -101,20 +101,19 @@ export const AppointmentActionDialog = ({
           </DialogTitle>
 
           <span className="text-xl text-black">
-            Appointment
-            {type === "approve" ? " Confirmation" : " Cancellation"}
+            {type === "approve" ? "Xác nhận lịch hẹn" : "Huỷ lịch hẹn"}
           </span>
           <p className="text-sm text-center text-gray-500">
             {type === "approve"
-              ? "You're about to confirmed this appointment. Yes to approve or No to cancel."
-              : "Are you sure you want to cancel this appointment?"}
+              ? "Bạn có chắc chắn muốn xác nhận cuộc hẹn này không?"
+              : "Bạn có chắc chắn muốn huỷ cuộc hẹn này không?"}
           </p>
 
-          {type == "cancel" && (
+          {type === "cancel" && (
             <Textarea
               disabled={isLoading}
               className="mt-4"
-              placeholder="Cancellation reason...."
+              placeholder="Lý do huỷ lịch..."
               onChange={(e) => setReason(e.target.value)}
             ></Textarea>
           )}
@@ -122,7 +121,7 @@ export const AppointmentActionDialog = ({
           <div className="flex justify-center mt-6 items-center gap-x-4">
             <Button
               disabled={isLoading}
-              onClick={() => handleAction()}
+              onClick={handleAction}
               variant="outline"
               className={cn(
                 "px-4 py-2 text-sm font-medium text-white hover:text-white hover:underline",
@@ -131,14 +130,14 @@ export const AppointmentActionDialog = ({
                   : "bg-destructive hover:bg-destructive"
               )}
             >
-              Yes, {type === "approve" ? "Approve" : "Delete"}
+              {type === "approve" ? "Đồng ý" : "Xác nhận huỷ"}
             </Button>
             <DialogClose asChild>
               <Button
                 variant="outline"
                 className="px-4 py-2 text-sm underline text-gray-500"
               >
-                No
+                Huỷ bỏ
               </Button>
             </DialogClose>
           </div>
