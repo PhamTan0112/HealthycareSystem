@@ -37,8 +37,15 @@ const AppointmentDetailsPage = async ({
               time={data?.time!}
               notes={data?.note!}
             />
-
             <VitalSigns
+              id={id}
+              patientId={data?.patient_id!}
+              doctorId={data?.doctor_id!}
+            />
+
+            <LabtestContainer />
+
+            <DiagnosisContainer
               id={id}
               patientId={data?.patient_id!}
               doctorId={data?.doctor_id!}
@@ -59,9 +66,9 @@ const AppointmentDetailsPage = async ({
           <MedicalHistoryContainer id={id!} patientId={data?.patient_id!} />
         )}
         {cat === "billing" && <BillsContainer id={id} />}
-        {cat === "payments" && (
+        {/* {cat === "payments" && (
           <PaymentsContainer patientId={data?.patient_id!} />
-        )}
+        )} */}
       </div>
       {/* RIGHT */}
       <div className="flex-1 space-y-6">

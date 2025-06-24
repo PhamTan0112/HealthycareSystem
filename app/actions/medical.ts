@@ -59,16 +59,16 @@ export const addDiagnosis = async (
     });
 
     // Nếu có yêu cầu xét nghiệm → Gọi action riêng
-    if (data.request_labtest && data.service_id) {
-      await createLabTest({
-        medical_id: Number(med_id),
-        service_id: Number(data.service_id),
-      });
-    }
+    // if (data.request_labtest && data.service_id) {
+    //   await createLabTest({
+    //     medical_id: Number(med_id),
+    //     service_id: Number(data.service_id),
+    //   });
+    // }
 
     return {
       success: true,
-      message: "Diagnosis and lab test (if any) created successfully.",
+      message: "Diagnosis created successfully.",
     };
   } catch (error) {
     console.error("Add diagnosis error:", error);

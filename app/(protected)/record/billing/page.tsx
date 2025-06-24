@@ -105,7 +105,9 @@ const BillingPage = async (props: SearchParamsProps) => {
         </td>
 
         <td className="flex gap-2">
-          <ViewAction href={`/appointments/${item.appointment_id}?cat=bills`} />
+          <ViewAction
+            href={`/record/appointments/${item.appointment_id}?cat=billing`}
+          />
 
           {isAdmin && (
             <ActionDialog

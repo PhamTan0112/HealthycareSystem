@@ -5,81 +5,63 @@ import { Table } from "@/components/tables/table";
 import { format } from "date-fns";
 import { LabTest } from "@prisma/client";
 import { ActionDialog } from "../action-dialog";
+import { UpdateLabTestDialog } from "../dialogs/update-labtest";
+import { AddLabTestDialog } from "../dialogs/add-labtest";
 
 const columns = [
-  {
-    header: "#",
-    key: "id",
-    className: "hidden md:table-cell",
-  },
-  {
-    header: "Bệnh nhân",
-    key: "patient",
-  },
-  {
-    header: "Dịch vụ",
-    key: "service",
-  },
+  { header: "#", key: "id", className: "hidden md:table-cell" },
+  { header: "Bệnh nhân", key: "patient" },
+  { header: "Dịch vụ", key: "service" },
   {
     header: "Ngày xét nghiệm",
     key: "test_date",
     className: "hidden md:table-cell",
   },
+  { header: "Trạng thái", key: "status", className: "hidden md:table-cell" },
+  { header: "Kết quả", key: "result" },
   {
-    header: "Trạng thái",
-    key: "status",
-    className: "hidden md:table-cell",
+    header: "Ghi chú",
+    key: "notes",
+    className: "max-w-xs truncate",
   },
-  {
-    header: "Kết quả",
-    key: "result",
-  },
-  {
-    header: "Thao tác",
-    key: "action",
-    className: "text-center",
-  },
+  { header: "Thao tác", key: "action", className: "text-center" },
 ];
 
 export default async function LabTestContainer() {
   const { userId } = await auth();
   const staff = await db.staff.findUnique({ where: { id: userId || "" } });
 
-  const labTests = await db.labTest.findMany({
-    orderBy: { test_date: "desc" },
-    include: {
-      services: true,
-      medical_record: {
-        include: { patient: true },
+  const [labTests, services] = await Promise.all([
+    db.labTest.findMany({
+      orderBy: { test_date: "desc" },
+      include: {
+        services: true,
+        medical_record: { include: { patient: true } },
       },
-    },
-  });
+    }),
+    db.services.findMany({ orderBy: { service_name: "asc" } }),
+  ]);
 
   const statusColor = {
-    PENDING: "bg-yellow-100 text-yellow-800",
-    PROCESSING: "bg-blue-100 text-blue-800",
-    COMPLETED: "bg-green-100 text-green-800",
+    PENDING: "bg-yellow-100 text-yellow-600",
+    COMPLETED: "bg-blue-100 text-blue-600",
   };
 
   const statusLabel = {
-    PENDING: "Chờ xử lý",
-    PROCESSING: "Đang thực hiện",
-    COMPLETED: "Hoàn thành",
+    PENDING: "PENDING",
+    COMPLETED: "COMPLETED",
   };
 
   const renderRow = (
     lab: LabTest & {
       services: { service_name: string };
       medical_record: {
-        patient: {
-          first_name: string;
-          last_name: string;
-          gender: string;
-        };
+        patient: { first_name: string; last_name: string; gender: string };
       };
     }
   ) => {
     const patient = lab.medical_record.patient;
+    const isCompleted = lab.status === "COMPLETED";
 
     return (
       <tr
@@ -108,15 +90,25 @@ export default async function LabTestContainer() {
             {statusLabel[lab.status as keyof typeof statusLabel]}
           </span>
         </td>
-        <td className="py-2 max-w-[200px] truncate">
+        <td className="py-2 max-w-[200px] truncate" title={lab.result || ""}>
           {lab.result || <span className="italic text-gray-400">Chưa có</span>}
         </td>
+        <td className="py-2 max-w-[200px] truncate" title={lab.notes || ""}>
+          {lab.notes || <span className="italic text-gray-400">Không có</span>}
+        </td>
         <td className="text-center py-2">
-          <ActionDialog
-            type="delete"
-            id={lab?.id?.toString()}
-            deleteType="labtest"
-          />
+          {!isCompleted ? (
+            <div className="flex justify-center gap-2">
+              <ActionDialog
+                type="delete"
+                id={lab?.id?.toString()}
+                deleteType="labtest"
+              />
+              <UpdateLabTestDialog labTest={lab} />
+            </div>
+          ) : (
+            <span className="text-sm italic text-gray-400">Đã hoàn thành</span>
+          )}
         </td>
       </tr>
     );
@@ -125,7 +117,7 @@ export default async function LabTestContainer() {
   return (
     <div className="bg-white rounded-xl p-2 2xl:p-4">
       <div className="w-full flex flex-col md:flex-row md:items-center justify-between mb-6">
-        <div className="">
+        <div>
           <h1 className="font-semibold text-xl">Xét nghiệm</h1>
           <div className="hidden lg:flex items-center gap-1">
             <ClipboardList size={20} className="text-gray-500" />
@@ -135,6 +127,11 @@ export default async function LabTestContainer() {
             </span>
           </div>
         </div>
+
+        <AddLabTestDialog
+          medicalId={labTests[0]?.record_id ?? 1}
+          services={services}
+        />
       </div>
 
       <Table columns={columns} renderRow={renderRow} data={labTests} />

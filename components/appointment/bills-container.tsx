@@ -138,33 +138,28 @@ export const BillsContainer = async ({ id }: { id: string }) => {
 
       <Separator />
 
-      <div className="flex flex-wrap lg:flex-nowrap items-center justify-between md:text-center py-2 gap-6">
-        <div className="w-[120px]">
-          <span className="text-gray-500">Tổng cộng</span>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 py-2 text-center">
+        <div>
+          <span className="text-gray-500 block">Tổng cộng</span>
           <p className="text-xl font-semibold">
             {(data?.total_amount || totalBills).toFixed(2)}
           </p>
         </div>
-        <div className="w-[120px]">
-          <span className="text-gray-500">Giảm giá</span>
+
+        <div>
+          <span className="text-gray-500 block">Giảm giá</span>
           <p className="text-xl font-semibold text-yellow-600">
             {(data?.discount || 0.0).toFixed(2)}{" "}
             <span className="text-sm text-gray-600">
-              ( {discount?.discountPercentage?.toFixed(2) || "0.0"}% )
+              ({discount?.discountPercentage?.toFixed(2) || "0.0"}%)
             </span>
           </p>
         </div>
-        <div className="w-[120px]">
-          <span className="text-gray-500">Cần thanh toán</span>
-          <p className="text-xl font-semibold ">
-            {(discount?.finalAmount || 0.0).toFixed(2)}
-          </p>
-        </div>
 
-        <div className="w-[120px]">
-          <span className="text-gray-500">Chưa thanh toán</span>
-          <p className="text-xl font-semibold text-red-600">
-            {(discount?.finalAmount! - data?.amount_paid! || 0.0).toFixed(2)}
+        <div>
+          <span className="text-gray-500 block">Cần thanh toán</span>
+          <p className="text-xl font-semibold">
+            {(discount?.finalAmount || 0.0).toFixed(2)}
           </p>
         </div>
       </div>

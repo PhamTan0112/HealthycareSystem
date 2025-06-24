@@ -31,7 +31,7 @@ const LabTestSchema = z.object({
   test_date: z.string(),
   result: z.string().min(1),
   notes: z.string().optional(),
-  status: z.enum(["PENDING", "PROCESSING", "COMPLETED"]),
+  status: z.enum(["PENDING", "COMPLETED"]),
 });
 
 type LabTestFormData = z.infer<typeof LabTestSchema>;
@@ -50,7 +50,7 @@ export const UpdateLabTestDialog = ({ labTest }: UpdateLabTestDialogProps) => {
       test_date: format(new Date(labTest.test_date), "yyyy-MM-dd"),
       result: labTest.result || "",
       notes: labTest.notes || "",
-      status: labTest.status as "PENDING" | "PROCESSING" | "COMPLETED",
+      status: labTest.status as "PENDING" | "COMPLETED",
     },
   });
 
@@ -107,7 +107,6 @@ export const UpdateLabTestDialog = ({ labTest }: UpdateLabTestDialogProps) => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="PENDING">PENDING</SelectItem>
-                  <SelectItem value="PROCESSING">PROCESSING</SelectItem>
                   <SelectItem value="COMPLETED">COMPLETED</SelectItem>
                 </SelectContent>
               </Select>

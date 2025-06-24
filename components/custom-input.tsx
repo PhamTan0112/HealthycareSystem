@@ -40,7 +40,11 @@ const RenderInput = ({ field, props }: { field: any; props: InputProps }) => {
           <Input
             type={props.inputType}
             placeholder={props.placeholder}
-            {...field}
+            value={field.value ?? ""} // 👈 đảm bảo không là undefined
+            onChange={field.onChange}
+            onBlur={field.onBlur}
+            name={field.name}
+            ref={field.ref}
           />
         </FormControl>
       );

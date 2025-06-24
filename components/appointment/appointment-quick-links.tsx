@@ -21,15 +21,15 @@ const AppointmentQuickLinks = async ({ userId }: { userId: string }) => {
           href="?cat=appointments"
           className="px-4 py-2 rounded-lg bg-violet-100 text-violet-600"
         >
-          Lịch hẹn
+          Chi tiết cuộc hẹn
         </Link>
 
-        <Link
+        {/* <Link
           href="?cat=diagnosis"
           className="px-4 py-2 rounded-lg bg-blue-100 text-blue-600"
         >
           Chẩn đoán
-        </Link>
+        </Link> */}
 
         <Link
           href="?cat=billing"
@@ -45,14 +45,14 @@ const AppointmentQuickLinks = async ({ userId }: { userId: string }) => {
           Lịch sử khám
         </Link>
 
-        <Link
+        {/* <Link
           href="?cat=payments"
           className="px-4 py-2 rounded-lg bg-purple-100 text-purple-600"
         >
           Thanh toán
-        </Link>
+        </Link> */}
 
-        <Link
+        {/* <Link
           href="?cat=lab-test"
           className="px-4 py-2 rounded-lg bg-purple-100 text-purple-600"
         >
@@ -64,7 +64,7 @@ const AppointmentQuickLinks = async ({ userId }: { userId: string }) => {
           className="px-4 py-2 rounded-lg bg-purple-100 text-purple-600"
         >
           Dấu hiệu sống
-        </Link>
+        </Link> */}
 
         {isPatient && <ReviewForm staffId={userId} />}
       </CardContent>

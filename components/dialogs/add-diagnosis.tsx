@@ -120,9 +120,7 @@ export const AddDiagnosis = ({
       <DialogContent className="sm:max-w-[60%] 2xl:max-w-[40%]">
         <CardHeader className="px-0">
           <DialogTitle>Thêm chẩn đoán</DialogTitle>
-          <CardDescription>
-            Nhập thông tin chẩn đoán và có thể yêu cầu xét nghiệm nếu cần.
-          </CardDescription>
+          <CardDescription>Nhập thông tin chẩn đoán.</CardDescription>
         </CardHeader>
 
         <Form {...form}>
@@ -164,7 +162,7 @@ export const AddDiagnosis = ({
               />
             </div>
 
-            <div className="space-y-2">
+            {/* <div className="space-y-2">
               <div className="flex items-center gap-2">
                 <Checkbox
                   checked={requestLab}
@@ -193,7 +191,7 @@ export const AddDiagnosis = ({
                   </SelectContent>
                 </Select>
               )}
-            </div>
+            </div> */}
 
             <Button
               type="submit"
