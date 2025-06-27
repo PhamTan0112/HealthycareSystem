@@ -4,12 +4,55 @@ import { ReviewFormValues, reviewSchema } from "@/lib/schema";
 
 import db from "@/lib/db";
 import { clerkClient } from "@clerk/nextjs/server";
+import { checkRole } from "@/utils/roles";
 
 export async function deleteDataById(
   id: string,
   deleteType: "doctor" | "staff" | "patient" | "payment" | "bill" | "labtest"
 ) {
   try {
+    // Kiểm tra quyền cho lab test
+    if (deleteType === "labtest") {
+      const isAdmin = await checkRole("ADMIN");
+      const isDoctor = await checkRole("DOCTOR");
+      const isNurse = await checkRole("NURSE");
+
+      if (!isAdmin && !isDoctor && !isNurse) {
+        return {
+          success: false,
+          message: "Bạn không có quyền xóa xét nghiệm",
+          status: 403,
+        };
+      }
+    }
+
+    // Kiểm tra quyền cho bill
+    if (deleteType === "bill") {
+      const isAdmin = await checkRole("ADMIN");
+      const isDoctor = await checkRole("DOCTOR");
+
+      if (!isAdmin && !isDoctor) {
+        return {
+          success: false,
+          message: "Bạn không có quyền xóa hóa đơn",
+          status: 403,
+        };
+      }
+    }
+
+    // Kiểm tra quyền cho payment
+    if (deleteType === "payment") {
+      const isAdmin = await checkRole("ADMIN");
+
+      if (!isAdmin) {
+        return {
+          success: false,
+          message: "Bạn không có quyền xóa thanh toán",
+          status: 403,
+        };
+      }
+    }
+
     switch (deleteType) {
       case "doctor":
         await db.doctor.delete({ where: { id: id } });

@@ -52,6 +52,35 @@ enum PaymentStatus {
   PART
 }
 
+enum NotificationType {
+  APPOINTMENT
+  PAYMENT
+  LAB_RESULT
+  SYSTEM
+  REMINDER
+}
+
+enum NotificationPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum LeaveType {
+  SICK_LEAVE
+  ANNUAL_LEAVE
+  EMERGENCY_LEAVE
+  OTHER
+}
+
+enum LeaveStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+}
+
 model Patient {
   id                       String   @id //clerk userId
   first_name               String
@@ -81,6 +110,7 @@ model Patient {
   medical                  MedicalRecords[]
   payments                 Payment[]
   ratings                  Rating[]
+  notifications            Notification[]
 
   created_at               DateTime @default(now())
   updated_at               DateTime @updatedAt
@@ -103,7 +133,10 @@ model Doctor {
   working_days          WorkingDays[]
   appointments          Appointment[]
   ratings               Rating[]
-  diagnosis             Diagnosis[] 
+  diagnosis             Diagnosis[]
+  notifications         Notification[]
+  leave_requests        LeaveRequest[]
+  approved_leaves       LeaveRequest[] @relation("LeaveApprover")
 
   created_at            DateTime @default(now())
   updated_at            DateTime @updatedAt
@@ -111,16 +144,19 @@ model Doctor {
 
 
 model WorkingDays {
-  id              Int   @id @default(autoincrement())
+  id              Int      @id @default(autoincrement())
   doctor_id       String
   day             String
   start_time      String
   close_time      String
-
-  doctor          Doctor  @relation(fields: [doctor_id], references: [id], onDelete: Cascade)
-
+  is_available    Boolean  @default(true)
+  max_appointments Int     @default(10)
+  break_start     String?
+  break_end       String?
   created_at      DateTime @default(now())
   updated_at      DateTime @updatedAt
+
+  doctor          Doctor   @relation(fields: [doctor_id], references: [id], onDelete: Cascade)
 }
 
 
@@ -137,6 +173,7 @@ model Staff {
 
   role          Role
   status        Status @default(ACTIVE)
+  notifications Notification[]
 
   created_at    DateTime @default(now())
   updated_at    DateTime @updatedAt
@@ -208,7 +245,7 @@ model LabTest {
   result        String
   status        String
   notes         String?
-  service_id    Int @unique
+  service_id    Int
   services      Services @relation(fields: [service_id], references: [id])
 
   medical_record MedicalRecords  @relation(fields: [record_id], references: [id], onDelete: Cascade)
@@ -305,9 +342,46 @@ model Services {
   service_name    String
   description     String
   price           Float
-  labtest         LabTest?
+  labtest         LabTest[]
   bills           PatientBills[]
 
   created_at      DateTime @default(now())
   updated_at      DateTime @updatedAt
+}
+
+model Notification {
+  id              Int                  @id @default(autoincrement())
+  user_id         String
+  title           String
+  message         String
+  type            NotificationType
+  priority        NotificationPriority @default(MEDIUM)
+  is_read         Boolean              @default(false)
+  related_id      String?              // ID của appointment, payment, etc.
+  related_type    String?              // Type của related object
+  scheduled_at    DateTime?            // Cho scheduled notifications
+  created_at      DateTime             @default(now())
+  updated_at      DateTime             @updatedAt
+
+  // Relations - sử dụng map để tránh conflict
+  patient         Patient?             @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "Notification_patient_fkey")
+  doctor          Doctor?              @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "Notification_doctor_fkey")
+  staff           Staff?               @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "Notification_staff_fkey")
+}
+
+model LeaveRequest {
+  id              Int         @id @default(autoincrement())
+  doctor_id       String
+  leave_type      LeaveType
+  start_date      DateTime
+  end_date        DateTime
+  reason          String
+  status          LeaveStatus @default(PENDING)
+  approved_by     String?
+  approved_at     DateTime?
+  created_at      DateTime    @default(now())
+  updated_at      DateTime    @updatedAt
+
+  doctor          Doctor      @relation(fields: [doctor_id], references: [id], onDelete: Cascade)
+  approver        Doctor?     @relation("LeaveApprover", fields: [approved_by], references: [id])
 }

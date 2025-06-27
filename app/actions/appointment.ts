@@ -6,14 +6,15 @@ import { AppointmentSchema, VitalSignsSchema } from "@/lib/schema";
 import { auth } from "@clerk/nextjs/server";
 import { AppointmentStatus } from "@prisma/client";
 import { Resend } from "resend";
+import { sendAppointmentNotification } from "./notification";
 
 export async function createNewAppointment(data: any) {
   try {
     const validatedData = AppointmentSchema.safeParse(data);
-
     if (!validatedData.success) {
       return { success: false, msg: "Invalid data" };
     }
+    console.log("validatedData: ", validatedData);
 
     const validated = validatedData.data;
 
@@ -30,8 +31,62 @@ export async function createNewAppointment(data: any) {
     const appointmentEnd = new Date(appointmentStart);
     appointmentEnd.setHours(appointmentEnd.getHours() + 1);
 
+    // 1. Kiểm tra bác sĩ có nghỉ phép không
+    const leave = await db.leaveRequest.findFirst({
+      where: {
+        doctor_id: validated.doctor_id,
+        status: { in: ["PENDING", "APPROVED"] },
+        start_date: { lte: appointmentStart },
+        end_date: { gte: appointmentStart },
+      },
+    });
+    if (leave) {
+      return {
+        success: false,
+        msg: "Bác sĩ đang nghỉ phép trong thời gian này.",
+      };
+    }
+
+    // 2. Kiểm tra số lượng lịch hẹn trong ngày
+    const count = await db.appointment.count({
+      where: {
+        doctor_id: validated.doctor_id,
+        appointment_date: appointmentDate,
+      },
+    });
+    const workingDay = await db.workingDays.findFirst({
+      where: {
+        doctor_id: validated.doctor_id,
+        day: appointmentDate
+          .toLocaleString("en-US", { weekday: "long" })
+          .toLocaleLowerCase(),
+      },
+    });
+
+    if (!workingDay) {
+      return { success: false, msg: "Bác sĩ không làm việc ngày này." };
+    }
+    if (count >= workingDay.max_appointments) {
+      return { success: false, msg: "Bác sĩ đã đầy lịch hẹn trong ngày." };
+    }
+    // 3. Kiểm tra khung giờ làm việc
+    const [startHour, startMinute] = workingDay.start_time
+      .split(":")
+      .map(Number);
+    const [endHour, endMinute] = workingDay.close_time.split(":").map(Number);
+    const apptHour = appointmentStart.getHours();
+    const apptMinute = appointmentStart.getMinutes();
+    const isInWorkingHours =
+      (apptHour > startHour ||
+        (apptHour === startHour && apptMinute >= startMinute)) &&
+      (apptHour < endHour || (apptHour === endHour && apptMinute <= endMinute));
+    if (!isInWorkingHours) {
+      return { success: false, msg: "Lịch hẹn ngoài giờ làm việc của bác sĩ." };
+    }
+    console.log("isInWorkingHours: ", isInWorkingHours);
+
     // ✅ Tạo lịch hẹn mới (bỏ check trùng)
-    await db.appointment.create({
+    const appointment = await db.appointment.create({
       data: {
         patient_id: data.patient_id,
         doctor_id: validated.doctor_id,
@@ -41,6 +96,15 @@ export async function createNewAppointment(data: any) {
         note: validated.note,
       },
     });
+
+    // Gửi thông báo cho bệnh nhân và bác sĩ
+    await sendAppointmentNotification(
+      data.patient_id,
+      validated.doctor_id,
+      appointment.id,
+      appointmentDate,
+      validated.time
+    );
 
     return {
       success: true,

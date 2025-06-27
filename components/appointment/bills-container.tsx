@@ -1,14 +1,14 @@
 import db from "@/lib/db";
 import { calculateDiscount } from "@/utils";
 import { checkRole } from "@/utils/roles";
-import { ReceiptText } from "lucide-react";
+import { ReceiptText, FileText } from "lucide-react";
 import { Table } from "../tables/table";
 import { PatientBills } from "@prisma/client";
 import { format } from "date-fns";
 import { ActionDialog } from "../action-dialog";
 import { Separator } from "../ui/separator";
-import { AddBills } from "../dialogs/add-bills";
 import { GenerateFinalBills } from "./generate-final-bill";
+import { auth } from "@clerk/nextjs/server";
 
 const columns = [
   {
@@ -17,11 +17,11 @@ const columns = [
     className: "hidden md:table-cell",
   },
   {
-    header: "Dịch vụ",
+    header: "Dịch vụ xét nghiệm",
     key: "service",
   },
   {
-    header: "Ngày",
+    header: "Ngày thực hiện",
     key: "date",
     className: "",
   },
@@ -53,21 +53,64 @@ interface ExtendedBillProps extends PatientBills {
     id: number;
   };
 }
+
 export const BillsContainer = async ({ id }: { id: string }) => {
-  const [data, servicesData] = await Promise.all([
+  const { userId } = await auth();
+  const isPatient = await checkRole("PATIENT");
+  const isAdmin = await checkRole("ADMIN");
+  const isDoctor = await checkRole("DOCTOR");
+  
+  // Lay thong tin cuoc hen de kiem tra quyen
+  const appointmentData = await db.appointment.findUnique({
+    where: { id: Number(id) },
+    include: {
+      patient: true
+    }
+  });
+
+  if (!appointmentData) {
+    return (
+      <div className="bg-white rounded-xl p-2 2xl:p-4">
+        <div className="text-center py-8 text-gray-500">
+          Khong tim thay cuoc hen
+        </div>
+      </div>
+    );
+  }
+
+  // Tao dieu kien where cho payment
+  let paymentWhereCondition: any = { appointment_id: Number(id) };
+  
+  // Neu la patient, chi lay hoa don cua chinh minh
+  if (isPatient) {
+    paymentWhereCondition.patient_id = userId;
+  }
+
+  const [data, completedLabTests] = await Promise.all([
     db.payment.findFirst({
-      where: { appointment_id: Number(id) },
+      where: paymentWhereCondition,
       include: {
         bills: {
           include: {
             service: { select: { service_name: true, id: true } },
           },
-
           orderBy: { created_at: "asc" },
         },
       },
     }),
-    db.services.findMany(),
+    // Lay danh sach xet nghiem da hoan thanh cho appointment nay
+    db.labTest.findMany({
+      where: {
+        medical_record: {
+          appointment_id: Number(id),
+          ...(isPatient && { patient_id: userId! })
+        },
+        status: "COMPLETED",
+      },
+      include: {
+        services: true,
+      },
+    }),
   ]);
 
   let totalBills = 0;
@@ -103,11 +146,14 @@ export const BillsContainer = async ({ id }: { id: string }) => {
         <td>{item?.total_cost.toFixed(2)}</td>
 
         <td className="hidden xl:table-cell">
-          <ActionDialog
-            type="delete"
-            id={item?.id.toString()}
-            deleteType="bill"
-          />
+          {/* Chỉ hiển thị nút xóa cho admin và doctor */}
+          {(isAdmin || isDoctor) && (
+            <ActionDialog
+              type="delete"
+              id={item?.id.toString()}
+              deleteType="bill"
+            />
+          )}
         </td>
       </tr>
     );
@@ -117,19 +163,22 @@ export const BillsContainer = async ({ id }: { id: string }) => {
     <div className="bg-white rounded-xl p-2 2xl:p-4">
       <div className="w-full flex flex-col md:flex-row md:items-center justify-between mb-6">
         <div className="">
-          <h1 className="font-semibold text-xl">Hóa đơn khám bệnh</h1>
+          <h1 className="font-semibold text-xl">Hóa đơn xét nghiệm</h1>
           <div className="hidden lg:flex items-center gap-1">
-            <ReceiptText size={20} className="text-gray-500" />
+            <FileText size={20} className="text-gray-500" />
             <p className="text-2xl font-semibold">{billData?.length}</p>
-            <span className="text-gray-600 text-sm xl:text-base">tổng mục</span>
+            <span className="text-gray-600 text-sm xl:text-base">dịch vụ xét nghiệm</span>
           </div>
         </div>
 
         {((await checkRole("ADMIN")) || (await checkRole("DOCTOR"))) && (
-          <div className="flex items-center mt-5 justify-end">
-            <AddBills id={data?.id} appId={id} servicesData={servicesData} />
-
-            <GenerateFinalBills id={data?.id} total_bill={totalBills} />
+          <div className="flex items-center mt-5 justify-end gap-2">
+            <GenerateFinalBills 
+              id={data?.id} 
+              total_bill={totalBills} 
+              appointmentId={id}
+              completedLabTests={completedLabTests}
+            />
           </div>
         )}
       </div>
@@ -140,7 +189,7 @@ export const BillsContainer = async ({ id }: { id: string }) => {
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 py-2 text-center">
         <div>
-          <span className="text-gray-500 block">Tổng cộng</span>
+          <span className="text-gray-500 block">Tổng tiền dịch vụ</span>
           <p className="text-xl font-semibold">
             {(data?.total_amount || totalBills).toFixed(2)}
           </p>
@@ -163,6 +212,28 @@ export const BillsContainer = async ({ id }: { id: string }) => {
           </p>
         </div>
       </div>
+
+      {/* Hướng dẫn khi chưa có hóa đơn */}
+      {billData.length === 0 && (
+        <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+          <div className="flex items-start gap-3">
+            <ReceiptText className="h-5 w-5 text-blue-600 mt-0.5" />
+            <div>
+              <h3 className="font-medium text-blue-900">Hóa đơn xét nghiệm</h3>
+              <p className="mt-2 text-sm text-blue-800">
+                Hóa đơn sẽ được tạo tự động khi xét nghiệm có trạng thái "COMPLETED". 
+                Sau đó bạn có thể nhấn "Tạo hóa đơn cuối" để thêm giảm giá.
+              </p>
+              {completedLabTests.length > 0 && (
+                <p className="mt-2 text-sm text-green-700">
+                  Có {completedLabTests.length} xét nghiệm đã hoàn thành. 
+                  Hóa đơn sẽ được tạo tự động.
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

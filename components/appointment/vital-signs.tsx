@@ -6,6 +6,7 @@ import { format } from "date-fns";
 import { Separator } from "../ui/separator";
 import { checkRole } from "@/utils/roles";
 import { AddVitalSigns } from "../dialogs/add-vital-signs";
+import { auth } from "@clerk/nextjs/server";
 
 interface VitalSignsProps {
   id: number | string;
@@ -23,13 +24,25 @@ const ItemCard = ({ label, value }: { label: string; value: string }) => {
     </div>
   );
 };
+
 export const VitalSigns = async ({
   id,
   patientId,
   doctorId,
 }: VitalSignsProps) => {
+  const { userId } = await auth();
+  const isPatient = await checkRole("PATIENT");
+  
+  // Tao dieu kien where cho medical records
+  let whereCondition: any = { appointment_id: Number(id) };
+  
+  // Neu la patient, chi lay dau hieu song cua chinh minh
+  if (isPatient) {
+    whereCondition.patient_id = userId;
+  }
+
   const data = await db.medicalRecords.findFirst({
-    where: { appointment_id: Number(id) },
+    where: whereCondition,
     include: {
       vital_signs: {
         orderBy: { created_at: "desc" },
@@ -40,7 +53,6 @@ export const VitalSigns = async ({
 
   const vitals = data?.vital_signs || null;
 
-  const isPatient = await checkRole("PATIENT");
   return (
     <section id="vital-signs">
       <Card>

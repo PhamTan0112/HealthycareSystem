@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { useAuth } from "@clerk/nextjs";
+import { checkRole } from "@/utils/roles";
 
 import { PatientBillSchema } from "@/lib/schema";
 import { Services } from "@prisma/client";
@@ -32,6 +34,7 @@ export const AddBills = ({ id, appId, servicesData }: DataProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const [data, setData] = useState<any>();
+  const [canAdd, setCanAdd] = useState(false);
 
   const form = useForm<z.infer<typeof PatientBillSchema>>({
     resolver: zodResolver(PatientBillSchema),
@@ -40,11 +43,20 @@ export const AddBills = ({ id, appId, servicesData }: DataProps) => {
       service_id: undefined,
       service_date: new Date().toDateString(),
       appointment_id: String(appId),
-      quantity: undefined,
+      quantity: "1",
       unit_cost: undefined,
       total_cost: undefined,
     },
   });
+
+  useEffect(() => {
+    async function checkPermission() {
+      const isAdmin = await checkRole("ADMIN");
+      const isDoctor = await checkRole("DOCTOR");
+      setCanAdd(isAdmin || isDoctor);
+    }
+    checkPermission();
+  }, []);
 
   const handleOnSubmit = async (values: z.infer<typeof PatientBillSchema>) => {
     try {
@@ -52,9 +64,17 @@ export const AddBills = ({ id, appId, servicesData }: DataProps) => {
       const resp = await addNewBill(values);
 
       if (resp.success) {
-        toast.success("Thêm hóa đơn thành công!");
+        toast.success("Thêm dịch vụ xét nghiệm thành công!");
         router.refresh();
-        form.reset();
+        form.reset({
+          bill_id: String(id),
+          service_id: undefined,
+          service_date: new Date().toDateString(),
+          appointment_id: String(appId),
+          quantity: "1",
+          unit_cost: undefined,
+          total_cost: undefined,
+        });
       } else if (resp.error) {
         toast.error(resp.msg);
       }
@@ -78,7 +98,6 @@ export const AddBills = ({ id, appId, servicesData }: DataProps) => {
   }, [servicesData, id]);
 
   const selectedService = form.watch("service_id");
-  const quantity = form.watch("quantity");
 
   useEffect(() => {
     if (selectedService) {
@@ -88,92 +107,91 @@ export const AddBills = ({ id, appId, servicesData }: DataProps) => {
 
       if (unit_cost) {
         form.setValue("unit_cost", unit_cost?.price.toFixed(2));
-      }
-      if (quantity) {
-        form.setValue(
-          "total_cost",
-          (Number(quantity) * unit_cost?.price!).toFixed(2)
-        );
+        form.setValue("total_cost", unit_cost?.price.toFixed(2));
       }
     }
-  }, [selectedService, quantity]);
+  }, [selectedService, servicesData, form]);
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button size="sm" className="text-sm font-normal">
-          <Plus size={22} className="text-gray-400" />
-          Thêm hóa đơn
-        </Button>
-      </DialogTrigger>
-      <DialogContent>
-        <CardHeader className="px-0">
-          <DialogTitle>Thêm hóa đơn khám bệnh</DialogTitle>
-          <CardDescription>
-            Vui lòng nhập đầy đủ và chính xác để đảm bảo quy trình khám chữa
-            bệnh.
-          </CardDescription>
-        </CardHeader>
+    canAdd && (
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button size="sm" className="text-sm font-normal">
+            <Plus size={22} className="text-gray-400" />
+            Thêm dịch vụ xét nghiệm
+          </Button>
+        </DialogTrigger>
+        <DialogContent>
+          <CardHeader className="px-0">
+            <DialogTitle>Thêm dịch vụ xét nghiệm</DialogTitle>
+            <CardDescription>
+              Chọn dịch vụ xét nghiệm cần thực hiện. Số lượng sẽ tự động được đặt là 1.
+            </CardDescription>
+          </CardHeader>
 
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(handleOnSubmit)}
-            className="space-y-8"
-          >
-            <div className="flex items-center gap-2">
-              <CustomInput
-                type="select"
-                control={form.control}
-                name="service_id"
-                placeholder="Chọn dịch vụ"
-                label="Tên dịch vụ"
-                selectList={data!}
-              />
-              <CustomInput
-                type="input"
-                control={form.control}
-                name="unit_cost"
-                placeholder=""
-                label="Đơn giá"
-              />
-            </div>
-
-            <div className="flex items-center gap-2">
-              <CustomInput
-                type="input"
-                control={form.control}
-                name="quantity"
-                placeholder="Nhập số lượng"
-                label="Số lượng"
-              />
-              <CustomInput
-                type="input"
-                control={form.control}
-                name="total_cost"
-                placeholder="0.00"
-                label="Thành tiền"
-              />
-            </div>
-
-            <CustomInput
-              type="input"
-              control={form.control}
-              name="service_date"
-              label="Ngày sử dụng"
-              placeholder=""
-              inputType="date"
-            />
-
-            <Button
-              type="submit"
-              disabled={isLoading}
-              className="bg-blue-600 w-full"
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(handleOnSubmit)}
+              className="space-y-8"
             >
-              Lưu hóa đơn
-            </Button>
-          </form>
-        </Form>
-      </DialogContent>
-    </Dialog>
+              <div className="flex items-center gap-2">
+                <CustomInput
+                  type="select"
+                  control={form.control}
+                  name="service_id"
+                  placeholder="Chọn dịch vụ xét nghiệm"
+                  label="Tên dịch vụ"
+                  selectList={data!}
+                />
+                <CustomInput
+                  type="input"
+                  control={form.control}
+                  name="unit_cost"
+                  placeholder=""
+                  label="Đơn giá"
+                  disabled={true}
+                />
+              </div>
+
+              <div className="flex items-center gap-2">
+                <CustomInput
+                  type="input"
+                  control={form.control}
+                  name="quantity"
+                  placeholder="1"
+                  label="Số lượng"
+                  disabled={true}
+                />
+                <CustomInput
+                  type="input"
+                  control={form.control}
+                  name="total_cost"
+                  placeholder="0.00"
+                  label="Thành tiền"
+                  disabled={true}
+                />
+              </div>
+
+              <CustomInput
+                type="input"
+                control={form.control}
+                name="service_date"
+                label="Ngày thực hiện"
+                placeholder=""
+                inputType="date"
+              />
+
+              <Button
+                type="submit"
+                disabled={isLoading}
+                className="bg-blue-600 w-full"
+              >
+                Thêm dịch vụ
+              </Button>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
+    )
   );
 };

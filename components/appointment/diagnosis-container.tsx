@@ -21,9 +21,20 @@ export const DiagnosisContainer = async ({
   const { userId } = await auth();
 
   if (!userId) redirect("/sign-in");
+  
+  const isPatient = await checkRole("PATIENT");
+  
+  // Tao dieu kien where cho medical records
+  let whereCondition: any = { appointment_id: Number(id) };
+  
+  // Neu la patient, chi lay chan doan cua chinh minh
+  if (isPatient) {
+    whereCondition.patient_id = userId;
+  }
+  
   const services = await getAllServices();
   const data = await db.medicalRecords.findFirst({
-    where: { appointment_id: Number(id) },
+    where: whereCondition,
     include: {
       diagnosis: {
         include: { doctor: true },
@@ -33,7 +44,6 @@ export const DiagnosisContainer = async ({
     orderBy: { created_at: "desc" },
   });
   const diagnosis = data?.diagnosis || null;
-  const isPatient = await checkRole("PATIENT");
 
   return (
     <div>
@@ -55,7 +65,7 @@ export const DiagnosisContainer = async ({
         <section className="space-y-6">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle>Hồ sơ y tế</CardTitle>
+              <CardTitle>Ho so y te</CardTitle>
 
               {!isPatient && (
                 <AddDiagnosis

@@ -3,6 +3,7 @@
 import { useAuth, UserButton } from "@clerk/nextjs";
 import { usePathname } from "next/navigation";
 import React from "react";
+import { NotificationBell } from "./NotificationBell";
 
 interface NavbarProps {
   notificationSlot?: React.ReactNode;
@@ -26,7 +27,7 @@ export const Navbar = ({ notificationSlot }: NavbarProps) => {
       </h1>
 
       <div className="flex items-center gap-4">
-        {notificationSlot}
+        {notificationSlot || <NotificationBell />}
         {user?.userId && <UserButton />}
       </div>
     </div>

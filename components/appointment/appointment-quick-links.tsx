@@ -45,6 +45,13 @@ const AppointmentQuickLinks = async ({ userId }: { userId: string }) => {
           Lịch sử khám
         </Link>
 
+        <Link
+          href="?cat=lab-test"
+          className="px-4 py-2 rounded-lg bg-purple-100 text-purple-600"
+        >
+          Xét nghiệm
+        </Link>
+
         {/* <Link
           href="?cat=payments"
           className="px-4 py-2 rounded-lg bg-purple-100 text-purple-600"

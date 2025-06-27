@@ -68,10 +68,19 @@ export async function createPaymentAction(paymentId: number) {
   if (!payment) throw new Error("Không tìm thấy hóa đơn");
 
   const orderCode = payment.receipt_number || Date.now(); // fallback nếu chưa có
+  
+  // Tính số tiền còn lại phải thanh toán
+  const payableAmount = payment.total_amount - payment.discount;
+  const remainingAmount = payableAmount - payment.amount_paid;
+
+  // Nếu đã thanh toán hết thì không cho thanh toán nữa
+  if (remainingAmount <= 0) {
+    throw new Error("Hóa đơn đã được thanh toán đầy đủ");
+  }
 
   const checkoutUrl = await createPayOSPaymentUrl({
     orderCode,
-    amount: payment.total_amount,
+    amount: remainingAmount, // Sử dụng số tiền còn lại
     description: `Hóa đơn #${paymentId}`,
     returnUrl: `http://localhost:3000/record/billing?receipt_number=${orderCode}`,
     cancelUrl: `http://localhost:3000/record/billing`,

@@ -30,6 +30,7 @@ interface InputProps {
   inputType?: "text" | "email" | "password" | "date";
   selectList?: { label: string; value: string }[];
   defaultValue?: string;
+  disabled?: boolean;
 }
 
 const RenderInput = ({ field, props }: { field: any; props: InputProps }) => {
@@ -45,6 +46,7 @@ const RenderInput = ({ field, props }: { field: any; props: InputProps }) => {
             onBlur={field.onBlur}
             name={field.name}
             ref={field.ref}
+            disabled={props.disabled}
           />
         </FormControl>
       );

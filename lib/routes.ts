@@ -12,6 +12,7 @@ export const routeAccess: RouteAccessProps = {
   "./record/doctors(.*)": ["admin", "doctor"],
   "./record/staffs": ["admin", "doctor"],
   "./record/patients": ["admin", "doctor", "nurse"],
+  "./record/billing": ["admin", "doctor", "patient"],
   "./record/registrationns": ["patient"],
 };
 

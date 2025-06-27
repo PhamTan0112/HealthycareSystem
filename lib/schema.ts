@@ -193,7 +193,7 @@ export const PatientBillSchema = z.object({
   service_id: z.string(),
   service_date: z.string(),
   appointment_id: z.string(),
-  quantity: z.string({ message: "Quantity is required" }),
+  quantity: z.string().default("1"),
   unit_cost: z.string({ message: "Unit cost is required" }),
   total_cost: z.string({ message: "Total cost is required" }),
 });
