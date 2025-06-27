@@ -20,10 +20,6 @@ export async function getDoctorDashboardStats() {
     const todayDate = new Date().getDay();
     const today = daysOfWeek[todayDate];
 
-    const now = new Date();
-    const todayStart = new Date(now.setHours(0, 0, 0, 0));
-    const todayEnd = new Date(now.setHours(23, 59, 59, 999));
-
     const [
       totalPatient,
       totalNurses,
@@ -32,11 +28,10 @@ export async function getDoctorDashboardStats() {
       totalAppointments, // 👉 đổi tên biến cho rõ nghĩa
     ] = await Promise.all([
       db.patient.count(),
-      db.staff.count({ where: { role: "NURSE" } }),
+      db.appointment.count({ where: { status: "COMPLETED" } }),
       db.appointment.findMany({
         where: {
           doctor_id: userId!,
-          appointment_date: { lte: new Date() },
         },
         include: {
           patient: {
