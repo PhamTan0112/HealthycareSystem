@@ -44,8 +44,8 @@ const AppointmentDetailsPage = async ({
   }
 
   const isPatient = await checkRole("PATIENT");
-  console.log("check ",isPatient, data.patient_id, userId);
-  
+  console.log("check ", isPatient, data.patient_id, userId);
+
   // Neu la patient va khong phai cuoc hen cua minh, thi khong hien thi gi
   if (isPatient && data.patient_id !== userId) {
     return (
@@ -103,7 +103,7 @@ const AppointmentDetailsPage = async ({
         {cat === "medical-history" && (
           <MedicalHistoryContainer id={id!} patientId={data?.patient_id!} />
         )}
-        {cat === "billing" && <BillsContainer id={id} />}
+        {cat === "billing" && !isPatient && <BillsContainer id={id} />}
         {/* {cat === "payments" && (
           <PaymentsContainer patientId={data?.patient_id!} />
         )} */}

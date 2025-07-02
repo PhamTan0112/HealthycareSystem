@@ -3,6 +3,7 @@ import { DoctorWorkingDaysForm } from "@/components/forms/update-doctor-form";
 import { ProfileImage } from "@/components/profile-image";
 import { RatingContainer } from "@/components/rating-container";
 import { RecentAppointments } from "@/components/tables/recent-appoinment";
+import { checkRole } from "@/utils/roles";
 import { getDoctorById } from "@/utils/services/doctor";
 import { format } from "date-fns";
 import Link from "next/link";
@@ -16,7 +17,7 @@ import { MdEmail, MdLocalPhone } from "react-icons/md";
 const DoctorProfile = async (props: { params: Promise<{ id: string }> }) => {
   const params = await props.params;
   const { data, totalAppointment } = await getDoctorById(params?.id);
-
+  const isAdmin = await checkRole("ADMIN");
   if (!data) return null;
 
   return (
@@ -123,18 +124,22 @@ const DoctorProfile = async (props: { params: Promise<{ id: string }> }) => {
               Lịch hẹn của bác sĩ
             </Link>
 
-            <Link
-              href="#"
-              className="p-3 rounded-md bg-purple-50 hover:underline"
-            >
-              Gửi yêu cầu nghỉ phép
-            </Link>
+            {isAdmin && (
+              <Link
+                href="/leave-request"
+                className="p-3 rounded-md bg-purple-50 hover:underline"
+              >
+                Gửi yêu cầu nghỉ phép
+              </Link>
+            )}
           </div>
         </div>
-        <DoctorWorkingDaysForm
-          doctorId={data.id}
-          initialSchedule={data.working_days}
-        />
+        {isAdmin && (
+          <DoctorWorkingDaysForm
+            doctorId={data.id}
+            initialSchedule={data.working_days}
+          />
+        )}
         <RatingContainer id={params?.id} />
       </div>
     </div>

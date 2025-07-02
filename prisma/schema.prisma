@@ -385,3 +385,8 @@ model LeaveRequest {
   doctor          Doctor      @relation(fields: [doctor_id], references: [id], onDelete: Cascade)
   approver        Doctor?     @relation("LeaveApprover", fields: [approved_by], references: [id])
 }
+
+generator erd {
+  provider = "prisma-erd-generator"
+  output   = "./ERD.svg" // thư mục chứa sơ đồ
+}

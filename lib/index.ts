@@ -1,22 +1,22 @@
 export const GENDER = [
-  { label: "Male", value: "MALE" },
-  { label: "Female", value: "FEMALE" },
+  { label: "Nam", value: "MALE" },
+  { label: "Nữ", value: "FEMALE" },
 ];
 
 export const MARITAL_STATUS = [
-  { label: "Single", value: "single" },
-  { label: "Married", value: "married" },
-  { label: "Divorced", value: "divorced" },
-  { label: "Widowed", value: "widowed" },
-  { label: "Separated", value: "separated" },
+  { label: "Độc thân", value: "Độc thân" },
+  { label: "Đã kết hôn", value: "Đã kết hôn" },
+  { label: "Đã ly hôn", value: "Đã ly hôn" },
+  { label: "Goá Phụ", value: "Goá Phụ" },
+  { label: "Ly thân", value: "Ly thân" },
 ];
 
 export const RELATION = [
-  { value: "mother", label: "Mother" },
-  { value: "father", label: "Father" },
-  { value: "husband", label: "Husband" },
-  { value: "wife", label: "Wife" },
-  { value: "other", label: "Other" },
+  { value: "mother", label: "Mẹ" },
+  { value: "father", label: "Cha" },
+  { value: "husband", label: "Chồng" },
+  { value: "wife", label: "Vợ" },
+  { value: "other", label: "Khác" },
 ];
 
 export const USER_ROLES = {

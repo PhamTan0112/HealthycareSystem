@@ -67,8 +67,8 @@ export async function createPaymentAction(paymentId: number) {
 
   if (!payment) throw new Error("Không tìm thấy hóa đơn");
 
-  const orderCode = payment.receipt_number || Date.now(); // fallback nếu chưa có
-  
+  const orderCode = Math.floor(100 + Math.random() * 900); // fallback nếu chưa có
+  console.log("check oddercode: ", orderCode);
   // Tính số tiền còn lại phải thanh toán
   const payableAmount = payment.total_amount - payment.discount;
   const remainingAmount = payableAmount - payment.amount_paid;

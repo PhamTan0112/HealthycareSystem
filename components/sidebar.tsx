@@ -53,6 +53,12 @@ export const Sidebar = async () => {
           access: ["patient"],
           icon: User,
         },
+        {
+          name: "Hồ sơ cá nhân",
+          href: `/record/doctors/${user?.id}`,
+          access: ["doctor"],
+          icon: CalendarDays,
+        },
       ],
     },
     {
@@ -70,12 +76,12 @@ export const Sidebar = async () => {
           access: ["admin", "patient"],
           icon: User,
         },
-        {
-          name: "Nhân viên",
-          href: "/record/staffs",
-          access: ["admin", "doctor"],
-          icon: UserRound,
-        },
+        // {
+        //   name: "Nhân viên",
+        //   href: "/record/staffs",
+        //   access: ["admin", "doctor"],
+        //   icon: UserRound,
+        // },
         {
           name: "Bệnh nhân",
           href: "/record/patients",
@@ -91,7 +97,7 @@ export const Sidebar = async () => {
         {
           name: "Hồ sơ bệnh án",
           href: "/record/medical-records",
-          access: ["admin", "doctor", "nurse"],
+          access: ["admin", "doctor", "patient"],
           icon: SquareActivity,
         },
         {
@@ -112,23 +118,17 @@ export const Sidebar = async () => {
           access: ["patient"],
           icon: ListOrdered,
         },
-        {
-          name: "Hồ sơ",
-          href: "/patient/self",
-          access: ["patient"],
-          icon: List,
-        },
+        // {
+        //   name: "Hồ sơ",
+        //   href: "/patient/self",
+        //   access: ["patient"],
+        //   icon: List,
+        // },
         {
           name: "Thanh toán",
           href: "/record/billing",
           access: ["patient"],
           icon: Receipt,
-        },
-        {
-          name: "Ngày làm việc",
-          href: `/record/doctors/${user?.id}`,
-          access: ["doctor"],
-          icon: CalendarDays,
         },
       ],
     },

@@ -11,42 +11,6 @@ import { Diagnosis, LabTest, MedicalRecords, Patient } from "@prisma/client";
 import { format } from "date-fns";
 import { BriefcaseBusiness } from "lucide-react";
 
-const columns = [
-  {
-    header: "Bản ghi",
-    key: "no",
-  },
-  {
-    header: "Thông tin",
-    key: "name",
-  },
-  {
-    header: "Ngày & Giờ",
-    key: "medical_date",
-    className: "hidden md:table-cell",
-  },
-  {
-    header: "Bác sĩ",
-    key: "doctor",
-    className: "hidden 2xl:table-cell",
-  },
-  {
-    header: "Chẩn đoán",
-    key: "diagnosis",
-    className: "hidden lg:table-cell",
-  },
-  {
-    header: "Xét nghiệm",
-    key: "lab_test",
-    className: "hidden 2xl:table-cell",
-  },
-  {
-    header: "Thao tác",
-    key: "action",
-    className: "",
-  },
-];
-
 interface ExtendedProps extends MedicalRecords {
   patient: Patient;
   diagnosis: Diagnosis[];
@@ -57,6 +21,44 @@ const MedicalRecordsPage = async (props: SearchParamsProps) => {
   const searchParams = await props.searchParams;
   const page = (searchParams?.p || "1") as string;
   const searchQuery = (searchParams?.q || "") as string;
+  const isPatient = await checkRole("PATIENT");
+
+  // Định nghĩa columns dựa trên role
+  const columns = [
+    {
+      header: "Bản ghi",
+      key: "no",
+    },
+    ...(isPatient ? [] : [{
+      header: "Thông tin",
+      key: "name",
+    }]),
+    {
+      header: "Ngày & Giờ",
+      key: "medical_date",
+      className: "hidden md:table-cell",
+    },
+    ...(isPatient ? [] : [{
+      header: "Bác sĩ",
+      key: "doctor",
+      className: "hidden 2xl:table-cell",
+    }]),
+    {
+      header: "Chẩn đoán",
+      key: "diagnosis",
+      className: "hidden lg:table-cell",
+    },
+    {
+      header: "Xét nghiệm",
+      key: "lab_test",
+      className: "hidden 2xl:table-cell",
+    },
+    {
+      header: "Thao tác",
+      key: "action",
+      className: "",
+    },
+  ];
 
   const { data, totalPages, totalRecords, currentPage } =
     await getMedicalRecords({
@@ -87,13 +89,17 @@ const MedicalRecordsPage = async (props: SearchParamsProps) => {
             <span className="text-sm capitalize">{patient?.gender}</span>
           </div>
         </td>
-        <td className="hidden md:table-cell">
-          <span className="text-sm">{patient?.email || "N/A"}</span>
-        </td>
+        {!isPatient && (
+          <td className="hidden md:table-cell">
+            <span className="text-sm">{patient?.email || "N/A"}</span>
+          </td>
+        )}
         <td className="hidden md:table-cell">
           {format(item?.created_at, "yyyy-MM-dd HH:mm:ss")}
         </td>
-        <td className="hidden 2xl:table-cell">{item?.doctor_id}</td>
+        {!isPatient && (
+          <td className="hidden 2xl:table-cell">{item?.doctor_id}</td>
+        )}
         <td className="hidden lg:table-cell">
           {item?.diagnosis?.length === 0 ? (
             <span className="text-gray-400 italic">Không tìm thấy</span>
@@ -123,7 +129,9 @@ const MedicalRecordsPage = async (props: SearchParamsProps) => {
           <BriefcaseBusiness size={20} className="text-gray-500" />
 
           <p className="text-2xl font-semibold">{totalRecords}</p>
-          <span className="text-gray-600 text-sm xl:text-base">hồ sơ</span>
+          <span className="text-gray-600 text-sm xl:text-base">
+            {isPatient ? "hồ sơ của bạn" : "hồ sơ"}
+          </span>
         </div>
         <div className="w-full lg:w-fit flex items-center justify-between lg:justify-start gap-2">
           <SearchInput />

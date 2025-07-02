@@ -1,5 +1,7 @@
 import db from "@/lib/db";
 import { Prisma } from "@prisma/client";
+import { auth } from "@clerk/nextjs/server";
+import { checkRole } from "@/utils/roles";
 
 export async function getMedicalRecords({
   page,
@@ -11,12 +13,16 @@ export async function getMedicalRecords({
   search?: string;
 }) {
   try {
+    const { userId } = await auth();
+    const isPatient = await checkRole("PATIENT");
+    
     const PAGE_NUMBER = Number(page) <= 0 ? 1 : Number(page);
     const LIMIT = Number(limit) || 10;
 
     const SKIP = (PAGE_NUMBER - 1) * LIMIT;
 
-    const where: Prisma.MedicalRecordsWhereInput = {
+    // Base search conditions
+    const searchConditions: Prisma.MedicalRecordsWhereInput = search ? {
       OR: [
         {
           patient: {
@@ -30,7 +36,17 @@ export async function getMedicalRecords({
         },
         { patient_id: { contains: search, mode: "insensitive" } },
       ],
-    };
+    } : {};
+
+    // Add patient filter if user is a patient
+    let where: Prisma.MedicalRecordsWhereInput = searchConditions;
+    
+    if (isPatient && userId) {
+      where = {
+        ...searchConditions,
+        patient_id: userId,
+      };
+    }
 
     const [data, totalRecords] = await Promise.all([
       db.medicalRecords.findMany({

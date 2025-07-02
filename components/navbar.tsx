@@ -14,10 +14,19 @@ export const Navbar = ({ notificationSlot }: NavbarProps) => {
 
   function formatPathName(): string {
     const pathname = usePathname();
-    if (!pathname) return "Overview";
+    if (!pathname) return "Tổng quan";
+
+    const routeMap: Record<string, string> = {
+      patient: "Bệnh nhân",
+      doctor: "Bác sĩ",
+      admin: "Quản lý",
+    };
+
     const splitRoute = pathname.split("/");
     const lastIndex = splitRoute.length - 1 > 2 ? 2 : splitRoute.length - 1;
-    return splitRoute[lastIndex].replace(/-/g, " ");
+    const key = splitRoute[lastIndex];
+
+    return routeMap[key] || key.replace(/-/g, " ");
   }
 
   return (
